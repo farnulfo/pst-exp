@@ -86,31 +86,31 @@ public class CRCTest {
     System.out.println("computed dwCRCPartial: " + Integer.toUnsignedString(crc));
   }
 
-  @Test
-  public void testCRC2() throws Exception {
-    String paths[] = {
-      "/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst",
-      "/Users/fa/Projects/java-libpst/src/test/resources/dist-list.pst",
-      "/Users/fa/Projects/java-libpst/src/test/resources/passworded.pst"
-    };
-
-    for (String p : paths) {
-      Path path = Paths.get(p);
-      PSTFile pst = new PSTFile(path);
-      System.out.println("path: " + path);
-      System.out.println("dwMagic: " + Integer.toUnsignedString(pst.readdwMagic()));
-      System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.readdwCRCPartial()));
-
-      RandomAccessFile file = new RandomAccessFile(path.toFile(), "r");
-      file.seek(8);
-      byte data[] = new byte[471];
-      file.read(data);
-
-      int crc = CRC.computeCRC(0, data);
-      System.out.println("computed dwCRCPartial: " + Integer.toUnsignedString(crc));
-
-      assertEquals(Integer.toUnsignedString(pst.readdwCRCPartial()), Integer.toUnsignedString(crc));
-      assertEquals(pst.readdwCRCPartial(), crc);
-    }
-  }
+//  @Test
+//  public void testCRC2() throws Exception {
+//    String paths[] = {
+//      "/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst",
+//      "/Users/fa/Projects/java-libpst/src/test/resources/dist-list.pst",
+//      "/Users/fa/Projects/java-libpst/src/test/resources/passworded.pst"
+//    };
+//
+//    for (String p : paths) {
+//      Path path = Paths.get(p);
+//      PSTFile pst = new PSTFile(path);
+//      System.out.println("path: " + path);
+//      System.out.println("dwMagic: " + Integer.toUnsignedString(pst.readdwMagic()));
+//      System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.readdwCRCPartial()));
+//
+//      RandomAccessFile file = new RandomAccessFile(path.toFile(), "r");
+//      file.seek(8);
+//      byte data[] = new byte[471];
+//      file.read(data);
+//
+//      int crc = CRC.computeCRC(0, data);
+//      System.out.println("computed dwCRCPartial: " + Integer.toUnsignedString(crc));
+//
+//      assertEquals(Integer.toUnsignedString(pst.readdwCRCPartial()), Integer.toUnsignedString(crc));
+//      assertEquals(pst.readdwCRCPartial(), crc);
+//    }
+//  }
 }
