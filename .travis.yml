@@ -1,0 +1,11 @@
+# Configuration for Travis CI http://travis-ci.org
+
+# Use container
+sudo: false
+
+language: java
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk6
