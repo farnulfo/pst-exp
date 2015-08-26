@@ -65,20 +65,20 @@ public class PSTFileTest {
     assertEquals(23, dWver);
   }
 
-  @Test
-  public void testReadwVerEnron() throws Exception {
-    System.out.println("readwVer");
-    Path path = Paths.get("/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst");
-    PSTFile pstFile = new PSTFile(path);
-    int dWver = pstFile.readwVer();
-    assertEquals(23, dWver);
-  }
-  
-  @Test
-  public void testCRCEnron() throws Exception {
-    Path path = Paths.get("/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst");
-    PSTFile pstFile = new PSTFile(path);
-    int dwCRCPartial = pstFile.readdwCRCPartial();
-    assertEquals(dwCRCPartial, pstFile.computeCRCPartial());
-  }
+//  @Test
+//  public void testReadwVerEnron() throws Exception {
+//    System.out.println("readwVer");
+//    Path path = Paths.get("/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst");
+//    PSTFile pstFile = new PSTFile(path);
+//    int dWver = pstFile.readwVer();
+//    assertEquals(23, dWver);
+//  }
+//  
+//  @Test
+//  public void testCRCEnron() throws Exception {
+//    Path path = Paths.get("/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst");
+//    PSTFile pstFile = new PSTFile(path);
+//    int dwCRCPartial = pstFile.readdwCRCPartial();
+//    assertEquals(dwCRCPartial, pstFile.computeCRCPartial());
+//  }
 }
