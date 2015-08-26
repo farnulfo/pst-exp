@@ -4,6 +4,7 @@ import com.google.common.io.BaseEncoding;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -19,7 +20,7 @@ public class HexToBin {
   private static final String SUFFIX = "  *!BDN...7SM......*";
 
   public static void fromHexToBin(Path pathInput, Path output) throws IOException {
-    try (BufferedReader br = new BufferedReader(Files.newBufferedReader(pathInput));
+    try (BufferedReader br = new BufferedReader(Files.newBufferedReader(pathInput, StandardCharsets.UTF_8));
             OutputStream os = Files.newOutputStream(output, StandardOpenOption.CREATE_NEW);) {
       String line;
       while ((line = br.readLine()) != null) {
