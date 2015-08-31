@@ -89,4 +89,10 @@ public class PSTFile implements IPSTFile {
     public int read(ByteBuffer buffer, long position) throws IOException {
         return fileChannel.read(buffer, position);
     }
+
+    @Override
+    public int read(byte[] bytes) throws IOException {
+        ByteBuffer b = ByteBuffer.wrap(bytes);
+        return fileChannel.read(b);
+    }
 }

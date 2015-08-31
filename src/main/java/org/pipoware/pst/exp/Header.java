@@ -23,7 +23,9 @@ public class Header {
     private int dwCRCPartial;
     private static final int CRC_PARTIAL_BEGIN_OFFSET = 8;
     private static final int CRC_PARTIAL_DATA_SIZE = 471;
-    
+    private static final int CRC_FULL_DATA_SIZE = 516;
+    private static final int CRC_FULL_BEGIN_OFFSET = 8;
+
     private static final int ULONG_SIZE = 8;
 
     private short wVer;
@@ -35,10 +37,27 @@ public class Header {
     long bidUnused;
     long bidNextP;
     long bidNextB;
-    
-    int rgnid[] = new int[128];
+
+    int rgnid[] = new int[32];
     private long qwUnused;
     private Root root;
+    private int dwAlign;
+    private final byte rgbFM[] = new byte[128];
+    private final byte rgbFP[] = new byte[128];
+    private byte bSentinel;
+    private byte bCryptMethod;
+    private short rgbReserved;
+    private int dwCRCFull;
+    private long ullReserved;
+    private int dwReservedANSI;
+
+    public byte[] getRgbFM() {
+        return rgbFM;
+    }
+
+    public byte[] getRgbFP() {
+        return rgbFP;
+    }
 
     public int getwMagicClient() {
         return wMagicClient;
@@ -50,6 +69,10 @@ public class Header {
 
     public int getDwReserved2() {
         return dwReserved2;
+    }
+
+    public Root getRoot() {
+        return root;
     }
 
     public long getBidUnused() {
@@ -74,6 +97,7 @@ public class Header {
     private int dwUnique;
 
     public enum PST_TYPE {
+
         ANSI, UNICODE
     };
     private PST_TYPE type;
@@ -123,22 +147,64 @@ public class Header {
             bidNextP = pst.readDWORD();
             bidNextB = pst.readDWORD();
         }
-        
+
         dwUnique = pst.readDWORD();
-        
-        for(int i = 0; i < rgnid.length; i ++) {
+
+        for (int i = 0; i < rgnid.length; i++) {
             rgnid[i] = pst.readDWORD();
         }
-        
+
         qwUnused = pst.readULONG();
         root = new Root(pst, type);
-        
+
+        if (type == PST_TYPE.UNICODE) {
+            dwAlign = pst.readDWORD();
+        }
+
+        pst.read(rgbFM);
+        pst.read(rgbFP);
+
+        bSentinel = pst.readBYTE();
+        if (bSentinel != (byte) 0x80) {
+            throw new IllegalArgumentException("Illegal bSentinel value: " + bSentinel + ", expected : 0x80");
+        }
+
+        bCryptMethod = pst.readBYTE();
+        if (!((bCryptMethod == (byte) 0x00)
+          || (bCryptMethod == (byte) 0x01)
+          || (bCryptMethod == (byte) 0x02))) {
+            throw new IllegalArgumentException("Illegal bCryptMethod value: " + bCryptMethod + ", expected : 0x00, 0x01 or 0x02");
+        }
+
+        rgbReserved = pst.readWORD();
+
+        if (type == PST_TYPE.UNICODE) {
+            bidNextB = pst.readULONG();
+        }
+
+        if (type == PST_TYPE.UNICODE) {
+            dwCRCFull = pst.readDWORD();
+            int dwCRCFullComputed = computeCRCFull();
+            if (dwCRCFull != dwCRCFullComputed) {
+                throw new IllegalArgumentException("Incorrect dwCRCFull computed : " + dwCRCFullComputed + ", expected : " + dwCRCFull);
+            }
+        }
+
+        if (type == PST_TYPE.ANSI) {
+            ullReserved = pst.readULONG();
+            dwReservedANSI = pst.readDWORD();
+        }
+
     }
-
-
 
     private int computeCRCPartial() throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(CRC_PARTIAL_DATA_SIZE);
+        pst.read(buffer, CRC_PARTIAL_BEGIN_OFFSET);
+        return CRC.computeCRC(0, buffer.array());
+    }
+
+    private int computeCRCFull() throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(CRC_FULL_DATA_SIZE);
         pst.read(buffer, CRC_PARTIAL_BEGIN_OFFSET);
         return CRC.computeCRC(0, buffer.array());
     }
@@ -165,6 +231,10 @@ public class Header {
 
     public byte getbPlatformAccess() {
         return bPlatformAccess;
+    }
+
+    public int[] getRgnid() {
+        return rgnid;
     }
 
 }

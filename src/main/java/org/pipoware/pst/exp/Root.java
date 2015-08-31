@@ -11,9 +11,9 @@ import java.io.IOException;
  *
  * @author Franck
  */
-class Root {
+public class Root {
     
-    private int dwReserved;
+    private final int dwReserved;
     private long ibFileEof;
     private long ibAMapLast;
     long cbAMapFree;
@@ -29,8 +29,8 @@ class Root {
         if (type == Header.PST_TYPE.UNICODE) {
             ibFileEof = pst.readULONG();
             ibAMapLast = pst.readULONG();
-            cbAMapFree = pst.readDWORD();
-            cbPMapFree = pst.readDWORD();
+            cbAMapFree = pst.readULONG();
+            cbPMapFree = pst.readULONG();
             long bid = pst.readULONG();
             long ib = pst.readULONG();
             bRefNBT = new BREF(bid, ib);

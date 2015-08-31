@@ -18,5 +18,6 @@ public interface IPSTFile {
     byte readBYTE() throws IOException;
     long readULONG() throws IOException;
     int read(ByteBuffer buffer, long position) throws IOException;
+    int read(byte[] bytes) throws IOException;
     void position(long newPosition) throws IOException;
 }

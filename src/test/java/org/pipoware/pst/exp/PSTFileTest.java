@@ -1,6 +1,5 @@
 package org.pipoware.pst.exp;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
