@@ -62,7 +62,7 @@ public class CRCTest {
     file.read(data);
 
     PSTFile pst = new PSTFile(path);
-    System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.readdwCRCPartial()));
+    System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.getHeader().getDwCRCPartial()));
     int crc = CRC.computeCRC(0, data);
     System.out.println(Integer.toUnsignedString(crc));
   }
@@ -74,8 +74,8 @@ public class CRCTest {
     //Path path = Paths.get("/Users/fa/Projects/java-libpst/src/test/resources/passworded.pst");
     Path path = Paths.get(getClass().getResource("/header2.bin").toURI());
     PSTFile pst = new PSTFile(path);
-    System.out.println("dwMagic: " + Integer.toUnsignedString(pst.readdwMagic()));
-    System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.readdwCRCPartial()));
+    System.out.println("dwMagic: " + Integer.toUnsignedString(pst.getHeader().getDwMagic()));
+    System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.getHeader().getDwCRCPartial()));
 
     RandomAccessFile file = new RandomAccessFile(path.toFile(), "r");
     file.seek(8);

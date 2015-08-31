@@ -41,7 +41,7 @@ public class PSTFileTest {
   public void testReaddwMagic() throws Exception {
     System.out.println("readdwMagic");
     PSTFile pstFile = new PSTFile(Paths.get(getClass().getResource("/header.bin").toURI()));
-    int dwMagic = pstFile.readdwMagic();
+    int dwMagic = pstFile.getHeader().getDwMagic();
     assertEquals(1313096225L, Integer.toUnsignedLong(dwMagic));
   }
 
@@ -52,7 +52,7 @@ public class PSTFileTest {
   public void testReaddwCRCPartial() throws Exception {
     System.out.println("readdwCRCPartial");
     PSTFile pstFile = new PSTFile(Paths.get(getClass().getResource("/header.bin").toURI()));
-    int dwCRCPartial = pstFile.readdwCRCPartial();
+    int dwCRCPartial = pstFile.getHeader().getDwCRCPartial();
     assertEquals(932882702L, Integer.toUnsignedLong(dwCRCPartial));
     
   }
@@ -61,7 +61,7 @@ public class PSTFileTest {
   public void testReadwVer() throws Exception {
     System.out.println("readwVer");
     PSTFile pstFile = new PSTFile(Paths.get(getClass().getResource("/header.bin").toURI()));
-    int dWver = pstFile.readwVer();
+    int dWver = pstFile.getHeader().getwVer();
     assertEquals(23, dWver);
   }
 

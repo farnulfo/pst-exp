@@ -5,7 +5,6 @@
  */
 package org.pipoware.pst.exp;
 
-import com.google.common.io.BaseEncoding;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -18,60 +17,76 @@ import java.nio.file.Path;
  *
  * @author fa
  */
-public class PSTFile {
+public class PSTFile implements IPSTFile {
 
-  private Path path = null;
-  private RandomAccessFile file = null;
-  private FileChannel fileChannel = null;
-  
-  public static final int DWORD_SIZE = 4;
-  public static final int WORD_SIZE =2;
-  
-  public static final int DWMAGIC_OFFSET = 0;
-  public static final int DWCRCPARTIAL_OFFSET = 4;
-  public static final int WVER_OFFSET = 10;
-    
-  public PSTFile(Path path) throws FileNotFoundException {
-    this.path = path;
-    this.file = new RandomAccessFile(this.path.toFile(), "r");
-    fileChannel = this.file.getChannel();
-  }
+    private Path path = null;
+    private RandomAccessFile file = null;
+    private FileChannel fileChannel = null;
 
-  public int readdwMagic() throws FileNotFoundException, IOException {
-    ByteBuffer buffer = ByteBuffer.allocate(DWORD_SIZE);
-    buffer.order(ByteOrder.LITTLE_ENDIAN);
-   
-    fileChannel.read(buffer, DWMAGIC_OFFSET);
-    buffer.flip();
+    private static final int ULONG_SIZE = 8;
+    public static final int DWORD_SIZE = 4;
+    public static final int WORD_SIZE = 2;
 
-    return buffer.getInt();
-  }
+    public static final int DWMAGIC_OFFSET = 0;
+    public static final int DWCRCPARTIAL_OFFSET = 4;
+    public static final int WVER_OFFSET = 10;
+    private final ByteBuffer dword = ByteBuffer.allocate(DWORD_SIZE).order(ByteOrder.LITTLE_ENDIAN);
+    private final ByteBuffer word = ByteBuffer.allocate(WORD_SIZE).order(ByteOrder.LITTLE_ENDIAN);
+    private final ByteBuffer ulong = ByteBuffer.allocate(ULONG_SIZE).order(ByteOrder.LITTLE_ENDIAN);
+    private final ByteBuffer ubyte = ByteBuffer.allocate(1);
+    private final Header header;
 
-  public int readdwCRCPartial() throws IOException {
-    ByteBuffer buffer = ByteBuffer.allocate(DWORD_SIZE);
-    buffer.order(ByteOrder.LITTLE_ENDIAN);
+    public PSTFile(Path path) throws FileNotFoundException, IOException {
+        this.path = path;
+        this.file = new RandomAccessFile(this.path.toFile(), "r");
+        fileChannel = this.file.getChannel();
+        header = new Header(this);
+        
+    }
 
-    fileChannel.read(buffer, DWCRCPARTIAL_OFFSET);
+    public Header getHeader() {
+        return header;
+    }
 
-    buffer.flip();
+    @Override
+    public int readDWORD() throws FileNotFoundException, IOException {
+        dword.clear();
+        fileChannel.read(dword);
+        dword.flip();
+        return dword.getInt();
+    }
 
-    return buffer.getInt();
-  }
-  
-  public short readwVer() throws FileNotFoundException, IOException {
-    ByteBuffer buffer = ByteBuffer.allocate(WORD_SIZE);
-    buffer.order(ByteOrder.LITTLE_ENDIAN);
+    @Override
+    public short readWORD() throws FileNotFoundException, IOException {
+        word.clear();
+        fileChannel.read(word);
+        word.flip();
+        return word.getShort();
+    }
 
-    fileChannel.read(buffer, WVER_OFFSET);
+    @Override
+    public long readULONG() throws FileNotFoundException, IOException {
+        ulong.clear();
+        fileChannel.read(ulong);
+        ulong.flip();
+        return ulong.getLong();
+    }
 
-    buffer.flip();
+    @Override
+    public byte readBYTE() throws FileNotFoundException, IOException {
+        ubyte.clear();
+        fileChannel.read(ubyte);
+        ubyte.flip();
+        return ubyte.get();
+    }
 
-    return buffer.getShort();
-  }
-  
-  public int computeCRCPartial() throws IOException {
-    ByteBuffer buffer = ByteBuffer.allocate(471);
-    fileChannel.read(buffer, 8);
-    return CRC.computeCRC(0, buffer.array());
-  }
+    @Override
+    public void position(long newPosition) throws IOException {
+        fileChannel.position(newPosition);
+    }
+
+    @Override
+    public int read(ByteBuffer buffer, long position) throws IOException {
+        return fileChannel.read(buffer, position);
+    }
 }
