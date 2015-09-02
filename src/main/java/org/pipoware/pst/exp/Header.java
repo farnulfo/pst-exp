@@ -50,6 +50,10 @@ public class Header {
   private int dwCRCFull;
   private long ullReserved;
   private int dwReservedANSI;
+  private final byte rgbReserved2[] = new byte[3];;
+  private byte bReserved;
+  private final byte rgbReserved3[] = new byte[32];
+  
 
   public byte[] getRgbFM() {
     return rgbFM;
@@ -194,7 +198,12 @@ public class Header {
       ullReserved = pst.readULONG();
       dwReservedANSI = pst.readDWORD();
     }
-
+    
+    pst.read(rgbReserved2);
+    
+    bReserved = pst.readBYTE();
+    
+    pst.read(rgbReserved3);
   }
 
   private int computeCRCPartial() throws IOException {
