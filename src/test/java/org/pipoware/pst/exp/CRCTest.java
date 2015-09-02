@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.pipoware.pst.exp;
 
 import java.io.RandomAccessFile;
@@ -55,62 +50,27 @@ public class CRCTest {
 
   @Test
   public void testCRC() throws Exception {
-    Path path = Paths.get(getClass().getResource("/header.bin").toURI());
-    RandomAccessFile file = new RandomAccessFile(path.toFile(), "r");
-    file.seek(8);
-    byte data[] = new byte[471];
-    file.read(data);
+        String files[] = new String[]{
+            "/header.bin",
+            "/header2.bin",
+            "/pstsdk/sample1.pst",
+            // "/pstsdk/sample2.pst", bSentinel != 0x80
+            "/pstsdk/submessage.pst",
+            // "/pstsdk/test_ansi.pst", bSentinel != 0x80
+            "/pstsdk/test_unicode.pst"
+        };
 
-    PSTFile pst = new PSTFile(path);
-    System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.getHeader().getDwCRCPartial()));
-    int crc = CRC.computeCRC(0, data);
-    System.out.println(Integer.toUnsignedString(crc));
-  }
+        for (String f : files) {
+            Path path = Paths.get(getClass().getResource(f).toURI());
+            PSTFile pst = new PSTFile(path);
+            RandomAccessFile file = new RandomAccessFile(path.toFile(), "r");
+            file.seek(8);
+            byte data[] = new byte[471];
+            file.read(data);
 
-  @Test
-  public void testCRCEnron() throws Exception {
-    //Path path = Paths.get("/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst");
-    //Path path = Paths.get("/Users/fa/Projects/java-libpst/src/test/resources/dist-list.pst");
-    //Path path = Paths.get("/Users/fa/Projects/java-libpst/src/test/resources/passworded.pst");
-    Path path = Paths.get(getClass().getResource("/header2.bin").toURI());
-    PSTFile pst = new PSTFile(path);
-    System.out.println("dwMagic: " + Integer.toUnsignedString(pst.getHeader().getDwMagic()));
-    System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.getHeader().getDwCRCPartial()));
+            int crc = CRC.computeCRC(0, data);
+            assertEquals("computeCRC for " + f, pst.getHeader().getDwCRCPartial(), crc);
+        }
+    }
 
-    RandomAccessFile file = new RandomAccessFile(path.toFile(), "r");
-    file.seek(8);
-    byte data[] = new byte[471];
-    file.read(data);
-
-    int crc = CRC.computeCRC(0, data);
-    System.out.println("computed dwCRCPartial: " + Integer.toUnsignedString(crc));
-  }
-
-//  @Test
-//  public void testCRC2() throws Exception {
-//    String paths[] = {
-//      "/Users/fa/Downloads/albert_meyers/albert_meyers_000_1_1.pst",
-//      "/Users/fa/Projects/java-libpst/src/test/resources/dist-list.pst",
-//      "/Users/fa/Projects/java-libpst/src/test/resources/passworded.pst"
-//    };
-//
-//    for (String p : paths) {
-//      Path path = Paths.get(p);
-//      PSTFile pst = new PSTFile(path);
-//      System.out.println("path: " + path);
-//      System.out.println("dwMagic: " + Integer.toUnsignedString(pst.readdwMagic()));
-//      System.out.println("dwCRCPartial: " + Integer.toUnsignedString(pst.readdwCRCPartial()));
-//
-//      RandomAccessFile file = new RandomAccessFile(path.toFile(), "r");
-//      file.seek(8);
-//      byte data[] = new byte[471];
-//      file.read(data);
-//
-//      int crc = CRC.computeCRC(0, data);
-//      System.out.println("computed dwCRCPartial: " + Integer.toUnsignedString(crc));
-//
-//      assertEquals(Integer.toUnsignedString(pst.readdwCRCPartial()), Integer.toUnsignedString(crc));
-//      assertEquals(pst.readdwCRCPartial(), crc);
-//    }
-//  }
 }
