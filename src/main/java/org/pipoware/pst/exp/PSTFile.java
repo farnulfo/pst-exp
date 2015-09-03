@@ -35,13 +35,18 @@ public class PSTFile implements IPSTFile {
     private final ByteBuffer ulong = ByteBuffer.allocate(ULONG_SIZE).order(ByteOrder.LITTLE_ENDIAN);
     private final ByteBuffer ubyte = ByteBuffer.allocate(1);
     private final Header header;
+  private final NBD nbd;
+  private final LTP ltp;
+  private final Messaging messaging;
 
     public PSTFile(Path path) throws FileNotFoundException, IOException {
         this.path = path;
         this.file = new RandomAccessFile(this.path.toFile(), "r");
         fileChannel = this.file.getChannel();
         header = new Header(this);
-        
+        nbd = new NBD(this, header);
+        ltp = new LTP(nbd);
+        messaging = new Messaging(ltp);
     }
 
     public Header getHeader() {
