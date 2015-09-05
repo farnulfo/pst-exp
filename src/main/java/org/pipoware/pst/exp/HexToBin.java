@@ -31,7 +31,7 @@ public class HexToBin {
         for (String token : tokens) {
           System.out.println(token);
 
-          byte[] decode = BaseEncoding.base32Hex().decode(token);
+          byte[] decode = BaseEncoding.base16().decode(token);
           os.write(decode);
         }
       }
