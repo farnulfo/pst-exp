@@ -5,12 +5,16 @@
  */
 package org.pipoware.pst.exp;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -43,5 +47,18 @@ public class PageTest {
     bytes[512-16] = (byte) 0x70;
     Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
   }
-  
+
+  @Test
+  public void testSampleIntermediateBTPage() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pages/sample_intermediate_bt_page.bin").toURI());
+    byte[] bytes = Files.readAllBytes(path);
+    Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
+  }
+
+  @Test
+  public void testSampleLeafNBTPage() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pages/sample_leaf_nbt_page.bin").toURI());
+    byte[] bytes = Files.readAllBytes(path);
+    Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
+  }
 }
