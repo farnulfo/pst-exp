@@ -26,10 +26,26 @@ class Page {
   private short wSig;
   private int dwCRC;
   private long bid;
+  /**
+   * The number of BTree entries stored in the page data.
+   */
   private byte cEnt;
+  
+  /**
+   * The maximum number of entries that can fit inside the page data.
+   */
   private byte cEntMax;
+  
+  /**
+   * The size of each BTree entry
+   */
   private byte cbEnt;
+  
+  /**
+   * The depth level of this page.
+   */
   private byte cLevel;
+  
   private NBTENTRY[] nbtentries;
 
   private enum PageType {
