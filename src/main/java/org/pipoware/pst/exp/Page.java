@@ -47,6 +47,7 @@ class Page {
   private byte cLevel;
   
   private NBTENTRY[] nbtentries;
+  private BTENTRY[] btentries;
 
   private enum PageType {
 
@@ -201,6 +202,7 @@ class Page {
         readRgEntries(EntryType.NBTENTRY, type);
       } else if (cLevel > 0) {
         // BTENTRY
+        readRgEntries(EntryType.BTENTRY, type);
       } else {
         throw new IllegalArgumentException("Unexpected cLevel value : " + cLevel + " for a NBT page");
       }
@@ -227,6 +229,12 @@ class Page {
         break;
       
       case BTENTRY:
+        btentries = new BTENTRY[cEnt];
+        for (int i = 0; i < cEnt; i++) {
+          int offset = i*cbEnt;
+          byte entrybyte[] = Arrays.copyOfRange(bytes, offset, offset + cbEnt);
+          btentries[i] = new BTENTRY(entrybyte, type);
+        }
         break;
         
       case BBTENTRY:
