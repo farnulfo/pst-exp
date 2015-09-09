@@ -48,6 +48,7 @@ class Page {
   
   private NBTENTRY[] nbtentries;
   private BTENTRY[] btentries;
+  private BBTENTRY[] bbtentries;
 
   private enum PageType {
 
@@ -209,8 +210,10 @@ class Page {
     } else if (pageType == PageType.ptypeBBT) {
       if (cLevel == 0) {
         // BBTENTRY
+        readRgEntries(EntryType.BBTENTRY, type);
       } else if (cLevel < 0) {
         // BTENTRY
+        readRgEntries(EntryType.BTENTRY, type);
       } else {
         throw new IllegalArgumentException("Unexpected cLevel value : " + cLevel + " for a BBT page");
       }
@@ -238,10 +241,16 @@ class Page {
         break;
         
       case BBTENTRY:
+        bbtentries = new BBTENTRY[cEnt];
+        for (int i = 0; i < cEnt; i++) {
+          int offset = i*cbEnt;
+          byte entrybyte[] = Arrays.copyOfRange(bytes, offset, offset + cbEnt);
+          bbtentries[i] = new BBTENTRY(entrybyte, type);
+        }
         break;
 
       default:
-        throw new AssertionError();
+        throw new UnsupportedOperationException("Unsupported " + entryType);
     }
   }
 

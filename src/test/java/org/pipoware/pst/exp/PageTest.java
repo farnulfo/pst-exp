@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -59,6 +60,17 @@ public class PageTest {
   public void testSampleLeafNBTPage() throws URISyntaxException, IOException {
     Path path = Paths.get(getClass().getResource("/pages/sample_leaf_nbt_page.bin").toURI());
     byte[] bytes = Files.readAllBytes(path);
+    Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
+  }
+  
+  @Test
+  public void testSampleLeafBBTPage() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pages/sample_leaf_bbt_page.bin").toURI());
+    byte[] bytes = Files.readAllBytes(path);
+    // Bug in MS File Format documentation 3.5 Sample Leaf BBT Page
+    // cLevel = 0 in text but clLevel = 0x01 in hexadecimal dump
+    Assert.assertEquals(0x01, bytes[491]);
+    bytes[491] = 0x00;
     Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
   }
 }
