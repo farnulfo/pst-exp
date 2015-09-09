@@ -220,7 +220,8 @@ class Page {
       case NBTENTRY:
         nbtentries = new NBTENTRY[cEnt];
         for (int i = 0; i < cEnt; i++) {
-          byte entrybyte[] = Arrays.copyOfRange(bytes, i, cbEnt);
+          int offset = i*cbEnt;
+          byte entrybyte[] = Arrays.copyOfRange(bytes, offset, offset + cbEnt);
           nbtentries[i] = new NBTENTRY(entrybyte, type);
         }
         break;
