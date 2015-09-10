@@ -113,7 +113,7 @@ class Page {
     bb.flip();
     wSig = bb.getShort(0);
     if ((pageType == PageType.ptypeAMap) || (pageType == PageType.ptypePMap)
-      || (pageType == PageType.ptypeFPMap) || (pageType == PageType.ptypeFPMap)) {
+      || (pageType == PageType.ptypeFMap) || (pageType == PageType.ptypeFPMap)) {
       if (wSig != 0) {
         throw new IllegalArgumentException("wSig : " + wSig + " <> 0");
       }
