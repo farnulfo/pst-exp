@@ -73,4 +73,16 @@ public class PageTest {
     bytes[491] = 0x00;
     Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
   }
+
+  @Test
+  public void testPSTPage() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
+    PSTFile pstFile = new PSTFile(path);
+    BREF bref = pstFile.getHeader().getRoot().bRefNBT;
+    long offset = bref.getIb();
+    pstFile.position(offset);
+    byte []b = new byte[512];
+    pstFile.read(b);
+    new Page(b, Header.PST_TYPE.UNICODE);
+  }
 }

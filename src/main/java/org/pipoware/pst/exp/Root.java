@@ -18,8 +18,8 @@ public class Root {
     private long ibAMapLast;
     long cbAMapFree;
     long cbPMapFree;
-    BREF bRefNBT;
-    BREF bRefBBT;
+    public BREF bRefNBT;
+    public BREF bRefBBT;
     byte fAMapValid;
     byte bReserved;
     short wReserved;
