@@ -5,6 +5,7 @@
  */
 package org.pipoware.pst.exp;
 
+import com.google.common.base.MoreObjects;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -14,7 +15,7 @@ import java.nio.ByteOrder;
  */
 class NBTENTRY {
 
-  private final long nid;
+  private final NID nid;
   private final long bidData;
   private final long bidSub;
   private final long nidParent;
@@ -23,19 +24,29 @@ class NBTENTRY {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
 
     if (type == Header.PST_TYPE.UNICODE) {
-      nid = bb.getLong();
+      nid = new NID(bb.getLong());
       bidData = bb.getLong();
       bidSub = bb.getLong();
       nidParent = bb.getInt();
       int dwPadding = bb.getInt();
       System.out.println(dwPadding);
     } else {
-      nid = bb.getInt();
+      nid = new NID(bb.getInt());
       bidData = bb.getInt();
       bidSub = bb.getInt();
       nidParent = bb.getInt();
     }
 
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+      .add("NID", nid)
+      .add("bidData", bidData)
+      .add("bidSub", bidSub)
+      .add("nidParent", nidParent)
+      .toString();
   }
 
 }
