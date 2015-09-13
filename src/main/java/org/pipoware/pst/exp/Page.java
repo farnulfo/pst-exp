@@ -5,6 +5,7 @@
  */
 package org.pipoware.pst.exp;
 
+import com.google.common.base.MoreObjects;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -253,5 +254,26 @@ class Page {
         throw new UnsupportedOperationException("Unsupported " + entryType);
     }
   }
-
+  
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+      .add("type", pType)
+      .add("nbtentries", Arrays.toString(nbtentries))
+      .add("btentries", Arrays.toString(btentries))
+      .add("bbtentries", Arrays.toString(bbtentries))
+      .toString();
+//    sb.append(", bbtentries :").append(Arrays.toString(bbtentries));
+//    sb.append(", btentries :").append(Arrays.toString(btentries));
+//    retur
+     
+//    sb.append(", bbtentries :").append(Arrays.toString(bbtentries));
+//    sb.append(", btentries :").append(Arrays.toString(btentries));
+//    StringBuilder sb = new StringBuilder();
+//    sb.append("Page, type : ").append(pageType);
+//    sb.append(", nbtentries :").append(Arrays.toString(nbtentries));
+//    sb.append(", bbtentries :").append(Arrays.toString(bbtentries));
+//    sb.append(", btentries :").append(Arrays.toString(btentries));
+//    return sb.toString();
+  }
 }

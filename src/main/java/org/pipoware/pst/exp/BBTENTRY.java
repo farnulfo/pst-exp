@@ -5,6 +5,7 @@
  */
 package org.pipoware.pst.exp;
 
+import com.google.common.base.MoreObjects;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -13,6 +14,7 @@ import java.nio.ByteOrder;
  * @author Franck
  */
 class BBTENTRY {
+
   private final BREF bref;
   private final short cb;
   private final short cref;
@@ -35,5 +37,13 @@ class BBTENTRY {
       cref = bb.getShort();
     }
   }
-  
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+      .add("bref", bref)
+      .add("cb", cb)
+      .add("cref", cref)
+      .toString();
+  }
 }

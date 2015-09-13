@@ -60,7 +60,8 @@ public class PageTest {
   public void testSampleLeafNBTPage() throws URISyntaxException, IOException {
     Path path = Paths.get(getClass().getResource("/pages/sample_leaf_nbt_page.bin").toURI());
     byte[] bytes = Files.readAllBytes(path);
-    Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
+    Page page = new Page(bytes, Header.PST_TYPE.UNICODE);
+    System.out.println("Page " + page);
   }
   
   @Test
@@ -83,6 +84,7 @@ public class PageTest {
     pstFile.position(offset);
     byte []b = new byte[512];
     pstFile.read(b);
-    new Page(b, Header.PST_TYPE.UNICODE);
+    Page page = new Page(b, Header.PST_TYPE.UNICODE);
+    System.out.println("Page " + page);
   }
 }
