@@ -42,9 +42,9 @@ class NBTENTRY {
   public String toString() {
     return MoreObjects.toStringHelper(this)
       .add("NID", nid)
-      .add("bidData", bidData)
-      .add("bidSub", bidSub)
-      .add("nidParent", nidParent)
+      .add("bidData", "0x" + Long.toHexString(bidData))
+      .add("bidSub", "0x" + Long.toHexString(bidSub))
+      .add("nidParent", "0x" + Long.toHexString(nidParent))
       .toString();
   }
 
