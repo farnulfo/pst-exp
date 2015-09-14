@@ -29,7 +29,6 @@ class NBTENTRY {
       bidSub = bb.getLong();
       nidParent = bb.getInt();
       int dwPadding = bb.getInt();
-      System.out.println(dwPadding);
     } else {
       nid = new NID(bb.getInt());
       bidData = bb.getInt();
