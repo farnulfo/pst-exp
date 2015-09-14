@@ -18,8 +18,8 @@ import java.util.EnumSet;
 class Page {
 
   public static final int PAGE_SIZE = 512;
-  private static final int UNICODE_TRAILER_SIZE = 16;
-  private static final int ANSI_TRAILER_SIZE = 12;
+  public static final int UNICODE_TRAILER_SIZE = 16;
+  public static final int ANSI_TRAILER_SIZE = 12;
   private static final int DWPADDING_SIZE = 4;
 
   private final byte[] bytes;

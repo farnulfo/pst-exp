@@ -7,9 +7,12 @@ package org.pipoware.pst.exp;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -68,10 +71,34 @@ public class PageTest {
   public void testSampleLeafBBTPage() throws URISyntaxException, IOException {
     Path path = Paths.get(getClass().getResource("/pages/sample_leaf_bbt_page.bin").toURI());
     byte[] bytes = Files.readAllBytes(path);
-    // Bug in MS File Format documentation 3.5 Sample Leaf BBT Page
+    
+    // Bug in MS File Format documentation 3.5 Sample Leaf BBT Page :
     // cLevel = 0 in text but clLevel = 0x01 in hexadecimal dump
+    // This is wrong because it's a leaf page and cLevel must be = 0
+    
+    // Verify original value
     Assert.assertEquals(0x01, bytes[491]);
+    
+    // Correct value
     bytes[491] = 0x00;
+    
+    // Verify original dwCRC value in PAGETRAILER
+    Assert.assertEquals((byte) 0x2F, bytes[500]);
+    Assert.assertEquals((byte) 0xA0, bytes[501]);
+    Assert.assertEquals((byte) 0xF6, bytes[502]);
+    Assert.assertEquals((byte) 0xA1, bytes[503]);
+
+    // As we've changed cLevel value that is part of data that will be used for page CRC
+    // we need to recompute CRC and change the dwCRC value in PAGETRAILER
+    int dwNewCRCValue = CRC.computeCRC(0, Arrays.copyOf(bytes, Page.PAGE_SIZE - Page.UNICODE_TRAILER_SIZE));
+    
+    ByteBuffer bb = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
+    bb.putInt(dwNewCRCValue);
+    byte dwNewCRCValueBytes[] = bb.array();
+    bytes[500] = dwNewCRCValueBytes[0];
+    bytes[501] = dwNewCRCValueBytes[1];
+    bytes[502] = dwNewCRCValueBytes[2];
+    bytes[503] = dwNewCRCValueBytes[3];
     Page p = new Page(bytes, Header.PST_TYPE.UNICODE);
   }
 
