@@ -15,8 +15,8 @@ import java.nio.ByteOrder;
  */
 class BTENTRY {
 
-  private final long btKey;
-  private final BREF bref;
+  public final long btKey;
+  public final BREF bref;
 
   BTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
