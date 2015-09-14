@@ -134,10 +134,10 @@ class Page {
         offset += 4;
 
         crcData = Arrays.copyOf(this.bytes, PAGE_SIZE - UNICODE_TRAILER_SIZE);
-        dwComputedCRC = CRC.computeCRC(dwCRC, crcData);
-//        if (dwCRC != dwComputedCRC) {
-//          throw new IllegalArgumentException("dwCRC = " + dwCRC + " <> dwComputedCRC = " + dwComputedCRC);
-//        }
+        dwComputedCRC = CRC.computeCRC(0, crcData);
+        if (dwCRC != dwComputedCRC) {
+          throw new IllegalArgumentException("dwCRC = " + dwCRC + " <> dwComputedCRC = " + dwComputedCRC);
+        }
 
         bb = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN);
         bb.put(this.bytes, offset, 8);
@@ -157,7 +157,7 @@ class Page {
         dwCRC = bb.getInt();
 
         crcData = Arrays.copyOf(this.bytes, PAGE_SIZE - ANSI_TRAILER_SIZE);
-        dwComputedCRC = CRC.computeCRC(dwCRC, crcData);
+        dwComputedCRC = CRC.computeCRC(0, crcData);
         if (dwCRC != dwComputedCRC) {
           throw new IllegalArgumentException("dwCRC = " + dwCRC + " <> dwComputedCRC = " + dwComputedCRC);
         }
