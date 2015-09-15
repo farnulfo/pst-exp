@@ -114,4 +114,27 @@ public class PageTest {
     Page page = new Page(b, Header.PST_TYPE.UNICODE);
     System.out.println("Page " + page);
   }
+
+  @Test
+  public void testPSTPages() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
+    PSTFile pstFile = new PSTFile(path);
+    BREF bref = pstFile.getHeader().getRoot().bRefNBT;
+    long offset = bref.getIb();
+    pstFile.position(offset);
+    byte []b = new byte[512];
+    pstFile.read(b);
+    Page page = new Page(b, Header.PST_TYPE.UNICODE);
+    System.out.println("Page " + page);
+    for (BTENTRY btentry : page.btentries) {
+      bref = btentry.bref;
+      offset = bref.getIb();
+      pstFile.position(offset);
+      b = new byte[512];
+      pstFile.read(b);
+      Page p = new Page(b, Header.PST_TYPE.UNICODE);
+      System.out.println("btkey 0x" + Long.toHexString(btentry.btKey));
+      System.out.println(p);
+    }
+  }
 }

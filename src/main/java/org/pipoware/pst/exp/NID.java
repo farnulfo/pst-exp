@@ -25,6 +25,7 @@ public class NID {
   public String toString() {
     return MoreObjects.toStringHelper(this)
       .add("nidType", "0x" + Long.toHexString(nidType))
+      .add("nidData", "0x" + Long.toHexString(data))
       .toString();
   }
 }

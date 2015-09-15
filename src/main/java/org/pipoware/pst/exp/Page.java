@@ -48,7 +48,7 @@ class Page {
   private byte cLevel;
   
   private NBTENTRY[] nbtentries;
-  private BTENTRY[] btentries;
+  public BTENTRY[] btentries;
   private BBTENTRY[] bbtentries;
 
   private enum PageType {
@@ -258,22 +258,10 @@ class Page {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("type", pType)
+      .add("type", "0x" + Long.toHexString(Byte.toUnsignedInt(pType)) + " (" + pageType + ")")
       .add("nbtentries", Arrays.toString(nbtentries))
       .add("btentries", Arrays.toString(btentries))
       .add("bbtentries", Arrays.toString(bbtentries))
       .toString();
-//    sb.append(", bbtentries :").append(Arrays.toString(bbtentries));
-//    sb.append(", btentries :").append(Arrays.toString(btentries));
-//    retur
-     
-//    sb.append(", bbtentries :").append(Arrays.toString(bbtentries));
-//    sb.append(", btentries :").append(Arrays.toString(btentries));
-//    StringBuilder sb = new StringBuilder();
-//    sb.append("Page, type : ").append(pageType);
-//    sb.append(", nbtentries :").append(Arrays.toString(nbtentries));
-//    sb.append(", bbtentries :").append(Arrays.toString(bbtentries));
-//    sb.append(", btentries :").append(Arrays.toString(btentries));
-//    return sb.toString();
   }
 }
