@@ -212,7 +212,7 @@ class Page {
       if (cLevel == 0) {
         // BBTENTRY
         readRgEntries(EntryType.BBTENTRY, type);
-      } else if (cLevel < 0) {
+      } else if (cLevel > 0) {
         // BTENTRY
         readRgEntries(EntryType.BTENTRY, type);
       } else {
