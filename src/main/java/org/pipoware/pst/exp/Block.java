@@ -26,7 +26,7 @@ public class Block {
     } else {
       throw new AssertionError("Unhandled type :" + type);
     }
-    int nb = (int) Math.ceil((double) (size + UNICODE_BLOCKTRAILER_SIZE)  / BLOCK_UNIT_SIZE);
+    int nb = (int) Math.ceil((double) (size + blocktrailerSize)  / BLOCK_UNIT_SIZE);
     return nb * BLOCK_UNIT_SIZE;
   }
 
@@ -72,7 +72,7 @@ public class Block {
     }
 
     Preconditions.checkArgument(bbtentry.bref.getBid() == bid, "BBTENTRY bid (%s) <> bid from block bytes (%s)", bbtentry.bref.getBid(), bid);
-    
+        
     byte crcData[] = Arrays.copyOf(bytes, bbtentry.cb);
     int dwComputedCRC = CRC.computeCRC(0, crcData);
 
