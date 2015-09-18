@@ -11,11 +11,11 @@ import java.util.Arrays;
  * @author Franck
  */
 public class Block {
-  public static int MAX_BLOCK_SIZE = 8192;
-  public static int BLOCK_UNIT_SIZE = 64;
-  public static int BLOCK_BOUNDARY = 64;
-  public static int UNICODE_BLOCKTRAILER_SIZE = 16;
-  public static int ANSI_BLOCKTRAILER_SIZE = 12;
+  public static final int MAX_BLOCK_SIZE = 8192;
+  public static final int BLOCK_UNIT_SIZE = 64;
+  public static final int BLOCK_BOUNDARY = 64;
+  public static final int UNICODE_BLOCKTRAILER_SIZE = 16;
+  public static final int ANSI_BLOCKTRAILER_SIZE = 12;
   
   public static int diskSize(int size, Header.PST_TYPE type) {
     int blocktrailerSize;
