@@ -15,14 +15,14 @@ import java.nio.ByteOrder;
  */
 class BBTENTRY {
 
-  private final BREF bref;
+  public final BREF bref;
   
   /**
    * The count of bytes of the raw data contained in the block 
    * referenced by BREF excluding the block trailer 
    * and alignment padding, if any.
    */
-  private final short cb;
+  public final short cb;
   
   /**
    * Reference count indicating the count of references to this block.
