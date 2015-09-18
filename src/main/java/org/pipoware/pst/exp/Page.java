@@ -49,7 +49,7 @@ class Page {
   
   private NBTENTRY[] nbtentries;
   public BTENTRY[] btentries;
-  private BBTENTRY[] bbtentries;
+  public BBTENTRY[] bbtentries;
 
   private enum PageType {
 
