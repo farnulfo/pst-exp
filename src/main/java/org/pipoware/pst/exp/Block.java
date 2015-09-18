@@ -77,6 +77,6 @@ public class Block {
     int dwComputedCRC = CRC.computeCRC(0, crcData);
 
     Preconditions.checkArgument(dwCRC == dwComputedCRC, "dwCRC (%s) <> dwComputedCRC(%s)", dwCRC ,dwComputedCRC);
-    
+    Preconditions.checkArgument(bbtentry.cb == cb, "BBTENTRY cb(%s) <> cb(%s)", bbtentry.cb, cb);
   }
 }
