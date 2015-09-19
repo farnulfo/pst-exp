@@ -167,6 +167,7 @@ public class PageTest {
         bbtentry.bref.getIb();
         int cb = bbtentry.cb;
         Block block = new Block(pstFile, bbtentry, Header.PST_TYPE.UNICODE);
+        System.out.println(block);
       }
     }
   }
