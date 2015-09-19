@@ -31,6 +31,9 @@ public class Block {
   private byte data[];
   private long rgbid[];
   private BREF bref;
+  private long lcbTotal;
+  private SLENTRY[] rgentries_slentry;
+  private SIENTRY[] rgentries_sientry;
   
 
   public static int diskSize(int size, Header.PST_TYPE type) {
@@ -118,25 +121,86 @@ public class Block {
       if (btype == BTYPE_XBLOCK_OR_XXBLOCK) {
         if (cLevel == 0x01) {
           blockType = BlockType.XBLOCK;
+        } else if (cLevel == 0x02) {
+          blockType = BlockType.XXBLOCK;
+        } else {
+          throw new IllegalArgumentException("Unsupported cLevel (" + cLevel + ") for btype " + btype);
+        }
 
-          int lcbTotal = bb.getInt();
+          lcbTotal = bb.getInt();
 
           rgbid = new long[cEnt];
           for (int i = 0; i < cEnt; i++) {
             rgbid[i] = (type == Header.PST_TYPE.UNICODE) ? bb.getLong() : bb.getInt();
           }
+      } else if (btype == BTYPE_SLBLOCK_OR_SIBLOCK) {
+        if (cLevel == 0x00) {
+          blockType = BlockType.SLBLOCK;
+          
+          int dwPadding = bb.getInt();
+          Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
+          
+          rgentries_slentry = new SLENTRY[cEnt];
+          for (int i = 0; i < cEnt; i++) {
+            long nid;
+            long bidData;
+            long bidSub;
 
+            if (type == Header.PST_TYPE.UNICODE) {
+              nid = bb.getLong();
+              bidData = bb.getLong();
+              bidSub = bb.getLong();
+            } else {
+              nid = bb.getInt();
+              bidData = bb.getInt();
+              bidSub = bb.getInt();
+            }
+            
+            rgentries_slentry[i] = new SLENTRY(nid, bidData, bidSub);
+          }
+          
+        } else if (cLevel == 0x01) {
+          blockType = BlockType.SIBLOCK;
+
+          int dwPadding = bb.getInt();
+          Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
+          
+          readRgSIENTRY(cEnt, type, bb);
+        }
+        else {
+          throw new IllegalArgumentException("Unsupported cLevel (" + cLevel + ") for btype " + btype);
         }
       }
 
     }
   }
 
+  private void readRgSIENTRY(short cEnt, Header.PST_TYPE type, ByteBuffer bb) {
+    rgentries_sientry = new SIENTRY[cEnt];
+    for (int i = 0; i < cEnt; i++) {
+      long nid;
+      long bid;
+      
+      if (type == Header.PST_TYPE.UNICODE) {
+        nid = bb.getLong();
+        bid = bb.getLong();
+      } else {
+        nid = bb.getLong();
+        bid = bb.getLong();
+      }
+      
+      rgentries_sientry[i] = new SIENTRY(nid, bid);
+    }
+  }
+
+  @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
       .add("bref", bref)
       .add("type", blockType)
       .add("rgbid", BID.toString(rgbid))
+      .add("rgentries_slentry", Arrays.toString(rgentries_slentry))
+      .add("rgentries_sientry", Arrays.toString(rgentries_sientry))
       .toString();
 
   }
