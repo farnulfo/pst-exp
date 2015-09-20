@@ -17,4 +17,10 @@ public class BlockTest {
     Assert.assertEquals(192, Block.diskSize(124, UNICODE));
   }
   
+  @Test
+  public void testSignature() {
+    Assert.assertEquals(0x4C04, Block.computeSig(19456, 0x4));
+    Assert.assertEquals(0x8DD8, Block.computeSig(36160, 0x98));
+    Assert.assertEquals(0x2D7A, Block.computeSig(142336, 0x178));
+  }
 }

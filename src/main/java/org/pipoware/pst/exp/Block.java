@@ -81,6 +81,13 @@ public class Block {
 
     short cb = bb.getShort();
     short wSig = bb.getShort();
+    
+    int wSigComputed = computeSig(bbtentry.bref.getIb(), bbtentry.bref.getBid());
+    Preconditions.checkArgument(Short.toUnsignedInt(wSig) == wSigComputed,
+      "wSig (0x%s) <> wSigComputed (0x%s) (BREF=%s)",
+      Integer.toHexString(wSig),
+      Integer.toHexString(wSigComputed),
+      bref);
 
     int dwCRC;
     long bid;
@@ -191,6 +198,13 @@ public class Block {
       
       rgentries_sientry[i] = new SIENTRY(nid, bid);
     }
+  }
+  
+  public static int computeSig(long ib, long bid) {
+    ib ^= bid;
+    int a = (int) (ib >>> 16);
+    int b = (int) ib & 0x0000FFFF;
+    return a ^ b;
   }
 
   @Override
