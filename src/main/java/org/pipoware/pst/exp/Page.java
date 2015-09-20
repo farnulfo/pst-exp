@@ -15,7 +15,7 @@ import java.util.EnumSet;
  *
  * @author Franck
  */
-class Page {
+public class Page {
 
   public static final int PAGE_SIZE = 512;
   public static final int UNICODE_TRAILER_SIZE = 16;
@@ -89,7 +89,7 @@ class Page {
   private PageType pageType;
   private byte pType;
 
-  Page(byte[] bytes, Header.PST_TYPE type) {
+  public Page(byte[] bytes, Header.PST_TYPE type) {
     this.bytes = Arrays.copyOf(bytes, PAGE_SIZE);
 
     int offset = 0;
