@@ -64,7 +64,7 @@ public class HN {
       .add("ibHnpm", "0x" + Integer.toHexString(Short.toUnsignedInt(ibHnpm)))
       .add("bSig", "0x" + Integer.toHexString(Byte.toUnsignedInt(bSig)))
       .add("bClientSig", "0x" + Integer.toHexString(Byte.toUnsignedInt(bClientSig)))
-      .add("hidUserRoot", "0x" + Integer.toHexString(hidUserRoot))
+      .add("hidUserRoot", "0x" + Integer.toHexString(hidUserRoot) + " " + HID.toString(hidUserRoot))
       .add("rgbFillLevel", "0x" + Integer.toHexString(rgbFillLevel))
       .add("cAlloc", "0x" + Integer.toHexString(Short.toUnsignedInt(cAlloc)))
       .add("cFree", "0x" + Integer.toHexString(Short.toUnsignedInt(cFree)))
