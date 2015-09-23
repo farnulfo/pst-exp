@@ -15,6 +15,16 @@ import com.google.common.base.MoreObjects;
  * @author Franck Arnulfo
  */
 public class HN {
+  
+  public static final byte CLIENT_SIG_RESERVED1 = 0x6C;
+  public static final byte CLIENT_SIG_TC = 0x7C;
+  public static final byte CLIENT_SIG_RESERVED2 = (byte) 0x8C;
+  public static final byte CLIENT_SIG_RESERVED3 = (byte) 0x9C;
+  public static final byte CLIENT_SIG_RESERVED4 = (byte) 0xA5;
+  public static final byte CLIENT_SIG_RESERVED5 = (byte) 0xAC;
+  public static final byte CLIENT_SIG_BTH = (byte) 0xB5;
+  public static final byte CLIENT_SIG_PC_BTH = (byte) 0xBC;
+  public static final byte CLIENT_SIG_RESERVED6 = (byte) 0xCC;
 
   private final byte[] data;
   short ibHnpm;
