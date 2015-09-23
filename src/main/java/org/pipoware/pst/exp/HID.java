@@ -28,7 +28,7 @@ public class HID {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("hid", hid)
+      .add("hid", "0x" + Integer.toHexString(hid))
       .add("type", type)
       .add("hidIndex", hidIndex)
       .add("hidBlockIndex", hidBlockIndex)
