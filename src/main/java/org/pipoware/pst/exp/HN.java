@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
  *
@@ -70,5 +71,13 @@ public class HN {
       .add("cFree", "0x" + Integer.toHexString(Short.toUnsignedInt(cFree)))
       .add("rgiAlloc", Arrays.toString(rgibAlloc))
       .toString();
+  }
+
+  byte[] getHeapItem(int hidIndex) {
+    Preconditions.checkArgument(hidIndex > 0, "hidIndex (%s) must be > 0 ", hidIndex);
+    Preconditions.checkArgument(hidIndex < rgibAlloc.length + 1, "hidIndex (%s) out of rgiAlloc size (%s)", rgibAlloc.length);
+    
+    int rgiAllocIndex = hidIndex - 1;
+    return Arrays.copyOfRange(data, rgibAlloc[rgiAllocIndex], rgibAlloc[rgiAllocIndex+1]);
   }
 }
