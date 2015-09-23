@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 public class BTH {
   
   private final HN hn;
+  private final BTHHEADER bthHeader;
   
   public BTH(HN aHN) {
     Preconditions.checkArgument(
@@ -18,13 +19,16 @@ public class BTH {
     this.hn = aHN;
     
     HID hid = new HID(hn.hidUserRoot);
-
+    
+    byte[] heapItem = hn.getHeapItem(hid.hidIndex);
+    bthHeader = new BTHHEADER(heapItem);
   }
 
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
       .add("hn", hn)
+      .add("bthHeader", bthHeader)
       .toString();
   }
 }
