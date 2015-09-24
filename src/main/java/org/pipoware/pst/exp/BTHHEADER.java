@@ -29,10 +29,10 @@ public class BTHHEADER {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("bTYpe", bType)
+      .add("bType", bType)
       .add("cbKey", cbKey)
       .add("cbEnt", cbEnt)
-      .add("bIdlLevels", bIdxLevels)
+      .add("bIdxLevels", bIdxLevels)
       .add("hidRoot", new HID(hidRoot))
       .toString();
   }
