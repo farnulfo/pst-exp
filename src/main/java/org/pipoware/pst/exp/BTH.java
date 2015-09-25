@@ -15,7 +15,7 @@ public class BTH {
   
   private final HN hn;
   private final BTHHEADER bthHeader;
-  private List<KeyData> keyDatas = new ArrayList<>();
+  public List<KeyData> keyDatas = new ArrayList<>();
   
   public BTH(HN aHN) {
     Preconditions.checkArgument(
