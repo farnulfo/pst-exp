@@ -36,7 +36,7 @@ public class PCITem {
     
     int dwValueHnid = bb.getInt();
     
-    if (propertyDataType.isVariabelSize()) {
+    if (propertyDataType.isVariableSize()) {
       hid = new HID(dwValueHnid);
       
     } else {

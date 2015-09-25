@@ -27,7 +27,7 @@ public enum PropertyDataType {
     this.fixedDataSizeInByte = fixedDataSizeInByte;
   }
 
-  public boolean isVariabelSize() {
+  public boolean isVariableSize() {
     return variableSize;
   }
 
