@@ -28,6 +28,10 @@ public class BTH {
     byte[] heapItem = hn.getHeapItem(hid.hidIndex);
     bthHeader = new BTHHEADER(heapItem);
     
+    if (bthHeader.bIdxLevels != 0) {
+      throw new UnsupportedOperationException("Only bIdxLevels = 0 for now.");
+    }
+    
     int hidRootIndex = new HID(bthHeader.hidRoot).hidIndex;
     byte[] b = hn.getHeapItem(hidRootIndex);
     ByteBuffer bb = ByteBuffer.wrap(b);
