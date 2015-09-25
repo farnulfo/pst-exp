@@ -59,7 +59,7 @@ public class NID {
 
   public NID(long data) {
     this.data = data;
-    nidType =  data & 0x1F;
+    nidType = data & 0x1F;
   }
 
   @Override
