@@ -10,8 +10,8 @@ import java.util.Arrays;
  */
 public class KeyData {
 
-  private final byte[] key;
-  private final byte[] data;
+  public final byte[] key;
+  public final byte[] data;
 
   public KeyData(byte[] key, byte[] data) {
     this.key = Arrays.copyOf(key, key.length);
