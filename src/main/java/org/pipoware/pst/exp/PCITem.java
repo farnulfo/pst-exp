@@ -19,8 +19,9 @@ public class PCITem {
   private int int32;
   private HID hid;
   private boolean bool;
+  private byte[] dataValue;
 
-  public PCITem(KeyData keyData) {
+  public PCITem(BTH bth, KeyData keyData) {
     Preconditions.checkArgument(keyData.key.length == 2, "Incorrect cbKey size (%s) for a PC Item", keyData.key.length);
     Preconditions.checkArgument(keyData.data.length == 6, "Incorrect cbEnt size (%s) for a PC Item", keyData.data.length);
 
@@ -38,6 +39,12 @@ public class PCITem {
     
     if (propertyDataType.isVariableSize()) {
       hid = new HID(dwValueHnid);
+      
+      if (hid.type == NID.NID_TYPE_HID) {
+        dataValue = bth.hn.getHeapItem(hid.hidIndex);
+      } else {
+        throw new UnsupportedOperationException("dwValueHnid with NID not yet implemented !");
+      }
       
     } else {
       if (propertyDataType.getFixedDataSizeInByte() > 4) {
@@ -67,6 +74,7 @@ public class PCITem {
       .add("int32", int32)
       .add("bool", bool)
       .add("hid", hid)
+      .add("dataValue", "[" + (dataValue != null ? BaseEncoding.base16().withSeparator(",", 2).encode(dataValue) : "null")+ "]")
       .toString();
   }
 }

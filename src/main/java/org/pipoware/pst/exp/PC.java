@@ -17,7 +17,7 @@ public class PC {
     this.bth = aBTH;
     
     for(KeyData keyData : bth.keyDatas) {
-      PCITem item = new PCITem(keyData);
+      PCITem item = new PCITem(bth, keyData);
       items.add(item);
     }
     

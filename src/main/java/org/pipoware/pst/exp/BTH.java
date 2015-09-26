@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class BTH {
   
-  private final HN hn;
+  public final HN hn;
   private final BTHHEADER bthHeader;
   public List<KeyData> keyDatas = new ArrayList<>();
   
