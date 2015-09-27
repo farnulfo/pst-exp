@@ -41,7 +41,7 @@ public class PCITem {
       hid = new HID(dwValueHnid);
       
       if (hid.type == NID.NID_TYPE_HID) {
-        dataValue = bth.hn.getHeapItem(hid.hidIndex);
+        dataValue = bth.hn.getHeapItem(hid);
       } else {
         throw new UnsupportedOperationException("dwValueHnid with NID not yet implemented !");
       }

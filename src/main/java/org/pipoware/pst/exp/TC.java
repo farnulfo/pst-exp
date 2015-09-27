@@ -21,10 +21,10 @@ public class TC {
 
     HID hid = new HID(hn.hidUserRoot);
 
-    byte[] heapItem = hn.getHeapItem(hid.hidIndex);
+    byte[] heapItem = hn.getHeapItem(hid);
     tcinfo = new TCINFO(heapItem);
     
-    heapItem = hn.getHeapItem(new HID(tcinfo.hidRowIndex).hidIndex);
+    heapItem = hn.getHeapItem(new HID(tcinfo.hidRowIndex));
     bthHeaderRowIndex = new BTHHEADER(heapItem);
 
   }

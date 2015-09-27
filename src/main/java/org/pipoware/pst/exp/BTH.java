@@ -25,15 +25,14 @@ public class BTH {
     
     HID hid = new HID(hn.hidUserRoot);
     
-    byte[] heapItem = hn.getHeapItem(hid.hidIndex);
+    byte[] heapItem = hn.getHeapItem(hid);
     bthHeader = new BTHHEADER(heapItem);
     
     if (bthHeader.bIdxLevels != 0) {
       throw new UnsupportedOperationException("Only bIdxLevels = 0 for now.");
     }
     
-    int hidRootIndex = new HID(bthHeader.hidRoot).hidIndex;
-    byte[] b = hn.getHeapItem(hidRootIndex);
+    byte[] b = hn.getHeapItem(new HID(bthHeader.hidRoot));
     ByteBuffer bb = ByteBuffer.wrap(b);
     Preconditions.checkArgument(b.length % (bthHeader.cbKey + bthHeader.cbEnt) == 0);
     

@@ -73,7 +73,8 @@ public class HN {
       .toString();
   }
 
-  byte[] getHeapItem(int hidIndex) {
+  byte[] getHeapItem(HID hid) {
+    int hidIndex = hid.hidIndex;
     Preconditions.checkArgument(hidIndex > 0, "hidIndex (%s) must be > 0 ", hidIndex);
     Preconditions.checkArgument(hidIndex < rgibAlloc.length + 1, "hidIndex (%s) out of rgiAlloc size (%s)", rgibAlloc.length);
     
