@@ -11,6 +11,7 @@ public class TC {
 
   private final HN hn;
   private final TCINFO tcinfo;
+  private final BTHHEADER bthHeaderRowIndex;
 
   public TC(HN aHN) {
     Preconditions.checkArgument(
@@ -22,6 +23,9 @@ public class TC {
 
     byte[] heapItem = hn.getHeapItem(hid.hidIndex);
     tcinfo = new TCINFO(heapItem);
+    
+    heapItem = hn.getHeapItem(new HID(tcinfo.hidRowIndex).hidIndex);
+    bthHeaderRowIndex = new BTHHEADER(heapItem);
 
   }
 
@@ -30,6 +34,7 @@ public class TC {
     return MoreObjects.toStringHelper(this)
       .add("hn", hn)
       .add("tcinfo", tcinfo)
+      .add("bthheader", bthHeaderRowIndex)
       .toString();
   }
 }
