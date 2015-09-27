@@ -29,7 +29,7 @@ public class BTHHEADER {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("bType", bType)
+      .add("bType", "0x" + Integer.toHexString(Byte.toUnsignedInt(bType)))
       .add("cbKey", cbKey)
       .add("cbEnt", cbEnt)
       .add("bIdxLevels", bIdxLevels)
