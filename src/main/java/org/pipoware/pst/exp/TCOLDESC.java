@@ -8,10 +8,10 @@ import com.google.common.base.MoreObjects;
  */
 public class TCOLDESC {
   
-  private final int tag;
-  private final short ibData;
-  private final byte cbData;
-  private final byte iBit;
+  public final int tag;
+  public final short ibData;
+  public final byte cbData;
+  public final byte iBit;
 
   TCOLDESC(int tag, short ibData, byte cbData, byte iBit) {
     this.tag = tag;
