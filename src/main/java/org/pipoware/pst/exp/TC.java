@@ -108,6 +108,13 @@ public class TC {
         System.out.println("\t" + tColDesc);
         System.out.println("\t\t row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(data) + "]");
         System.out.println("\t\t is null : " + isRowDataNull(CEBArray, tColDesc.iBit));
+        
+        if (!isRowDataNull(CEBArray, tColDesc.iBit)) {
+          short wPropType = (short) (tColDesc.tag & 0x0000FFFF);
+          PropertyDataType propertyDataType = PropertyDataType.get(wPropType);
+          System.out.println("\t\t value : [" + BaseEncoding.base16().withSeparator(",", 2).encode(getValue(propertyDataType, data, hn)) + "]");
+        }
+        
       }
     }
   }
@@ -126,5 +133,34 @@ public class TC {
       .add("bthheader", bthHeaderRowIndex)
       .add("tcRowIds", tcRowIds.toString())
       .toString();
+  }
+
+  private byte[] getValue(PropertyDataType propertyDataType, byte[] data, HN hn) {
+    ByteBuffer bb = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+    byte[] dataValue;
+    
+    if (propertyDataType.isVariableSize()) {
+      Preconditions.checkArgument(data.length == 4);
+      int dwValueHnid = bb.getInt();
+      HID hid = new HID(dwValueHnid);
+      
+      if (hid.type == NID.NID_TYPE_HID) {
+        dataValue = hn.getHeapItem(hid);
+      } else {
+        throw new UnsupportedOperationException("dwValueHnid with NID not yet implemented !");
+      }
+      
+    } else {
+      if (propertyDataType.getFixedDataSizeInByte() <= 8) {
+        dataValue = Arrays.copyOf(data, data.length);
+      } else {
+        int dwValueHnid = bb.getInt();
+        HID hid = new HID(dwValueHnid);
+        Preconditions.checkArgument(hid.type == NID.NID_TYPE_HID);
+        dataValue = hn.getHeapItem(hid);
+      }
+    }
+    
+    return dataValue;
   }
 }
