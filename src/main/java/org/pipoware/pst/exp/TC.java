@@ -119,7 +119,7 @@ public class TC {
     }
   }
   
-  public boolean isRowDataNull(byte[] cebArray, byte iBit) {
+  public static boolean isRowDataNull(byte[] cebArray, byte iBit) {
     byte a1 = cebArray[iBit / 8];
     byte b1 = (byte) (1 << (7 - (iBit % 8)));
     return !((a1 & b1) != 0);
