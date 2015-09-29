@@ -83,15 +83,6 @@ public class TC {
       bb = ByteBuffer.wrap(rowData).order(ByteOrder.LITTLE_ENDIAN);
       int dwRowId = bb.getInt();
 
-      System.out.println(tcRowIds.get(i));
-      for (TCOLDESC tColDesc : tcinfo.tColDesc) {
-        bb.position(tColDesc.ibData);
-        byte[] data = new byte[tColDesc.cbData];
-        bb.get(data);
-        System.out.println("\t" + tColDesc);
-        System.out.println("\t\t[" + BaseEncoding.base16().withSeparator(",", 2).encode(data) + "]");
-      }
-      
       bb.position(tcinfo.TCI_1b);
       byte[] CEBArray = new byte[rgbCEBSize];
       bb.get(CEBArray);
@@ -108,9 +99,23 @@ public class TC {
         boolean fCEB = (a1 & b1) != 0;
         System.out.println("iBit " + iBit + " = " + fCEB);
       }
-      
+
+      System.out.println(tcRowIds.get(i));
+      for (TCOLDESC tColDesc : tcinfo.tColDesc) {
+        bb.position(tColDesc.ibData);
+        byte[] data = new byte[tColDesc.cbData];
+        bb.get(data);
+        System.out.println("\t" + tColDesc);
+        System.out.println("\t\t row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(data) + "]");
+        System.out.println("\t\t is null : " + isRowDataNull(CEBArray, tColDesc.iBit));
+      }
     }
-    
+  }
+  
+  public boolean isRowDataNull(byte[] cebArray, byte iBit) {
+    byte a1 = cebArray[iBit / 8];
+    byte b1 = (byte) (1 << (7 - (iBit % 8)));
+    return !((a1 & b1) != 0);
   }
 
   @Override
