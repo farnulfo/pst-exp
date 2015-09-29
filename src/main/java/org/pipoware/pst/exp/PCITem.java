@@ -49,6 +49,7 @@ public class PCITem {
     } else {
       if (propertyDataType.getFixedDataSizeInByte() > 4) {
         hid = new HID(dwValueHnid);
+        throw new UnsupportedOperationException("Not yet implemented !");
       } else {
         switch (propertyDataType) {
           case PtypBoolean:
