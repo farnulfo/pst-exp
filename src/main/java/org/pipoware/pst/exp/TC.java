@@ -100,10 +100,6 @@ public class TC {
         System.out.print(String.format("%8s", Integer.toBinaryString(b1 & 0xFF)).replace(' ', '0') + " ");
       }
       System.out.println();
-      BitSet bitSet = BitSet.valueOf(CEBArray);
-      for (int k = 0; k < bitSet.size(); k++) {
-        System.out.println("BitSet(" + k + ") = " + bitSet.get(k));
-      }
       
       for (TCOLDESC tColDesc : tcinfo.tColDesc) {
         byte iBit = tColDesc.iBit;
