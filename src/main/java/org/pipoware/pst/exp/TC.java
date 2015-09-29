@@ -112,6 +112,7 @@ public class TC {
         if (!isRowDataNull(CEBArray, tColDesc.iBit)) {
           short wPropType = (short) (tColDesc.tag & 0x0000FFFF);
           PropertyDataType propertyDataType = PropertyDataType.get(wPropType);
+          System.out.println("\t\t propertyDataType : " + propertyDataType);
           System.out.println("\t\t value : [" + BaseEncoding.base16().withSeparator(",", 2).encode(getValue(propertyDataType, data, hn)) + "]");
         }
         
