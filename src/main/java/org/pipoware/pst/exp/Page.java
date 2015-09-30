@@ -255,6 +255,14 @@ public class Page {
     }
   }
   
+  public int getDepthLevel() {
+    if (pageType == PageType.ptypeNBT || pageType == PageType.ptypeBBT) {
+      return cLevel;
+    } else {
+      throw new IllegalArgumentException("Depth level is not a field of type " + pageType);
+    }
+  }
+  
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
