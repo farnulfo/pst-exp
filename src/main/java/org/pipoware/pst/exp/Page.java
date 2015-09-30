@@ -259,6 +259,10 @@ public class Page {
   public String toString() {
     return MoreObjects.toStringHelper(this)
       .add("type", "0x" + Long.toHexString(Byte.toUnsignedInt(pType)) + " (" + pageType + ")")
+      .add("cEnt", cEnt)
+      .add("cEntMax", cEntMax)
+      .add("cbEnt", cbEnt)
+      .add("cLevel", cLevel)
       .add("nbtentries", Arrays.toString(nbtentries))
       .add("btentries", Arrays.toString(btentries))
       .add("bbtentries", Arrays.toString(bbtentries))
