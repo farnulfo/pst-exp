@@ -111,7 +111,7 @@ public class PageTest {
     pstFile.position(offset);
     byte []b = new byte[512];
     pstFile.read(b);
-    Page page = new Page(b, Header.PST_TYPE.UNICODE);
+    Page page = new Page(b, pstFile.getHeader().getType());
     System.out.println("Page " + page);
   }
 
@@ -124,7 +124,7 @@ public class PageTest {
     pstFile.position(offset);
     byte []b = new byte[512];
     pstFile.read(b);
-    Page page = new Page(b, Header.PST_TYPE.UNICODE);
+    Page page = new Page(b, pstFile.getHeader().getType());
     System.out.println("Page " + page);
     for (BTENTRY btentry : page.btentries) {
       bref = btentry.bref;
@@ -147,7 +147,7 @@ public class PageTest {
     pstFile.position(offset);
     byte []b = new byte[512];
     pstFile.read(b);
-    Page page = new Page(b, Header.PST_TYPE.UNICODE);
+    Page page = new Page(b, pstFile.getHeader().getType());
     System.out.println("Page " + page);
     for (BTENTRY btentry : page.btentries) {
       bref = btentry.bref;
