@@ -15,10 +15,10 @@ import java.nio.ByteOrder;
  */
 class NBTENTRY {
 
-  private final NID nid;
-  private final long bidData;
-  private final long bidSub;
-  private final long nidParent;
+  public final NID nid;
+  public final long bidData;
+  public final long bidSub;
+  public final long nidParent;
 
   public NBTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);

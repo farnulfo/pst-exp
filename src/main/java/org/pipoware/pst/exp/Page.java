@@ -47,7 +47,7 @@ public class Page {
    */
   private byte cLevel;
   
-  private NBTENTRY[] nbtentries;
+  public NBTENTRY[] nbtentries;
   public BTENTRY[] btentries;
   public BBTENTRY[] bbtentries;
 

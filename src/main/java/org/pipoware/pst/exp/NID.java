@@ -54,12 +54,12 @@ public class NID {
   // LTP
   public static final byte NID_TYPE_LTP = 0x1F;
 
-  private final long data;
-  private final long nidType;
+  public final long data;
+  public final long nidType;
 
   public NID(long data) {
     this.data = data;
-    nidType = data & 0x1F;
+    this.nidType = data & 0x1F;
   }
 
   @Override
