@@ -28,7 +28,7 @@ public class Block {
   };
   public BlockType blockType;
 
-  private byte data[];
+  public byte data[];
   private long rgbid[];
   private BREF bref;
   private long lcbTotal;
