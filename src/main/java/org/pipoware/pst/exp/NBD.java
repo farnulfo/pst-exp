@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * @author Franck
  */
-class NBD {
+public class NBD {
 
   private final PSTFile pst;
   private final Header header;
@@ -20,7 +20,7 @@ class NBD {
     this.pst = pst;
     this.header = header;
   }
-  
+
   private void getPageLeafEntries(long pageOffset) throws IOException {
     Page page = fetchPage(pageOffset);
   }
