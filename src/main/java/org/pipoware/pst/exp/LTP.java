@@ -11,7 +11,7 @@ package org.pipoware.pst.exp;
  */
 class LTP {
 
-  public LTP(NBD nbd) {
+  public LTP(NDB nbd) {
   }
   
 }

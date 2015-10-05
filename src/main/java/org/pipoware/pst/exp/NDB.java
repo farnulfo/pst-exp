@@ -11,12 +11,12 @@ import java.io.IOException;
  *
  * @author Franck
  */
-public class NBD {
+public class NDB {
 
   private final PSTFile pst;
   private final Header header;
 
-  public NBD(PSTFile pst, Header header) {
+  public NDB(PSTFile pst, Header header) {
     this.pst = pst;
     this.header = header;
   }
