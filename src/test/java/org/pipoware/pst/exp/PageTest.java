@@ -5,6 +5,7 @@
  */
 package org.pipoware.pst.exp;
 
+import com.google.common.base.Strings;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -168,6 +169,38 @@ public class PageTest {
         int cb = bbtentry.cb;
         Block block = new Block(pstFile, bbtentry, Header.PST_TYPE.UNICODE);
         System.out.println(block);
+      }
+    }
+  }
+
+  @Test
+  public void testPSTPagesBlockTree() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
+    PSTFile pstFile = new PSTFile(path);
+    BREF bref = pstFile.getHeader().getRoot().bRefBBT;
+    long offset = bref.getIb();
+    pstFile.position(offset);
+    byte []b = new byte[Page.PAGE_SIZE];
+    pstFile.read(b);
+    Page page = new Page(b, pstFile.getHeader().getType());
+    System.out.println("Page " + page);
+    displayPage(pstFile, page, 0);
+  }
+
+  private void displayPage(PSTFile pstFile, Page page, int indent) throws IOException {
+    if (page.getDepthLevel() == 0) {
+      for (BBTENTRY bbtentry : page.bbtentries) {
+        Block block = new Block(pstFile, bbtentry, Header.PST_TYPE.UNICODE);
+        System.out.println(Strings.repeat(" ", indent) + block);
+      }
+    } else {
+      for (BTENTRY btentry : page.btentries) {
+        pstFile.position(btentry.bref.getIb());
+        byte[] b = new byte[Page.PAGE_SIZE];
+        pstFile.read(b);
+        Page p = new Page(b, pstFile.getHeader().getType());
+        System.out.println(Strings.repeat(" ", indent)+ "btkey 0x" + Long.toHexString(btentry.btKey));
+        displayPage(pstFile, p, indent + 4);
       }
     }
   }
