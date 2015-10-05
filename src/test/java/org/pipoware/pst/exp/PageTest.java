@@ -145,7 +145,7 @@ public class PageTest {
     BREF bref = pstFile.getHeader().getRoot().bRefBBT;
     long offset = bref.getIb();
     pstFile.position(offset);
-    byte []b = new byte[512];
+    byte []b = new byte[Page.PAGE_SIZE];
     pstFile.read(b);
     Page page = new Page(b, pstFile.getHeader().getType());
     System.out.println("Page " + page);
@@ -153,7 +153,7 @@ public class PageTest {
       bref = btentry.bref;
       offset = bref.getIb();
       pstFile.position(offset);
-      b = new byte[512];
+      b = new byte[Page.PAGE_SIZE];
       pstFile.read(b);
       Page p = new Page(b, Header.PST_TYPE.UNICODE);
       System.out.println("btkey 0x" + Long.toHexString(btentry.btKey));
