@@ -99,6 +99,10 @@ public class Header {
     return dwUnique;
   }
 
+  public byte getBCryptMethod() {
+    return this.bCryptMethod;
+  }
+
   public PST_TYPE getType() {
     return type;
   }
