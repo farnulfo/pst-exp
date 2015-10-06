@@ -5,6 +5,10 @@
  */
 package org.pipoware.pst.exp;
 
+import org.pipoware.pst.exp.pages.BBTENTRY;
+import org.pipoware.pst.exp.pages.BTENTRY;
+import org.pipoware.pst.exp.pages.Page;
+import org.pipoware.pst.exp.pages.NBTENTRY;
 import com.google.common.base.Preconditions;
 import java.io.IOException;
 

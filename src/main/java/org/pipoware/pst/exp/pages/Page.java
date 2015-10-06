@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.pipoware.pst.exp;
+package org.pipoware.pst.exp.pages;
 
 import com.google.common.base.MoreObjects;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.EnumSet;
+import org.pipoware.pst.exp.CRC;
+import org.pipoware.pst.exp.Header;
 
 /**
  *
