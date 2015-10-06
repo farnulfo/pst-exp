@@ -184,8 +184,8 @@ public class Header {
       throw new IllegalArgumentException("Illegal bCryptMethod value: " + bCryptMethod + ", expected : 0x00, 0x01 or 0x02");
     }
     
-    if (bCryptMethod !=  NDB_CRYPT_NONE) {
-      throw new UnsupportedOperationException("NDB CRYPT METHOD " + bCryptMethod + " not yet implemented.");
+    if (bCryptMethod ==  NDB_CRYPT_CYCLIC) {
+      throw new UnsupportedOperationException("NDB CRYPT METHOD NDB_CRYPT_CYCLIC not yet implemented.");
     }
 
     rgbReserved = pst.readWORD();
