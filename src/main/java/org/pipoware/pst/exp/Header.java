@@ -10,6 +10,10 @@ import java.nio.ByteOrder;
  */
 public class Header {
 
+  public static final byte NDB_CRYPT_NONE = 0x00;
+  public static final byte NDB_CRYPT_PERMUTE = 0x01;
+  public static final byte NDB_CRYPT_CYCLIC = 0x02;
+
   private IPSTFile pst = null;
   private final int dwMagic;
   private final int wMagicClient;
@@ -50,10 +54,10 @@ public class Header {
   private int dwCRCFull;
   private long ullReserved;
   private int dwReservedANSI;
-  private final byte rgbReserved2[] = new byte[3];;
+  private final byte rgbReserved2[] = new byte[3];
+  ;
   private byte bReserved;
   private final byte rgbReserved3[] = new byte[32];
-  
 
   public byte[] getRgbFM() {
     return rgbFM;
@@ -174,9 +178,9 @@ public class Header {
     }
 
     bCryptMethod = pst.readBYTE();
-    if (!((bCryptMethod == (byte) 0x00)
-      || (bCryptMethod == (byte) 0x01)
-      || (bCryptMethod == (byte) 0x02))) {
+    if (!((bCryptMethod == NDB_CRYPT_NONE)
+      || (bCryptMethod == NDB_CRYPT_PERMUTE)
+      || (bCryptMethod == NDB_CRYPT_CYCLIC))) {
       throw new IllegalArgumentException("Illegal bCryptMethod value: " + bCryptMethod + ", expected : 0x00, 0x01 or 0x02");
     }
 
@@ -198,11 +202,11 @@ public class Header {
       ullReserved = pst.readULONG();
       dwReservedANSI = pst.readDWORD();
     }
-    
+
     pst.read(rgbReserved2);
-    
+
     bReserved = pst.readBYTE();
-    
+
     pst.read(rgbReserved3);
   }
 
