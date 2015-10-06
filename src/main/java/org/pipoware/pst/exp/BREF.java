@@ -11,12 +11,12 @@ import com.google.common.base.MoreObjects;
  *
  * @author Franck
  */
-class BREF {
+public class BREF {
 
   private final long bid;
   private final long ib;
 
-  BREF(long bid, long ib) {
+  public BREF(long bid, long ib) {
     this.bid = bid;
     this.ib = ib;
   }

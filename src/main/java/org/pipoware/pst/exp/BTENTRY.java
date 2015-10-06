@@ -13,12 +13,12 @@ import java.nio.ByteOrder;
  *
  * @author Franck
  */
-class BTENTRY {
+public class BTENTRY {
 
   public final long btKey;
   public final BREF bref;
 
-  BTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
+  public BTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
 
     if (type == Header.PST_TYPE.UNICODE) {

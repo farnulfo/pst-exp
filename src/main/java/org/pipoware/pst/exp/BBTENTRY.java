@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
  *
  * @author Franck
  */
-class BBTENTRY {
+public class BBTENTRY {
 
   public final BREF bref;
   
@@ -30,7 +30,7 @@ class BBTENTRY {
    */
   private final short cref;
 
-  BBTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
+  public BBTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
 
     if (type == Header.PST_TYPE.UNICODE) {

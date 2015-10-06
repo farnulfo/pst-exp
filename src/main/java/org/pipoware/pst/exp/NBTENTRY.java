@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
  *
  * @author Franck
  */
-class NBTENTRY {
+public class NBTENTRY {
 
   public final NID nid;
   public final long bidData;
