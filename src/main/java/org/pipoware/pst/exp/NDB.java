@@ -5,6 +5,7 @@
  */
 package org.pipoware.pst.exp;
 
+import com.google.common.base.Preconditions;
 import java.io.IOException;
 
 /**
@@ -65,6 +66,11 @@ public class NDB {
     long bid = getBlockIdFromNID(nid);
     Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, bid);
+    byte bCryptMethod = pst.getHeader().getBCryptMethod();
+    Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+    if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+      PermutativeEncoding.decode(block.data);
+    }
     HN hn = new HN(block.data);
     BTH bth = new BTH(hn);
     PC pc = new PC(bth);
