@@ -17,7 +17,7 @@ public class MessageStoreTest {
     Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
     PSTFile pstFile = new PSTFile(path);
     NDB ndb = new NDB(pstFile, pstFile.getHeader());
-    PC pc = ndb.getPCFromNID(0x21);
+    PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
     System.out.println("PC:" + pc);
   }
 }
