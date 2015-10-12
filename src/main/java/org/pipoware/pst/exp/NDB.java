@@ -26,10 +26,6 @@ public class NDB {
     this.header = header;
   }
 
-  private void getPageLeafEntries(long pageOffset) throws IOException {
-    Page page = fetchPage(pageOffset);
-  }
-
   private Page fetchPage(long pageOffset) throws IOException {
     pst.position(pageOffset);
     byte[] bytes = new byte[Page.PAGE_SIZE];
