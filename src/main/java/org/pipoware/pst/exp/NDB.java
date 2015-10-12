@@ -33,39 +33,38 @@ public class NDB {
     return new Page(bytes, pst.getHeader().getType());
   }
 
-  public long getBlockIdFromNID(int nid) throws IOException {
+  private NBTENTRY geNBTENTRYFromNID(int nid) throws IOException {
     Page rootNBTPage = fetchPage(header.getRoot().bRefNBT.getIb());
-    return getBlockIdFromNID(rootNBTPage, nid);
+    return getNBTENTRYFromNID(rootNBTPage, nid);
   }
   
-  private long getBlockIdFromNID(Page page, int nid) throws IOException {
+  public NBTENTRY getNBTENTRYFromNID(Page page, int nid) throws IOException {
     if (page.getDepthLevel() == 0) {
       for (NBTENTRY nbtentry : page.nbtentries) {
         if (nbtentry.nid.data == nid) {
-          return nbtentry.bidData;
+          return nbtentry;
         }
       }
-      return -1;
+      return null;
     } else {
       for (BTENTRY btentry : page.btentries) {
         pst.position(btentry.bref.getIb());
         byte[] b = new byte[Page.PAGE_SIZE];
         pst.read(b);
         Page p = new Page(b, pst.getHeader().getType());
-        long bid = getBlockIdFromNID(p, nid);
-        if (bid != -1) {
-          return bid;
+        NBTENTRY nbtentry = getNBTENTRYFromNID(p, nid);
+        if (nbtentry != null) {
+          return nbtentry;
         }
       }
     }
     throw new IllegalArgumentException("NID " + nid +" no found.");
   }
-  
-      
+
   public PC getPCFromNID(int nid) throws IOException {
-    long bid = getBlockIdFromNID(nid);
+    NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
     Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
-    Block block = getBlockFromBID(page, bid);
+    Block block = getBlockFromBID(page, nbtentry.bidData);
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
     Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
     if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
@@ -76,7 +75,7 @@ public class NDB {
     PC pc = new PC(bth);
     return pc;
   }
-
+  
   private Block getBlockFromBID(Page page, long bid) throws IOException {
     if (page.getDepthLevel() == 0) {
       for (BBTENTRY bbentry : page.bbtentries) {
