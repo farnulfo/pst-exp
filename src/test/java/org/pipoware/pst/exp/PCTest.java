@@ -25,7 +25,7 @@ public class PCTest {
 
     HN hn = new HN(bytes);
     BTH bth = new BTH(hn);
-    PC pc = new PC(bth);
+    PC pc = new PC(bth, null, null);
     
     System.out.println(pc);
     

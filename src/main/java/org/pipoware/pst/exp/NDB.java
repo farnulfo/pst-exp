@@ -72,8 +72,14 @@ public class NDB {
     }
     HN hn = new HN(block.data);
     BTH bth = new BTH(hn);
-    PC pc = new PC(bth);
+    PC pc = new PC(bth, this, nbtentry);
     return pc;
+  }
+  
+  public Block getBlockFromBID(long bid) throws IOException {
+    Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
+    Block block = getBlockFromBID(page, bid);
+    return block;
   }
   
   private Block getBlockFromBID(Page page, long bid) throws IOException {

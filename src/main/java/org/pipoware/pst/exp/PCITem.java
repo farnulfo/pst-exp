@@ -3,9 +3,12 @@ package org.pipoware.pst.exp;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.io.BaseEncoding;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+import org.pipoware.pst.exp.Block.BlockType;
+import org.pipoware.pst.exp.pages.NBTENTRY;
 
 /**
  *
@@ -21,7 +24,7 @@ public class PCITem {
   private boolean bool;
   private byte[] dataValue;
 
-  public PCITem(BTH bth, KeyData keyData) {
+  public PCITem(BTH bth, KeyData keyData, NDB ndb, NBTENTRY nbtentry) throws IOException {
     Preconditions.checkArgument(keyData.key.length == 2, "Incorrect cbKey size (%s) for a PC Item", keyData.key.length);
     Preconditions.checkArgument(keyData.data.length == 6, "Incorrect cbEnt size (%s) for a PC Item", keyData.data.length);
 
@@ -43,7 +46,16 @@ public class PCITem {
       if (hid.type == NID.NID_TYPE_HID) {
         dataValue = bth.hn.getHeapItem(hid);
       } else {
-        throw new UnsupportedOperationException("dwValueHnid with NID not yet implemented !");
+        // dwValueHnid = NID (subnode)
+        long blockId = nbtentry.bidSub;
+        Block block = ndb.getBlockFromBID(blockId);
+        Preconditions.checkArgument(block.blockType == BlockType.SLBLOCK, "Not yet supported block type : " + block.blockType);
+        for (SLENTRY slEntry : block.rgentries_slentry) {
+          if (dwValueHnid == slEntry.nid) {
+            Block b = ndb.getBlockFromBID(slEntry.bidData);
+            dataValue = Arrays.copyOf(b.data, b.data.length);
+          }
+        }
       }
       
     } else {
