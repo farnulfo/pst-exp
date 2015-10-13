@@ -2,7 +2,6 @@ package org.pipoware.pst.exp;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.BaseEncoding;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -17,25 +16,6 @@ import org.pipoware.pst.exp.pages.NBTENTRY;
  */
 public class PCITem {
 
-  static public final ImmutableMap<Short, String> PROPERTY_TAG_MAP = new ImmutableMap.Builder<Short, String>()
-    .put((short) 0x0001, "PidTagNameidBucketCount")
-    .put((short) 0x0002, "PidTagNameidStreamGuid")
-    .put((short) 0x0003, "PidTagNameidStreamEntry")
-    .put((short) 0x0004, "PidTagNameidStreamString")
-    .put((short) 0x1000, "PidTagNameidBucketBase")
-    .put((short) 0x1097, "PidTagItemTemporaryFlags ")
-    .put((short) 0x661D, "PidTagPstBestBodyProptag")
-    .put((short) 0x6635, "PidTagPstHiddenCount")
-    .put((short) 0x6636, "PidTagPstHiddenUnread")
-    .put((short) 0x6705, "PidTagPstIpmsubTreeDescendant")
-    .put((short) 0x6772, "PidTagPstSubTreeContainer")
-    .put((short) 0x67F1, "PidTagLtpParentNid")
-    .put((short) 0x67F2, "PidTagLtpRowId")
-    .put((short) 0x67F3, "PidTagLtpRowVer")
-    .put((short) 0x67FF, "PidTagPstPassword")
-    .put((short) 0x682F, "PidTagMapiFormComposeCommand")
-    .build();
-    
   private final PropertyDataType propertyDataType;
   private final short propertyIdentifier;
   private final byte[] propertyData;
@@ -102,7 +82,7 @@ public class PCITem {
   public String toString() {
     return MoreObjects.toStringHelper(this)
       .add("propertyIdentifier", Integer.toHexString(Short.toUnsignedInt(propertyIdentifier)))
-      .add("propertyTag", PROPERTY_TAG_MAP.get(propertyIdentifier))
+      .add("propertyTag", PropertyTag.getPropertyTagFromIdentifier(propertyIdentifier))
       .add("propertyData", "[" + BaseEncoding.base16().withSeparator(",", 2).encode(propertyData) + "]")
       .add("propertyDataType", propertyDataType)
       .add("int32", int32)
