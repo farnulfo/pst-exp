@@ -33,8 +33,8 @@ public class Block {
   private long rgbid[];
   private BREF bref;
   private long lcbTotal;
-  private SLENTRY[] rgentries_slentry;
-  private SIENTRY[] rgentries_sientry;
+  public SLENTRY[] rgentries_slentry;
+  public SIENTRY[] rgentries_sientry;
   
 
   public static int diskSize(int size, Header.PST_TYPE type) {
