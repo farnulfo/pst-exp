@@ -14,7 +14,7 @@ import org.pipoware.pst.exp.pages.NBTENTRY;
  *
  * @author Franck Arnulfo
  */
-public class PCITem {
+public class PCItem {
 
   private final PropertyDataType propertyDataType;
   private final short propertyIdentifier;
@@ -24,7 +24,7 @@ public class PCITem {
   private boolean bool;
   private byte[] dataValue;
 
-  public PCITem(BTH bth, KeyData keyData, NDB ndb, NBTENTRY nbtentry) throws IOException {
+  public PCItem(BTH bth, KeyData keyData, NDB ndb, NBTENTRY nbtentry) throws IOException {
     Preconditions.checkArgument(keyData.key.length == 2, "Incorrect cbKey size (%s) for a PC Item", keyData.key.length);
     Preconditions.checkArgument(keyData.data.length == 6, "Incorrect cbEnt size (%s) for a PC Item", keyData.data.length);
 
