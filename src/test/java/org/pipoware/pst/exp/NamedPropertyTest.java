@@ -18,6 +18,7 @@ public class NamedPropertyTest {
     PSTFile pstFile = new PSTFile(path);
     NDB ndb = new NDB(pstFile, pstFile.getHeader());
     PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_NAME_TO_ID_MAP);
-    System.out.println("PC:" + pc);
+    System.out.println("PC:" + ToStringHelper.formatMultiline(pc.toString()));
+    pc.handleNameToIDMap();
   }
 }

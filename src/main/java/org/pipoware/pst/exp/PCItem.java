@@ -17,12 +17,12 @@ import org.pipoware.pst.exp.pages.NBTENTRY;
 public class PCItem {
 
   private final PropertyDataType propertyDataType;
-  private final short propertyIdentifier;
+  public final short propertyIdentifier;
   private final byte[] propertyData;
   private int int32;
   private HID hid;
   private boolean bool;
-  private byte[] dataValue;
+  public byte[] dataValue;
 
   public PCItem(BTH bth, KeyData keyData, NDB ndb, NBTENTRY nbtentry) throws IOException {
     Preconditions.checkArgument(keyData.key.length == 2, "Incorrect cbKey size (%s) for a PC Item", keyData.key.length);
@@ -53,6 +53,11 @@ public class PCItem {
         for (SLENTRY slEntry : block.rgentries_slentry) {
           if (dwValueHnid == slEntry.nid) {
             Block b = ndb.getBlockFromBID(slEntry.bidData);
+            byte bCryptMethod = ndb.pst.getHeader().getBCryptMethod();
+            Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+            if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+              PermutativeEncoding.decode(b.data);
+            }
             dataValue = Arrays.copyOf(b.data, b.data.length);
           }
         }

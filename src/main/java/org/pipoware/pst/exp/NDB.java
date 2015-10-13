@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class NDB {
 
-  private final PSTFile pst;
+  public final PSTFile pst;
   private final Header header;
 
   public NDB(PSTFile pst, Header header) {
