@@ -108,7 +108,7 @@ public class PCITem {
       .add("int32", int32)
       .add("bool", bool)
       .add("hid", hid)
-      .add("dataValue", "[" + (dataValue != null ? BaseEncoding.base16().withSeparator(",", 2).encode(dataValue) : "null")+ "]")
+      .add("dataValue", dataValue == null ? "null" : "(size=" + dataValue.length + ") [" + BaseEncoding.base16().withSeparator(",", 2).encode(dataValue)+ "]")
       .toString();
   }
 }
