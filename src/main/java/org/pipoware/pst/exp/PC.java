@@ -13,13 +13,13 @@ import org.pipoware.pst.exp.pages.NBTENTRY;
 public class PC {
 
   private final BTH bth;
-  private final List<PCItem> items = new ArrayList<>();
+  private final List<PCITem> items = new ArrayList<>();
 
   public PC(BTH aBTH, NDB ndb, NBTENTRY nbtentry) throws IOException {
     this.bth = aBTH;
     
     for(KeyData keyData : bth.keyDatas) {
-      PCItem item = new PCItem(bth, keyData, ndb, nbtentry);
+      PCITem item = new PCITem(bth, keyData, ndb, nbtentry);
       items.add(item);
     }
     
