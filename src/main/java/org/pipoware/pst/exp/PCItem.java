@@ -6,6 +6,7 @@ import com.google.common.io.BaseEncoding;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import org.pipoware.pst.exp.Block.BlockType;
 import org.pipoware.pst.exp.pages.NBTENTRY;
@@ -85,6 +86,11 @@ public class PCItem {
 
   @Override
   public String toString() {
+    String string = null;
+    if (propertyDataType == PropertyDataType.PtypString) {
+      string = new String(dataValue, StandardCharsets.UTF_16LE);
+    }
+      
     return MoreObjects.toStringHelper(this)
       .add("propertyIdentifier", Integer.toHexString(Short.toUnsignedInt(propertyIdentifier)))
       .add("propertyTag", PropertyTag.getPropertyTagFromIdentifier(propertyIdentifier))
@@ -94,6 +100,7 @@ public class PCItem {
       .add("bool", bool)
       .add("hid", hid)
       .add("dataValue", dataValue == null ? "null" : "(size=" + dataValue.length + ") [" + BaseEncoding.base16().withSeparator(",", 2).encode(dataValue)+ "]")
+      .add("dataValue String", string)
       .toString();
   }
 }
