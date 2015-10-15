@@ -104,4 +104,18 @@ public class NDB {
     }
     return null;
   }
+  
+  public TC getTCFromNID(int nid) throws Exception {
+    NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
+    Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
+    Block block = getBlockFromBID(page, nbtentry.bidData);
+    byte bCryptMethod = pst.getHeader().getBCryptMethod();
+    Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+    if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+      PermutativeEncoding.decode(block.data);
+    }
+    HN hn = new HN(block.data);
+    TC tc = new TC(hn);
+    return tc;
+  }
 }
