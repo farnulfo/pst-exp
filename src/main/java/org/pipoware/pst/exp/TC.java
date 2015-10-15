@@ -6,9 +6,9 @@ import com.google.common.base.Strings;
 import com.google.common.io.BaseEncoding;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.List;
 
 /**
@@ -114,6 +114,9 @@ public class TC {
           PropertyDataType propertyDataType = PropertyDataType.get(wPropType);
           System.out.println("\t\t propertyDataType : " + propertyDataType);
           System.out.println("\t\t value : [" + BaseEncoding.base16().withSeparator(",", 2).encode(getValue(propertyDataType, data, hn)) + "]");
+          if (propertyDataType == PropertyDataType.PtypString) {
+            System.out.println("\t\t String(value, UTF_16LE) : " + new String(getValue(propertyDataType, data, hn), StandardCharsets.UTF_16LE));
+          }
         }
         
       }
