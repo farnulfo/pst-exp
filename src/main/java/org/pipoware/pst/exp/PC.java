@@ -83,5 +83,14 @@ public class PC {
     }
     return null;
   }
+  
+  public PCItem getPCItemByPropertyIdentifier(short propertyIdentifier) {
+    for (PCItem item : items) {
+      if (item.propertyIdentifier == propertyIdentifier) {
+        return item;
+      }
+    }
+    throw new IllegalArgumentException("propertyIdentier " + propertyIdentifier + " not found.");
+  }
 
 }
