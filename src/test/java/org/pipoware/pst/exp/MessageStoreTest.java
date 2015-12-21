@@ -18,6 +18,6 @@ public class MessageStoreTest {
     PSTFile pstFile = new PSTFile(path);
     NDB ndb = new NDB(pstFile, pstFile.getHeader());
     PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
-    System.out.println("PC:" + pc);
+    System.out.println("PC:" + ToStringHelper.formatMultiline(pc.toString()));
   }
 }
