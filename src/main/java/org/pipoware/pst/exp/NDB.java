@@ -105,7 +105,7 @@ public class NDB {
     return null;
   }
   
-  public TC getTCFromNID(int nid) throws Exception {
+  public TC getTCFromNID(int nid) throws IOException {
     NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
     Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, nbtentry.bidData);
