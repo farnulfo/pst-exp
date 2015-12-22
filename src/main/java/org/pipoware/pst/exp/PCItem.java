@@ -63,11 +63,10 @@ public class PCItem {
             dataValue = Arrays.copyOf(b.data, b.data.length);
           }
         }
-        if (propertyDataType == PropertyDataType.PtypString) {
-          string = new String(dataValue, StandardCharsets.UTF_16LE);
-        }
       }
-      
+      if (propertyDataType == PropertyDataType.PtypString) {
+        string = new String(dataValue, StandardCharsets.UTF_16LE);
+      }
     } else {
       if (propertyDataType.getFixedDataSizeInByte() > 4) {
         hid = new HID(dwValueHnid);
