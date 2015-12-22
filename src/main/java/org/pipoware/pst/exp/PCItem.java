@@ -21,6 +21,7 @@ public class PCItem {
   public final short propertyIdentifier;
   private final byte[] propertyData;
   private int int32;
+  private String string;
   private HID hid;
   private boolean bool;
   public byte[] dataValue;
@@ -62,6 +63,9 @@ public class PCItem {
             dataValue = Arrays.copyOf(b.data, b.data.length);
           }
         }
+        if (propertyDataType == PropertyDataType.PtypString) {
+          string = new String(dataValue, StandardCharsets.UTF_16LE);
+        }
       }
       
     } else {
@@ -83,14 +87,30 @@ public class PCItem {
     }
     
   }
+  
+  public int getInt() {
+    if (propertyDataType != PropertyDataType.PtypInteger32) {
+      throw new IllegalArgumentException("propertyDataType : " + propertyDataType + " <> " + PropertyDataType.PtypInteger32);
+    }
+    return int32;
+  }
+
+  public String getString() {
+    if (propertyDataType != PropertyDataType.PtypString) {
+      throw new IllegalArgumentException("propertyDataType : " + propertyDataType + " <> " + PropertyDataType.PtypString);
+    }
+    return string;
+  }
+  
+  public boolean getBoolean() {
+    if (propertyDataType != PropertyDataType.PtypBoolean) {
+      throw new IllegalArgumentException("propertyDataType : " + propertyDataType + " <> " + PropertyDataType.PtypBoolean);
+    }
+    return bool;    
+  }
 
   @Override
   public String toString() {
-    String string = null;
-    if (propertyDataType == PropertyDataType.PtypString) {
-      string = new String(dataValue, StandardCharsets.UTF_16LE);
-    }
-      
     return MoreObjects.toStringHelper(this)
       .add("propertyIdentifier", Integer.toHexString(Short.toUnsignedInt(propertyIdentifier)))
       .add("propertyTag", PropertyTag.getPropertyTagFromIdentifier(propertyIdentifier))

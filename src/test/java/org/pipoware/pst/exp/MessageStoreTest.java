@@ -19,5 +19,14 @@ public class MessageStoreTest {
     NDB ndb = new NDB(pstFile, pstFile.getHeader());
     PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
     System.out.println("PC:" + ToStringHelper.formatMultiline(pc.toString()));
+    PCItem pic = pc.getPCItemByPropertyIdentifier((short) 0x35E0);
+    EntryID rootEntryId = new EntryID(pic.dataValue);
+    System.out.println("rootEntryId : " + ToStringHelper.formatMultiline(rootEntryId.toString()));
+    System.out.println("rootEntryId.nid : " + new NID(rootEntryId.nid));
+    PC rootFolderPC = ndb.getPCFromNID(rootEntryId.nid);
+    System.out.println("rootFolderPC: " + ToStringHelper.formatMultiline(rootFolderPC.toString()));
+    Folder rootFolder = new Folder(rootFolderPC);
+    System.out.println("rootFolder: " + rootFolder);
+    
   }
 }
