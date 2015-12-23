@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.Test;
+import static org.pipoware.pst.exp.PropertyIdentifier.PidTagIpmSubTreeEntryId;
 
 /**
  *
@@ -19,7 +20,7 @@ public class MessageStoreTest {
     NDB ndb = new NDB(pstFile, pstFile.getHeader());
     PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
     System.out.println("PC:" + ToStringHelper.formatMultiline(pc.toString()));
-    PCItem pic = pc.getPCItemByPropertyIdentifier((short) 0x35E0);
+    PCItem pic = pc.getPCItemByPropertyIdentifier(PidTagIpmSubTreeEntryId);
     EntryID rootEntryId = new EntryID(pic.dataValue);
     System.out.println("rootEntryId : " + ToStringHelper.formatMultiline(rootEntryId.toString()));
     System.out.println("rootEntryId.nid : " + new NID(rootEntryId.nid));

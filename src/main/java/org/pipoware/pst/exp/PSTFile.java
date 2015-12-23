@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import static org.pipoware.pst.exp.PropertyIdentifier.PidTagIpmSubTreeEntryId;
 
 /**
  *
@@ -107,7 +108,7 @@ public class PSTFile implements IPSTFile {
   
   public Folder getRootFolder() throws IOException {
     PC messageStorePC = getMessageStorePC();
-    PCItem pic = messageStorePC.getPCItemByPropertyIdentifier((short) 0x35E0);
+    PCItem pic = messageStorePC.getPCItemByPropertyIdentifier(PidTagIpmSubTreeEntryId);
     EntryID rootEntryId = new EntryID(pic.dataValue);
     PC rootFolderPC = ndb.getPCFromNID(rootEntryId.nid);
     Folder rootFolder = new Folder(rootFolderPC);
