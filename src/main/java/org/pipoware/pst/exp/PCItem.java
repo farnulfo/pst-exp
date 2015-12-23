@@ -66,6 +66,8 @@ public class PCItem {
       }
       if (propertyDataType == PropertyDataType.PtypString) {
         string = new String(dataValue, StandardCharsets.UTF_16LE);
+      } else if (propertyDataType == PropertyDataType.PtypString8) {
+        string = new String(dataValue, StandardCharsets.UTF_8);
       }
     } else {
       if (propertyDataType.getFixedDataSizeInByte() > 4) {
@@ -95,10 +97,11 @@ public class PCItem {
   }
 
   public String getString() {
-    if (propertyDataType != PropertyDataType.PtypString) {
+    if ((propertyDataType == PropertyDataType.PtypString) || (propertyDataType == PropertyDataType.PtypString8)) {
+      return string;
+    } else {
       throw new IllegalArgumentException("propertyDataType : " + propertyDataType + " <> " + PropertyDataType.PtypString);
     }
-    return string;
   }
   
   public boolean getBoolean() {
