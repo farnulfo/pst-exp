@@ -76,7 +76,7 @@ public class HN {
   byte[] getHeapItem(HID hid) {
     int hidIndex = hid.hidIndex;
     Preconditions.checkArgument(hidIndex > 0, "hidIndex (%s) must be > 0 ", hidIndex);
-    Preconditions.checkArgument(hidIndex < rgibAlloc.length + 1, "hidIndex (%s) out of rgiAlloc size (%s)", rgibAlloc.length);
+    Preconditions.checkArgument(hidIndex < rgibAlloc.length + 1, "hidIndex (%s) out of rgiAlloc size (%s)", hidIndex, rgibAlloc.length);
     
     int rgiAllocIndex = hidIndex - 1;
     return Arrays.copyOfRange(data, rgibAlloc[rgiAllocIndex], rgibAlloc[rgiAllocIndex+1]);
