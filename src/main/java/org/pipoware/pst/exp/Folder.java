@@ -1,8 +1,10 @@
 package org.pipoware.pst.exp;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.io.BaseEncoding;
-import java.nio.charset.StandardCharsets;
+import static org.pipoware.pst.exp.PropertyIdentifier.PidTagContentCount;
+import static org.pipoware.pst.exp.PropertyIdentifier.PidTagContentUnreadCount;
+import static org.pipoware.pst.exp.PropertyIdentifier.PidTagDisplayName;
+import static org.pipoware.pst.exp.PropertyIdentifier.PidTagSubfolders;
 
 /**
  *
@@ -15,11 +17,6 @@ public class Folder {
   private final int contentCount;
   private final int contentUnreadCount;
   private final boolean subFolders;
-
-  public static final short PidTagDisplayName = (short) 0x3001;
-  public static final short PidTagContentCount = (short) 0x3602;
-  public static final short PidTagContentUnreadCount = (short) 0x3603;
-  public static final short PidTagSubfolders = (short) 0x360A;
 
   public Folder(PC pc) {
     folderPC = pc;
