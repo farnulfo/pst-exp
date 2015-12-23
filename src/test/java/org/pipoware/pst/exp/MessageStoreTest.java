@@ -25,8 +25,20 @@ public class MessageStoreTest {
     System.out.println("rootEntryId.nid : " + new NID(rootEntryId.nid));
     PC rootFolderPC = ndb.getPCFromNID(rootEntryId.nid);
     System.out.println("rootFolderPC: " + ToStringHelper.formatMultiline(rootFolderPC.toString()));
+    int rootFolderHCnid = (rootEntryId.nid & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
+    TC hc = ndb.getTCFromNID(rootFolderHCnid);
     Folder rootFolder = new Folder(rootFolderPC);
     System.out.println("rootFolder: " + rootFolder);
+    System.out.println("hc :" + ToStringHelper.formatMultiline(hc.toString()));
+    System.out.println("index 0 :" + ToStringHelper.formatMultiline(ndb.getPCFromNID(32866).toString()));
+    System.out.println("index 1 :" + ToStringHelper.formatMultiline(ndb.getPCFromNID(32898).toString()));
     
+  }
+
+  @Test
+  public void testFolder() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
+    PSTFile pstFile = new PSTFile(path);
+    Folder rootFolder = pstFile.getRootFolder();
   }
 }

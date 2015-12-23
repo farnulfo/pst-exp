@@ -100,4 +100,17 @@ public class PSTFile implements IPSTFile {
     ByteBuffer b = ByteBuffer.wrap(bytes);
     return fileChannel.read(b);
   }
+  
+  private PC getMessageStorePC() throws IOException {
+    return ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
+  }
+  
+  public Folder getRootFolder() throws IOException {
+    PC messageStorePC = getMessageStorePC();
+    PCItem pic = messageStorePC.getPCItemByPropertyIdentifier((short) 0x35E0);
+    EntryID rootEntryId = new EntryID(pic.dataValue);
+    PC rootFolderPC = ndb.getPCFromNID(rootEntryId.nid);
+    Folder rootFolder = new Folder(rootFolderPC);
+    return rootFolder;
+  }
 }
