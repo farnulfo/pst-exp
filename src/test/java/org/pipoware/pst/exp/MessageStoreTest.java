@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import org.junit.Test;
 import static org.pipoware.pst.exp.PropertyIdentifier.PidTagIpmSubTreeEntryId;
 
@@ -28,7 +29,7 @@ public class MessageStoreTest {
     System.out.println("rootFolderPC: " + ToStringHelper.formatMultiline(rootFolderPC.toString()));
     int rootFolderHCnid = (rootEntryId.nid & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
     TC hc = ndb.getTCFromNID(rootFolderHCnid);
-    Folder rootFolder = new Folder(rootFolderPC);
+    Folder rootFolder = new Folder(ndb, rootFolderPC, hc);
     System.out.println("rootFolder: " + rootFolder);
     System.out.println("hc :" + ToStringHelper.formatMultiline(hc.toString()));
     System.out.println("index 0 :" + ToStringHelper.formatMultiline(ndb.getPCFromNID(32866).toString()));
@@ -42,5 +43,19 @@ public class MessageStoreTest {
     PSTFile pstFile = new PSTFile(path);
     MessageStore messageStore = pstFile.getMessageStore();
     Folder rootFolder = messageStore.getRootFolder();
+    if (rootFolder.hasSubFolers()) {
+      List<Folder> folders = rootFolder.getFolders();
+    }
+  }
+
+  @Test
+  public void testFolderANSI() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/pstsdk/test_ansi.pst").toURI());
+    PSTFile pstFile = new PSTFile(path);
+    MessageStore messageStore = pstFile.getMessageStore();
+    Folder rootFolder = messageStore.getRootFolder();
+    if (rootFolder.hasSubFolers()) {
+      List<Folder> folders = rootFolder.getFolders();
+    }
   }
 }
