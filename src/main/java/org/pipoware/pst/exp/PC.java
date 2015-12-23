@@ -55,9 +55,6 @@ public class PC {
         int length = bbStringStream.getInt();
         byte []stringBytes = new byte[length];
         bbStringStream.get(stringBytes);
-        String s = new String(stringBytes, StandardCharsets.UTF_16);
-        System.out.println("S UTF_16:" + new String(stringBytes, StandardCharsets.UTF_16));
-        System.out.println("S UTF_16BE:" + new String(stringBytes, StandardCharsets.UTF_16BE));
         System.out.println("S UTF_16LE:" + new String(stringBytes, StandardCharsets.UTF_16LE));
         
       } else {
