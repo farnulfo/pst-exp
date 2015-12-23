@@ -128,6 +128,10 @@ public class TC {
     byte b1 = (byte) (1 << (7 - (iBit % 8)));
     return !((a1 & b1) != 0);
   }
+  
+  public List<TCROWID> getRows() {
+    return tcRowIds;
+  }
 
   @Override
   public String toString() {
