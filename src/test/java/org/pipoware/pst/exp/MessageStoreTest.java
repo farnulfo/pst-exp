@@ -40,6 +40,7 @@ public class MessageStoreTest {
   public void testFolder() throws URISyntaxException, IOException {
     Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
     PSTFile pstFile = new PSTFile(path);
-    Folder rootFolder = pstFile.getRootFolder();
+    MessageStore messageStore = pstFile.getMessageStore();
+    Folder rootFolder = messageStore.getRootFolder();
   }
 }

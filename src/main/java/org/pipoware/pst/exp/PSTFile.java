@@ -106,12 +106,7 @@ public class PSTFile implements IPSTFile {
     return ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
   }
   
-  public Folder getRootFolder() throws IOException {
-    PC messageStorePC = getMessageStorePC();
-    PCItem pic = messageStorePC.getPCItemByPropertyIdentifier(PidTagIpmSubTreeEntryId);
-    EntryID rootEntryId = new EntryID(pic.dataValue);
-    PC rootFolderPC = ndb.getPCFromNID(rootEntryId.nid);
-    Folder rootFolder = new Folder(rootFolderPC);
-    return rootFolder;
+  public MessageStore getMessageStore() throws IOException {
+    return new MessageStore(ndb, getMessageStorePC());
   }
 }
