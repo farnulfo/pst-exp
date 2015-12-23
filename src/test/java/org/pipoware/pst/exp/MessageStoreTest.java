@@ -52,6 +52,17 @@ public class MessageStoreTest {
   public void testFolderANSI() throws URISyntaxException, IOException {
     Path path = Paths.get(getClass().getResource("/pstsdk/test_ansi.pst").toURI());
     PSTFile pstFile = new PSTFile(path);
+    
+    NDB ndb = new NDB(pstFile, pstFile.getHeader());
+    PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
+    System.out.println("PC:" + ToStringHelper.formatMultiline(pc.toString()));
+    PCItem pic = pc.getPCItemByPropertyIdentifier(PidTagIpmSubTreeEntryId);
+    EntryID rootEntryId = new EntryID(pic.dataValue);
+    System.out.println("rootEntryId : " + ToStringHelper.formatMultiline(rootEntryId.toString()));
+    System.out.println("rootEntryId.nid : " + new NID(rootEntryId.nid));
+    PC rootFolderPC = ndb.getPCFromNID(rootEntryId.nid);
+    System.out.println("rootFolderPC: " + ToStringHelper.formatMultiline(rootFolderPC.toString()));
+    
     MessageStore messageStore = pstFile.getMessageStore();
     Folder rootFolder = messageStore.getRootFolder();
     if (rootFolder.hasSubFolers()) {
