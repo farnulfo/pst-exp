@@ -152,6 +152,7 @@ public class Page {
         bb.put(this.bytes, offset, 4);
         bb.flip();
         bid = bb.getInt();
+        offset += 4;
 
         bb = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
         bb.put(this.bytes, offset, 4);
