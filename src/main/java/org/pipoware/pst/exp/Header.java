@@ -166,7 +166,10 @@ public class Header {
       rgnid[i] = pst.readDWORD();
     }
 
-    qwUnused = pst.readULONG();
+    if (type == PST_TYPE.UNICODE) {
+      qwUnused = pst.readULONG();
+    }
+    
     root = new Root(pst, type);
 
     if (type == PST_TYPE.UNICODE) {
@@ -175,7 +178,7 @@ public class Header {
 
     pst.read(rgbFM);
     pst.read(rgbFP);
-
+    
     bSentinel = pst.readBYTE();
     if (bSentinel != (byte) 0x80) {
       throw new IllegalArgumentException("Illegal bSentinel value: " + bSentinel + ", expected : 0x80");
