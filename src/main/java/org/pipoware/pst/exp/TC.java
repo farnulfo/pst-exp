@@ -58,7 +58,11 @@ public class TC {
     }
     
     HID hnidRows = new HID(tcinfo.hnidRows);
-    heapItem = hn.getHeapItem(hnidRows);
+    if (hnidRows.type == NID.NID_TYPE_HID) {
+      heapItem = hn.getHeapItem(hnidRows);
+    } else {
+      throw new IllegalArgumentException("HNID<>HID not yet implemented!");
+    }
 
     Preconditions.checkArgument((heapItem.length / tcRowIds.size()) == tcinfo.TCI_bm);
 
