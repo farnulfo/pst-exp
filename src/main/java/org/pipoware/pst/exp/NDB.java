@@ -65,6 +65,7 @@ public class NDB {
     NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
     Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, nbtentry.bidData);
+    Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
     Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
     if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
@@ -109,6 +110,7 @@ public class NDB {
     NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
     Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, nbtentry.bidData);
+    Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
     Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
     if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
