@@ -95,33 +95,33 @@ public class Page {
     this.bytes = Arrays.copyOf(bytes, PAGE_SIZE);
 
     int offset = 0;
+    int length = 0;
     if (type == Header.PST_TYPE.UNICODE) {
       offset = PAGE_SIZE - UNICODE_TRAILER_SIZE;
+      length = UNICODE_TRAILER_SIZE;
     } else {
       offset = PAGE_SIZE - ANSI_TRAILER_SIZE;
+      length = ANSI_TRAILER_SIZE;
     }
-    pType = this.bytes[offset];
-    offset++;
-    pTypeRepeat = this.bytes[offset];
-    offset++;
+    
+    ByteBuffer bb = ByteBuffer.wrap(this.bytes, offset, length).order(ByteOrder.LITTLE_ENDIAN);
 
+    pType = bb.get();
+    pTypeRepeat = bb.get();
+    
     if (pType != pTypeRepeat) {
       throw new IllegalArgumentException("pTYpe : " + pType + " <> pTypeRepeat : " + pTypeRepeat);
     }
 
     pageType = PageType.get(pType);
 
-    ByteBuffer bb = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN);
-    bb.put(this.bytes, offset, 2);
-    bb.flip();
-    wSig = bb.getShort(0);
+    wSig = bb.getShort();
     if ((pageType == PageType.ptypeAMap) || (pageType == PageType.ptypePMap)
       || (pageType == PageType.ptypeFMap) || (pageType == PageType.ptypeFPMap)) {
       if (wSig != 0) {
         throw new IllegalArgumentException("wSig : " + wSig + " <> 0");
       }
     }
-    offset += 2;
 
     byte[] crcData;
     int dwComputedCRC;
@@ -129,11 +129,7 @@ public class Page {
     switch (type) {
 
       case UNICODE:
-        bb = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
-        bb.put(this.bytes, offset, 4);
-        bb.flip();
         dwCRC = bb.getInt();
-        offset += 4;
 
         crcData = Arrays.copyOf(this.bytes, PAGE_SIZE - UNICODE_TRAILER_SIZE);
         dwComputedCRC = CRC.computeCRC(0, crcData);
@@ -141,22 +137,11 @@ public class Page {
           throw new IllegalArgumentException("dwCRC = " + dwCRC + " <> dwComputedCRC = " + dwComputedCRC);
         }
 
-        bb = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN);
-        bb.put(this.bytes, offset, 8);
-        bb.flip();
         bid = bb.getLong();
         break;
 
       case ANSI:
-        bb = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
-        bb.put(this.bytes, offset, 4);
-        bb.flip();
         bid = bb.getInt();
-        offset += 4;
-
-        bb = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
-        bb.put(this.bytes, offset, 4);
-        bb.flip();
         dwCRC = bb.getInt();
 
         crcData = Arrays.copyOf(this.bytes, PAGE_SIZE - ANSI_TRAILER_SIZE);
