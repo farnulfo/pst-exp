@@ -57,8 +57,8 @@ public class TC {
       tcRowIds.add(new TCROWID(dwRowID, dwRowIndex));
     }
     
-    HID hidRowsData = new HID(tcinfo.hnidRows);
-    heapItem = hn.getHeapItem(hidRowsData);
+    HID hnidRows = new HID(tcinfo.hnidRows);
+    heapItem = hn.getHeapItem(hnidRows);
 
     Preconditions.checkArgument((heapItem.length / tcRowIds.size()) == tcinfo.TCI_bm);
 
