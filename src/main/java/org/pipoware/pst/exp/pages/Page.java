@@ -6,6 +6,7 @@
 package org.pipoware.pst.exp.pages;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -92,6 +93,7 @@ public class Page {
   private byte pType;
 
   public Page(byte[] bytes, Header.PST_TYPE type) {
+    Preconditions.checkArgument(type == Header.PST_TYPE.ANSI || type == Header.PST_TYPE.UNICODE);
     this.bytes = Arrays.copyOf(bytes, PAGE_SIZE);
 
     int offset = 0;
