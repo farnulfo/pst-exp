@@ -36,7 +36,7 @@ public class PSTFile implements IPSTFile {
   private final ByteBuffer ulong = ByteBuffer.allocate(ULONG_SIZE).order(ByteOrder.LITTLE_ENDIAN);
   private final ByteBuffer ubyte = ByteBuffer.allocate(1);
   private final Header header;
-  private final NDB ndb;
+  public final NDB ndb;
   private final LTP ltp;
   private final Messaging messaging;
 
