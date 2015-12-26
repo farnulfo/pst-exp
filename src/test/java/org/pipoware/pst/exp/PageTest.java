@@ -136,7 +136,7 @@ public class PageTest {
       pstFile.position(offset);
       b = new byte[512];
       pstFile.read(b);
-      Page p = new Page(b, Header.PST_TYPE.UNICODE);
+      Page p = new Page(b, pstFile.getHeader().getType());
       System.out.println("btkey 0x" + Long.toHexString(btentry.btKey));
       System.out.println(p);
     }
