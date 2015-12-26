@@ -26,7 +26,7 @@ public class NDB {
     this.header = header;
   }
 
-  private Page fetchPage(long pageOffset) throws IOException {
+  public Page getPage(long pageOffset) throws IOException {
     pst.position(pageOffset);
     byte[] bytes = new byte[Page.PAGE_SIZE];
     pst.read(bytes);
@@ -34,7 +34,7 @@ public class NDB {
   }
 
   private NBTENTRY geNBTENTRYFromNID(int nid) throws IOException {
-    Page rootNBTPage = fetchPage(header.getRoot().bRefNBT.getIb());
+    Page rootNBTPage = getPage(header.getRoot().bRefNBT.getIb());
     return getNBTENTRYFromNID(rootNBTPage, nid);
   }
   
@@ -63,7 +63,7 @@ public class NDB {
 
   public PC getPCFromNID(int nid) throws IOException {
     NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
-    Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
+    Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
@@ -78,7 +78,7 @@ public class NDB {
   }
   
   public Block getBlockFromBID(long bid) throws IOException {
-    Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
+    Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, bid);
     return block;
   }
@@ -108,7 +108,7 @@ public class NDB {
   
   public TC getTCFromNID(int nid) throws IOException {
     NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
-    Page page = fetchPage(pst.getHeader().getRoot().bRefBBT.getIb());
+    Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
