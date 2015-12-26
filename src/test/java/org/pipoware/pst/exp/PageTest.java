@@ -124,19 +124,10 @@ public class PageTest {
     Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
     PSTFile pstFile = new PSTFile(path);
     BREF bref = pstFile.getHeader().getRoot().bRefNBT;
-    long offset = bref.getIb();
-    pstFile.position(offset);
-    byte []b = new byte[512];
-    pstFile.read(b);
-    Page page = new Page(b, pstFile.getHeader().getType());
+    Page page = pstFile.ndb.getPage(bref);
     System.out.println("Page " + page);
     for (BTENTRY btentry : page.btentries) {
-      bref = btentry.bref;
-      offset = bref.getIb();
-      pstFile.position(offset);
-      b = new byte[512];
-      pstFile.read(b);
-      Page p = new Page(b, pstFile.getHeader().getType());
+      Page p = pstFile.ndb.getPage(btentry.bref);
       System.out.println("btkey 0x" + Long.toHexString(btentry.btKey));
       System.out.println(p);
     }
@@ -147,25 +138,17 @@ public class PageTest {
     Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
     PSTFile pstFile = new PSTFile(path);
     BREF bref = pstFile.getHeader().getRoot().bRefBBT;
-    long offset = bref.getIb();
-    pstFile.position(offset);
-    byte []b = new byte[Page.PAGE_SIZE];
-    pstFile.read(b);
-    Page page = new Page(b, pstFile.getHeader().getType());
+    Page page = pstFile.ndb.getPage(bref);
     System.out.println("Page " + page);
     for (BTENTRY btentry : page.btentries) {
       bref = btentry.bref;
-      offset = bref.getIb();
-      pstFile.position(offset);
-      b = new byte[Page.PAGE_SIZE];
-      pstFile.read(b);
-      Page p = new Page(b, Header.PST_TYPE.UNICODE);
+      Page p = pstFile.ndb.getPage(bref);
       System.out.println("btkey 0x" + Long.toHexString(btentry.btKey));
       System.out.println(p);
 
       for (BBTENTRY bbtentry : p.bbtentries) {
         bref = bbtentry.bref;
-        offset = bref.getIb();
+        long offset = bref.getIb();
         pstFile.position(offset);
         bbtentry.bref.getBid();
         bbtentry.bref.getIb();
@@ -181,11 +164,7 @@ public class PageTest {
     Path path = Paths.get(getClass().getResource("/pstsdk/sample1.pst").toURI());
     PSTFile pstFile = new PSTFile(path);
     BREF bref = pstFile.getHeader().getRoot().bRefBBT;
-    long offset = bref.getIb();
-    pstFile.position(offset);
-    byte []b = new byte[Page.PAGE_SIZE];
-    pstFile.read(b);
-    Page page = new Page(b, pstFile.getHeader().getType());
+    Page page = pstFile.ndb.getPage(bref);
     System.out.println("Page " + page);
     displayPage(pstFile, page, 0);
   }
@@ -198,10 +177,7 @@ public class PageTest {
       }
     } else {
       for (BTENTRY btentry : page.btentries) {
-        pstFile.position(btentry.bref.getIb());
-        byte[] b = new byte[Page.PAGE_SIZE];
-        pstFile.read(b);
-        Page p = new Page(b, pstFile.getHeader().getType());
+        Page p = pstFile.ndb.getPage(btentry.bref);
         System.out.println(Strings.repeat(" ", indent)+ "btkey 0x" + Long.toHexString(btentry.btKey));
         displayPage(pstFile, p, indent + 4);
       }
