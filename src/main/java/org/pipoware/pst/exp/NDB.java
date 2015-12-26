@@ -26,6 +26,10 @@ public class NDB {
     this.header = header;
   }
 
+  public Page getPage(BREF bref) throws IOException {
+    return getPage(bref.getIb());
+  }
+  
   public Page getPage(long pageOffset) throws IOException {
     pst.position(pageOffset);
     byte[] bytes = new byte[Page.PAGE_SIZE];
