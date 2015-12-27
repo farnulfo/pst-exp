@@ -23,7 +23,7 @@ public class PCTest {
     Path path = Paths.get(getClass().getResource("/ltp/sample_heap_on_node.bin").toURI());
     byte[] bytes = Files.readAllBytes(path);
 
-    HN hn = new HN(bytes);
+    HN hn = new HN(null, bytes);
     BTH bth = new BTH(hn);
     PC pc = new PC(bth, null, null);
     

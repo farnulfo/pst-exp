@@ -36,8 +36,10 @@ public class HN {
   public final short cAlloc;
   public final short cFree;
   public final short[] rgibAlloc;
+  public final NDB ndb;
 
-  public HN(byte[] bytes) {
+  public HN(NDB ndb, byte[] bytes) {
+    this.ndb = ndb;
     data = Arrays.copyOf(bytes, bytes.length);
 
     // Read HNHDR

@@ -23,7 +23,7 @@ public class TCTest {
     Path path = Paths.get(getClass().getResource("/ltp/sample_tc.bin").toURI());
     byte[] bytes = Files.readAllBytes(path);
 
-    HN hn = new HN(bytes);
+    HN hn = new HN(null, bytes);
     TC tc = new TC(hn);
 
     System.out.println(tc);

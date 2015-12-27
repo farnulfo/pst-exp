@@ -75,7 +75,7 @@ public class NDB {
     if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
       PermutativeEncoding.decode(block.data);
     }
-    HN hn = new HN(block.data);
+    HN hn = new HN(this, block.data);
     BTH bth = new BTH(hn);
     PC pc = new PC(bth, this, nbtentry);
     return pc;
@@ -120,7 +120,7 @@ public class NDB {
     if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
       PermutativeEncoding.decode(block.data);
     }
-    HN hn = new HN(block.data);
+    HN hn = new HN(this, block.data);
     TC tc = new TC(hn);
     return tc;
   }
