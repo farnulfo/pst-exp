@@ -121,7 +121,7 @@ public class NDB {
       PermutativeEncoding.decode(block.data);
     }
     HN hn = new HN(this, block.data);
-    TC tc = new TC(hn);
+    TC tc = new TC(hn, nbtentry);
     return tc;
   }
 }

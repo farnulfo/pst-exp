@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.pipoware.pst.exp.pages.NBTENTRY;
 
 /**
  *
@@ -21,12 +22,14 @@ public class TC {
   private final TCINFO tcinfo;
   private final BTHHEADER bthHeaderRowIndex;
   private final List<TCROWID> tcRowIds;
+  private final NBTENTRY nbtentry;
 
-  public TC(HN aHN) {
+  public TC(HN aHN, NBTENTRY nbtentry) {
     Preconditions.checkArgument(
       aHN.bClientSig == HN.CLIENT_SIG_TC,
       "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.bClientSig)));
     this.hn = aHN;
+    this.nbtentry = nbtentry;
 
     HID hid = new HID(hn.hidUserRoot);
 

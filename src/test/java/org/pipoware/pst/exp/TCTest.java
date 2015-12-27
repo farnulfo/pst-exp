@@ -24,7 +24,7 @@ public class TCTest {
     byte[] bytes = Files.readAllBytes(path);
 
     HN hn = new HN(null, bytes);
-    TC tc = new TC(hn);
+    TC tc = new TC(hn, null);
 
     System.out.println(tc);
 
