@@ -54,15 +54,15 @@ public class Folder {
     if (hasSubFolers()) {
       for (TCROWID row : hierarchyTable.getRows()) {
         int dwRowId = row.dwRowID;
-        PC folderPC = ndb.getPCFromNID(dwRowId);
-        boolean hasFolder = folderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
+        PC subFolderPC = ndb.getPCFromNID(dwRowId);
+        boolean hasFolder = subFolderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
         TC hc = null;
         if (hasFolder) {
           int tcNID = (dwRowId & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
           hc = ndb.getTCFromNID(tcNID);
         }
 
-        folders.add(new Folder(ndb, folderPC, hc));
+        folders.add(new Folder(ndb, subFolderPC, hc));
       }
     }
     return folders;
