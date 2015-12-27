@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.io.BaseEncoding;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -24,12 +25,12 @@ public class TC {
   private final List<TCROWID> tcRowIds;
   private final NBTENTRY nbtentry;
 
-  public TC(HN aHN, NBTENTRY nbtentry) {
+  public TC(HN aHN, NBTENTRY aNBTENTRY) throws IOException {
     Preconditions.checkArgument(
       aHN.bClientSig == HN.CLIENT_SIG_TC,
       "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.bClientSig)));
     this.hn = aHN;
-    this.nbtentry = nbtentry;
+    this.nbtentry = aNBTENTRY;
 
     HID hid = new HID(hn.hidUserRoot);
 
@@ -64,7 +65,24 @@ public class TC {
     if (hnidRows.type == NID.NID_TYPE_HID) {
       heapItem = hn.getHeapItem(hnidRows);
     } else {
-      throw new IllegalArgumentException("HNID<>HID not yet implemented!");
+      Block block = hn.ndb.getBlockFromBID(nbtentry.bidSub);
+      Preconditions.checkArgument(block.blockType == Block.BlockType.SLBLOCK, "Not yet supported BlockType %s", block.blockType);
+      SLENTRY slentry = null;
+      for (SLENTRY s : block.rgentries_slentry) {
+        if (s.nid == tcinfo.hnidRows) {
+          slentry = s;
+        }
+      }
+      Preconditions.checkNotNull(slentry, "SLENTRY not found");
+      Block b = hn.ndb.getBlockFromBID(slentry.bidData);
+      System.out.println("Block : " + b);
+      Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
+      byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
+      Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+      if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+        PermutativeEncoding.decode(b.data);
+      }
+      heapItem = b.data;
     }
 
     Preconditions.checkArgument((heapItem.length / tcRowIds.size()) == tcinfo.TCI_bm);
