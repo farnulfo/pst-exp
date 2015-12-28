@@ -29,7 +29,7 @@ public class MessageStoreTest {
     System.out.println("rootFolderPC: " + ToStringHelper.formatMultiline(rootFolderPC.toString()));
     int rootFolderHCnid = (rootEntryId.nid & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
     TC hc = ndb.getTCFromNID(rootFolderHCnid);
-    Folder rootFolder = new Folder(ndb, rootFolderPC, hc);
+    Folder rootFolder = new Folder(ndb, rootFolderPC, hc, null);
     System.out.println("rootFolder: " + rootFolder);
     System.out.println("hc :" + ToStringHelper.formatMultiline(hc.toString()));
     System.out.println("index 0 :" + ToStringHelper.formatMultiline(ndb.getPCFromNID(32866).toString()));
