@@ -46,7 +46,11 @@ public class PCItem {
       hid = new HID(dwValueHnid);
       
       if (hid.type == NID.NID_TYPE_HID) {
-        dataValue = bth.hn.getHeapItem(hid);
+        if (dwValueHnid != 0) {
+          dataValue = bth.hn.getHeapItem(hid);
+        } else {
+          System.out.println("dwValueHnid == null");
+        }
       } else {
         // dwValueHnid = NID (subnode)
         long blockId = nbtentry.bidSub;
@@ -65,9 +69,9 @@ public class PCItem {
         }
       }
       if (propertyDataType == PropertyDataType.PtypString) {
-        string = new String(dataValue, StandardCharsets.UTF_16LE);
+        string = (dataValue != null) ? new String(dataValue, StandardCharsets.UTF_16LE) : "NULLLLLLL";
       } else if (propertyDataType == PropertyDataType.PtypString8) {
-        string = new String(dataValue, StandardCharsets.UTF_8);
+        string = (dataValue != null) ?  new String(dataValue, StandardCharsets.UTF_8) : "NULLLLLLL";
       }
     } else {
       if (propertyDataType.getFixedDataSizeInByte() > 4) {
