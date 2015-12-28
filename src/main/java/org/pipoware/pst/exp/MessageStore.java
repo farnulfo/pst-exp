@@ -32,7 +32,7 @@ class MessageStore {
     boolean hasFolder = rootFolderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
     int rootFolderHCnid = (rootEntryId.nid & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
     TC hc = ndb.getTCFromNID(rootFolderHCnid);
-    return new Folder(ndb, rootFolderPC, hc);
+    return new Folder(ndb, rootFolderPC, hc, null);
   }
 
 }

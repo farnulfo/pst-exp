@@ -18,16 +18,18 @@ public class Folder {
   private final NDB ndb;
   private final PC folderPC;
   private final TC hierarchyTable;
+  private final TC contentTable;
   private final String displayName;
   private final int contentCount;
   private final int contentUnreadCount;
   private final boolean subFolders;
   private final List<Folder> folders = new ArrayList<>();
 
-  public Folder(NDB ndb, PC pc, TC hierarchyTable) {
+  public Folder(NDB ndb, PC pc, TC hierarchyTable, TC aContentTable) {
     this.ndb = ndb;
     this.folderPC = pc;
     this.hierarchyTable = hierarchyTable;
+    this.contentTable = aContentTable;
     displayName = folderPC.getPCItemByPropertyIdentifier(PidTagDisplayName).getString();
     contentCount = folderPC.getPCItemByPropertyIdentifier(PidTagContentCount).getInt();
     contentUnreadCount = folderPC.getPCItemByPropertyIdentifier(PidTagContentUnreadCount).getInt();
@@ -61,11 +63,27 @@ public class Folder {
           int tcNID = (dwRowId & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
           hc = ndb.getTCFromNID(tcNID);
         }
+        
+        TC contentTableTC = null;
+        int contentCount = subFolderPC.getPCItemByPropertyIdentifier(PidTagContentCount).getInt();
+        if (contentCount > 0) {
+          int contentTableNID = (dwRowId & 0xFFFFFFE0) | NID.NID_TYPE_CONTENTS_TABLE;
+          contentTableTC = ndb.getTCFromNID(contentTableNID);
+        }
 
-        folders.add(new Folder(ndb, subFolderPC, hc));
+        folders.add(new Folder(ndb, subFolderPC, hc, contentTableTC));
       }
     }
     return folders;
+  }
+  
+  public List<Message> getMessages() {
+    List<Message> messages = new ArrayList<>();
+    for (TCROWID tcrowid : contentTable.getRows()) {
+      Message message = new Message(ndb, tcrowid.dwRowID);
+      messages.add(message);
+    }
+    return messages;
   }
 
   @Override
