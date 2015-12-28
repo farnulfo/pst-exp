@@ -30,7 +30,7 @@ public class Block {
   public BlockType blockType;
 
   public byte data[];
-  private long rgbid[];
+  public long rgbid[];
   private BREF bref;
   private long lcbTotal;
   public SLENTRY[] rgentries_slentry;
