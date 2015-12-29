@@ -18,11 +18,11 @@ public class BTH {
   
   public BTH(HN aHN) {
     Preconditions.checkArgument(
-      aHN.bClientSig == HN.CLIENT_SIG_PC_BTH,
-      "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.bClientSig)));
+      aHN.getClientSig() == HN.CLIENT_SIG_PC_BTH,
+      "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.getClientSig())));
     this.hn = aHN;
     
-    HID hid = new HID(hn.hidUserRoot);
+    HID hid = new HID(hn.getHidUserRoot());
     
     byte[] heapItem = hn.getHeapItem(hid);
     bthHeader = new BTHHEADER(heapItem);

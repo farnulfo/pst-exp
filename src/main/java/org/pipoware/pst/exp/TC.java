@@ -27,12 +27,12 @@ public class TC {
 
   public TC(HN aHN, NBTENTRY aNBTENTRY) throws IOException {
     Preconditions.checkArgument(
-      aHN.bClientSig == HN.CLIENT_SIG_TC,
-      "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.bClientSig)));
+      aHN.getClientSig() == HN.CLIENT_SIG_TC,
+      "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.getClientSig())));
     this.hn = aHN;
     this.nbtentry = aNBTENTRY;
 
-    HID hid = new HID(hn.hidUserRoot);
+    HID hid = new HID(hn.getHidUserRoot());
 
     byte[] heapItem = hn.getHeapItem(hid);
     tcinfo = new TCINFO(heapItem);
