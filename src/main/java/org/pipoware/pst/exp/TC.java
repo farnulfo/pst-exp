@@ -76,7 +76,7 @@ public class TC {
       Preconditions.checkNotNull(slentry, "SLENTRY not found");
       Block b = hn.ndb.getBlockFromBID(slentry.bidData);
       System.out.println("Block : " + b);
-      Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
+      Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", b.blockType);
       byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
       Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
       if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
