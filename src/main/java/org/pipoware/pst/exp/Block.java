@@ -193,8 +193,8 @@ public class Block {
         nid = bb.getLong();
         bid = bb.getLong();
       } else {
-        nid = bb.getLong();
-        bid = bb.getLong();
+        nid = bb.getInt();
+        bid = bb.getInt();
       }
       
       rgentries_sientry[i] = new SIENTRY(nid, bid);
