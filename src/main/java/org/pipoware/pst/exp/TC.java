@@ -61,9 +61,10 @@ public class TC {
       tcRowIds.add(new TCROWID(dwRowID, dwRowIndex));
     }
     
+    byte[] rowMatrixData;
     HID hnidRows = new HID(tcinfo.hnidRows);
     if (hnidRows.type == NID.NID_TYPE_HID) {
-      heapItem = hn.getHeapItem(hnidRows);
+      rowMatrixData = hn.getHeapItem(hnidRows);
     } else {
       Block block = hn.ndb.getBlockFromBID(nbtentry.bidSub);
       Preconditions.checkArgument(block.blockType == Block.BlockType.SLBLOCK, "Not yet supported BlockType %s", block.blockType);
@@ -82,10 +83,10 @@ public class TC {
       if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
         PermutativeEncoding.decode(b.data);
       }
-      heapItem = b.data;
+      rowMatrixData = b.data;
     }
 
-    Preconditions.checkArgument((heapItem.length / tcRowIds.size()) == tcinfo.TCI_bm);
+    Preconditions.checkArgument((rowMatrixData.length / tcRowIds.size()) == tcinfo.TCI_bm);
 
     System.out.println("0x00000000\t" + Strings.repeat("X", tcinfo.TCI_bm));
     for (TCOLDESC tColDesc : tcinfo.tColDesc) {
@@ -103,7 +104,7 @@ public class TC {
     Preconditions.checkArgument(rgbCEBSize == rgbCEBComputedSize);
 
     for (int i = 0; i < tcRowIds.size(); i++) {
-      byte[] rowData = Arrays.copyOfRange(heapItem, i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
+      byte[] rowData = Arrays.copyOfRange(rowMatrixData, i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
       System.out.println("row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(rowData) + "]");
       bb = ByteBuffer.wrap(rowData).order(ByteOrder.LITTLE_ENDIAN);
       int dwRowId = bb.getInt();
