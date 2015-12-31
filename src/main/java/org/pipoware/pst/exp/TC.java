@@ -77,20 +77,34 @@ public class TC {
       Preconditions.checkNotNull(slentry, "SLENTRY not found");
       Block b = hn.ndb.getBlockFromBID(slentry.bidData);
       System.out.println("Block : " + b);
-      Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", b.blockType);
-      byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
-      Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
-      if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
-        PermutativeEncoding.decode(b.data);
+      Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK || b.blockType == Block.BlockType.XBLOCK,
+        "Blocktype %s not yet handled!", b.blockType);
+      if (b.blockType == Block.BlockType.DATA_BLOCK) {
+        byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
+        Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+        if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+          PermutativeEncoding.decode(b.data);
+        }
+        rowMatrixDataBlocks.add(b.data);
+      } else if (b.blockType == Block.BlockType.XBLOCK) {
+        for (long bid : b.rgbid) {
+          Block b1 = hn.ndb.getBlockFromBID(bid);
+          Preconditions.checkArgument(b1.blockType == Block.BlockType.DATA_BLOCK);
+          byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
+          Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+          if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+            PermutativeEncoding.decode(b1.data);
+          }
+          rowMatrixDataBlocks.add(b1.data);
+        }
       }
-      rowMatrixDataBlocks.add(b.data);
     }
 
     displayRowMatrixData(rowMatrixDataBlocks);
   }
 
   private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
-    Preconditions.checkArgument(rowMatrixDataBlocks.size() > 0);
+    Preconditions.checkArgument(rowMatrixDataBlocks.size() == 1, "Only simple data block for now");
     if (rowMatrixDataBlocks.size() == 1) {
       Preconditions.checkArgument((rowMatrixDataBlocks.get(0).length / tcRowIds.size()) == tcinfo.TCI_bm);
     }
