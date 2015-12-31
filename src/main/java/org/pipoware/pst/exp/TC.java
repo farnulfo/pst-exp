@@ -108,6 +108,7 @@ public class TC {
       System.out.println("row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(rowData) + "]");
       bb = ByteBuffer.wrap(rowData).order(ByteOrder.LITTLE_ENDIAN);
       int dwRowId = bb.getInt();
+      Preconditions.checkArgument(dwRowId == tcRowIds.get(i).dwRowID);
 
       bb.position(tcinfo.TCI_1b);
       byte[] CEBArray = new byte[rgbCEBSize];
