@@ -176,6 +176,11 @@ public class TC {
     }
   }
   
+  public int getRowsPerBlock() {
+    int blockTrailerSize = hn.ndb.pst.getHeader().getType() == Header.PST_TYPE.UNICODE ? Block.UNICODE_BLOCKTRAILER_SIZE : Block.ANSI_BLOCKTRAILER_SIZE;
+    return (Block.MAX_BLOCK_SIZE - blockTrailerSize) / tcinfo.TCI_bm;
+  }
+  
   public static boolean isRowDataNull(byte[] cebArray, byte iBit) {
     byte a1 = cebArray[iBit / 8];
     byte b1 = (byte) (1 << (7 - (iBit % 8)));
