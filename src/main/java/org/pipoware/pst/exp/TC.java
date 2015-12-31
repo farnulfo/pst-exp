@@ -86,15 +86,18 @@ public class TC {
       rowMatrixData = b.data;
     }
 
-    Preconditions.checkArgument((rowMatrixData.length / tcRowIds.size()) == tcinfo.TCI_bm);
+    displayRowMatrixData(rowMatrixData);
+  }
 
+  private void displayRowMatrixData(byte[] rowMatrixData) {
+    ByteBuffer bb;
+    Preconditions.checkArgument((rowMatrixData.length / tcRowIds.size()) == tcinfo.TCI_bm);
     System.out.println("0x00000000\t" + Strings.repeat("X", tcinfo.TCI_bm));
     for (TCOLDESC tColDesc : tcinfo.tColDesc) {
       System.out.print("0x" + Integer.toHexString(tColDesc.tag) + "\t");
       System.out.print(Strings.repeat(" ", tColDesc.ibData));
       System.out.println(Strings.repeat("X", tColDesc.cbData));
     }
-
     int sizeAll = 0;
     for (TCOLDESC tColDesc : tcinfo.tColDesc) {
       sizeAll += tColDesc.cbData;
@@ -102,7 +105,6 @@ public class TC {
     int rgbCEBSize = tcinfo.TCI_bm - sizeAll;
     int rgbCEBComputedSize = (int) Math.ceil((double) tcinfo.cCols / 8);
     Preconditions.checkArgument(rgbCEBSize == rgbCEBComputedSize);
-
     for (int i = 0; i < tcRowIds.size(); i++) {
       byte[] rowData = Arrays.copyOfRange(rowMatrixData, i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
       System.out.println("row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(rowData) + "]");
