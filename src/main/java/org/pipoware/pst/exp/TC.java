@@ -61,10 +61,10 @@ public class TC {
       tcRowIds.add(new TCROWID(dwRowID, dwRowIndex));
     }
     
-    byte[] rowMatrixData;
+    List<byte[]> rowMatrixDataBlocks = new ArrayList<>();
     HID hnidRows = new HID(tcinfo.hnidRows);
     if (hnidRows.type == NID.NID_TYPE_HID) {
-      rowMatrixData = hn.getHeapItem(hnidRows);
+      rowMatrixDataBlocks.add(hn.getHeapItem(hnidRows));
     } else {
       Block block = hn.ndb.getBlockFromBID(nbtentry.bidSub);
       Preconditions.checkArgument(block.blockType == Block.BlockType.SLBLOCK, "Not yet supported BlockType %s", block.blockType);
@@ -83,14 +83,17 @@ public class TC {
       if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
         PermutativeEncoding.decode(b.data);
       }
-      rowMatrixData = b.data;
+      rowMatrixDataBlocks.add(b.data);
     }
 
-    displayRowMatrixData(rowMatrixData);
+    displayRowMatrixData(rowMatrixDataBlocks);
   }
 
-  private void displayRowMatrixData(byte[] rowMatrixData) {
-    Preconditions.checkArgument((rowMatrixData.length / tcRowIds.size()) == tcinfo.TCI_bm);
+  private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
+    Preconditions.checkArgument(rowMatrixDataBlocks.size() > 0);
+    if (rowMatrixDataBlocks.size() == 1) {
+      Preconditions.checkArgument((rowMatrixDataBlocks.get(0).length / tcRowIds.size()) == tcinfo.TCI_bm);
+    }
     System.out.println("0x00000000\t" + Strings.repeat("X", tcinfo.TCI_bm));
     for (TCOLDESC tColDesc : tcinfo.tColDesc) {
       System.out.print("0x" + Integer.toHexString(tColDesc.tag) + "\t");
@@ -105,7 +108,10 @@ public class TC {
     int rgbCEBComputedSize = (int) Math.ceil((double) tcinfo.cCols / 8);
     Preconditions.checkArgument(rgbCEBSize == rgbCEBComputedSize);
     for (int i = 0; i < tcRowIds.size(); i++) {
-      byte[] rowData = Arrays.copyOfRange(rowMatrixData, i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
+      byte[] rowData = null;
+      if (rowMatrixDataBlocks.size() == 1) {
+        rowData = Arrays.copyOfRange(rowMatrixDataBlocks.get(0), i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
+      }
       System.out.println("row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(rowData) + "]");
       ByteBuffer bb = ByteBuffer.wrap(rowData).order(ByteOrder.LITTLE_ENDIAN);
       int dwRowId = bb.getInt();
