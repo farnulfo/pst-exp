@@ -104,9 +104,15 @@ public class TC {
   }
 
   private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
-    Preconditions.checkArgument(rowMatrixDataBlocks.size() == 1, "Only simple data block for now");
+    Preconditions.checkArgument(rowMatrixDataBlocks.size() > 0);
     if (rowMatrixDataBlocks.size() == 1) {
       Preconditions.checkArgument((rowMatrixDataBlocks.get(0).length / tcRowIds.size()) == tcinfo.TCI_bm);
+    } else {
+      int nbRows = 0;
+      for(byte[] block : rowMatrixDataBlocks) {
+        nbRows += block.length / tcinfo.TCI_bm;
+      }
+      Preconditions.checkArgument(nbRows == tcRowIds.size());
     }
     System.out.println("0x00000000\t" + Strings.repeat("X", tcinfo.TCI_bm));
     for (TCOLDESC tColDesc : tcinfo.tColDesc) {
@@ -125,6 +131,10 @@ public class TC {
       byte[] rowData = null;
       if (rowMatrixDataBlocks.size() == 1) {
         rowData = Arrays.copyOfRange(rowMatrixDataBlocks.get(0), i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
+      } else {
+        int blockIndex = i / getRowsPerBlock();
+        int rowIndexInBlock = i % getRowsPerBlock();
+        rowData = Arrays.copyOfRange(rowMatrixDataBlocks.get(blockIndex), rowIndexInBlock * tcinfo.TCI_bm, rowIndexInBlock * tcinfo.TCI_bm + tcinfo.TCI_bm);
       }
       System.out.println("row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(rowData) + "]");
       ByteBuffer bb = ByteBuffer.wrap(rowData).order(ByteOrder.LITTLE_ENDIAN);
