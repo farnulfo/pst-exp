@@ -90,7 +90,6 @@ public class TC {
   }
 
   private void displayRowMatrixData(byte[] rowMatrixData) {
-    ByteBuffer bb;
     Preconditions.checkArgument((rowMatrixData.length / tcRowIds.size()) == tcinfo.TCI_bm);
     System.out.println("0x00000000\t" + Strings.repeat("X", tcinfo.TCI_bm));
     for (TCOLDESC tColDesc : tcinfo.tColDesc) {
@@ -108,7 +107,7 @@ public class TC {
     for (int i = 0; i < tcRowIds.size(); i++) {
       byte[] rowData = Arrays.copyOfRange(rowMatrixData, i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
       System.out.println("row data : [" + BaseEncoding.base16().withSeparator(",", 2).encode(rowData) + "]");
-      bb = ByteBuffer.wrap(rowData).order(ByteOrder.LITTLE_ENDIAN);
+      ByteBuffer bb = ByteBuffer.wrap(rowData).order(ByteOrder.LITTLE_ENDIAN);
       int dwRowId = bb.getInt();
       Preconditions.checkArgument(dwRowId == tcRowIds.get(i).dwRowID);
 
