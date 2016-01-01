@@ -20,6 +20,7 @@ public class BTHHEADER {
     Preconditions.checkArgument(heapItem.length == 8);
     ByteBuffer bb = ByteBuffer.wrap(heapItem).order(ByteOrder.LITTLE_ENDIAN);
     bType = bb.get();
+    Preconditions.checkArgument(bType == HN.CLIENT_SIG_BTH);
     cbKey = bb.get();
     cbEnt = bb.get();
     bIdxLevels = bb.get();
