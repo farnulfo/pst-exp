@@ -20,14 +20,14 @@ public class BTH {
     this(aHN, aHN.getHidUserRoot());
   }    
   
-  public BTH(HN aHN, int hidRoot) {
+  public BTH(HN aHN, int hidOfBTHHEADER) {
     Preconditions.checkArgument(
       aHN.getClientSig() == HN.CLIENT_SIG_PC_BTH ||
       aHN.getClientSig() == HN.CLIENT_SIG_TC,
       "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.getClientSig())));
     this.hn = aHN;
     
-    HID hid = new HID(hidRoot);
+    HID hid = new HID(hidOfBTHHEADER);
     
     byte[] heapItem = hn.getHeapItem(hid);
     bthHeader = new BTHHEADER(heapItem);
