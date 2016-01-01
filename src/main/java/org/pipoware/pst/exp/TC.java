@@ -21,7 +21,7 @@ public class TC {
 
   private final HN hn;
   private final TCINFO tcinfo;
-  private final BTHHEADER bthHeaderRowIndex;
+  private final BTH bthRowIndex;
   private final List<TCROWID> tcRowIds;
   private final NBTENTRY nbtentry;
 
@@ -37,30 +37,17 @@ public class TC {
     byte[] heapItem = hn.getHeapItem(hid);
     tcinfo = new TCINFO(heapItem);
     
-    heapItem = hn.getHeapItem(new HID(tcinfo.hidRowIndex));
-    bthHeaderRowIndex = new BTHHEADER(heapItem);
-    
-    heapItem = hn.getHeapItem(new HID(bthHeaderRowIndex.hidRoot));
-    
-    ByteBuffer bb = ByteBuffer.wrap(heapItem).order(ByteOrder.LITTLE_ENDIAN);
-    Preconditions.checkArgument(heapItem.length % (bthHeaderRowIndex.cbKey + bthHeaderRowIndex.cbEnt) == 0);
+    bthRowIndex = new BTH(hn, tcinfo.hidRowIndex);
     
     tcRowIds = new ArrayList<>();
-    int nbRecords = heapItem.length / (bthHeaderRowIndex.cbKey + bthHeaderRowIndex.cbEnt);
-    Preconditions.checkArgument((bthHeaderRowIndex.cbEnt == 4) || (bthHeaderRowIndex.cbEnt == 2), "Invalid cbEnt (%s) for a TC BTH", bthHeaderRowIndex.cbEnt);
-    for (int i = 0; i < nbRecords; i++) {
-      int dwRowID = bb.getInt();
-      
-      int dwRowIndex;
-      if (bthHeaderRowIndex.cbEnt == 4) {
-        dwRowIndex = bb.getInt();
-      } else {
-        dwRowIndex = bb.getShort();
-      }
-      
-      tcRowIds.add(new TCROWID(dwRowID, dwRowIndex));
+    for(KeyData keyData : bthRowIndex.keyDatas) {
+      Preconditions.checkArgument(keyData.key.length == 4);
+      Preconditions.checkArgument(keyData.data.length == 4);
+      int dwRowId = ByteBuffer.wrap(keyData.key).order(ByteOrder.LITTLE_ENDIAN).getInt();
+      int dwRowIndex = ByteBuffer.wrap(keyData.data).order(ByteOrder.LITTLE_ENDIAN).getInt();
+      tcRowIds.add(new TCROWID(dwRowId, dwRowIndex));
     }
-    
+
     List<byte[]> rowMatrixDataBlocks = new ArrayList<>();
     HID hnidRows = new HID(tcinfo.hnidRows);
     if (hnidRows.type == NID.NID_TYPE_HID) {
@@ -206,7 +193,7 @@ public class TC {
     return MoreObjects.toStringHelper(this)
       .add("hn", hn)
       .add("tcinfo", tcinfo)
-      .add("bthheader", bthHeaderRowIndex)
+      .add("bthheader", bthRowIndex)
       .add("tcRowIds", tcRowIds.toString())
       .toString();
   }
