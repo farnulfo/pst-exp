@@ -17,12 +17,17 @@ public class BTH {
   public List<KeyData> keyDatas = new ArrayList<>();
   
   public BTH(HN aHN) {
+    this(aHN, aHN.getHidUserRoot());
+  }    
+  
+  public BTH(HN aHN, int hidRoot) {
     Preconditions.checkArgument(
-      aHN.getClientSig() == HN.CLIENT_SIG_PC_BTH,
+      aHN.getClientSig() == HN.CLIENT_SIG_PC_BTH ||
+      aHN.getClientSig() == HN.CLIENT_SIG_TC,
       "Unsupported bClientSig 0x%s", Integer.toHexString(Byte.toUnsignedInt(aHN.getClientSig())));
     this.hn = aHN;
     
-    HID hid = new HID(hn.getHidUserRoot());
+    HID hid = new HID(hidRoot);
     
     byte[] heapItem = hn.getHeapItem(hid);
     bthHeader = new BTHHEADER(heapItem);
