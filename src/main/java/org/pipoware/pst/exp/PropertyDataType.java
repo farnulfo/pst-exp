@@ -31,7 +31,8 @@ public enum PropertyDataType {
   PtypMultipleFloating32((short) 0x1004, true, 0),
   PtypMultipleFloating64((short) 0x1005, true, 0),
   PtypMultipleCurrency((short) 0x1006, true, 0),
-  PtypMultipleFloatingTime((short) 0x1007, true, 0);
+  PtypMultipleFloatingTime((short) 0x1007, true, 0),
+  PtypMultipleString((short) 0x101F, true, 0);
 
   private final short propertyTypeValue;
   private final boolean variableSize;
