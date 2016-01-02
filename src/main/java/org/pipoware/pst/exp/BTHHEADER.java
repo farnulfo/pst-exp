@@ -22,8 +22,10 @@ public class BTHHEADER {
     bType = bb.get();
     Preconditions.checkArgument(bType == HN.CLIENT_SIG_BTH);
     cbKey = bb.get();
+    Preconditions.checkArgument(cbKey == 2 || cbKey == 4 || cbKey == 8 || cbKey == 16);
     cbEnt = bb.get();
     bIdxLevels = bb.get();
+    Preconditions.checkArgument(bIdxLevels >= 0);
     hidRoot = bb.getInt();
   }
   
