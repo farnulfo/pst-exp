@@ -40,7 +40,7 @@ public class Folder {
     return displayName;
   }
 
-  public int getContentCOunt() {
+  public int getContentCount() {
     return contentCount;
   }
 
