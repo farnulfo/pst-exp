@@ -77,7 +77,7 @@ public class Folder {
     return folders;
   }
   
-  public List<Message> getMessages() {
+  public List<Message> getMessages() throws IOException {
     List<Message> messages = new ArrayList<>();
     for (TCROWID tcrowid : contentTable.getRows()) {
       Message message = new Message(ndb, tcrowid.dwRowID);
