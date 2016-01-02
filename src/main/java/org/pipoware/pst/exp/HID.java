@@ -1,7 +1,6 @@
 package org.pipoware.pst.exp;
 
 import com.google.common.base.MoreObjects;
-import java.util.Arrays;
 
 /**
  *
@@ -13,6 +12,7 @@ public class HID {
   public final int type;
   public final int hidIndex;
   public final int hidBlockIndex;
+  public static final int SIZE = 4;
   
   public HID(int hid) {
     this.hid = hid;
