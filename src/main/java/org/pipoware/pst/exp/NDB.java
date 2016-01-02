@@ -37,9 +37,14 @@ public class NDB {
     return new Page(bytes, pst.getHeader().getType());
   }
 
-  private NBTENTRY geNBTENTRYFromNID(int nid) throws IOException {
+  public NBTENTRY geNBTENTRYFromNID(int nid) throws IOException {
     Page rootNBTPage = getPage(header.getRoot().bRefNBT.getIb());
-    return getNBTENTRYFromNID(rootNBTPage, nid);
+    NBTENTRY nbtentry = getNBTENTRYFromNID(rootNBTPage, nid);
+    if (nbtentry == null) {
+      throw new IllegalArgumentException("NID " + nid +" no found.");
+    } else {
+      return nbtentry;
+    }
   }
   
   public NBTENTRY getNBTENTRYFromNID(Page page, int nid) throws IOException {
@@ -62,7 +67,7 @@ public class NDB {
         }
       }
     }
-    throw new IllegalArgumentException("NID " + nid +" no found.");
+    return null;
   }
 
   public PC getPCFromNID(int nid) throws IOException {
