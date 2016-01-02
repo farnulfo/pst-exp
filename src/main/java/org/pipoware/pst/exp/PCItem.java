@@ -3,6 +3,7 @@ package org.pipoware.pst.exp;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.io.BaseEncoding;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -96,15 +97,31 @@ public class PCItem {
     
   }
 
-  private byte[] getBlockData(Block block, NDB ndb) {
-    Preconditions.checkArgument(block.blockType == BlockType.DATA_BLOCK);
+  private byte[] getBlockData(Block block, NDB ndb) throws IOException {
+    Preconditions.checkArgument(block.blockType == BlockType.DATA_BLOCK || block.blockType == BlockType.XBLOCK);
     byte bCryptMethod = ndb.pst.getHeader().getBCryptMethod();
     Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
-    if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
-      PermutativeEncoding.decode(block.data);
+
+    if (block.blockType == BlockType.DATA_BLOCK) {
+      if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+        PermutativeEncoding.decode(block.data);
+      }
+      byte data[] = block.data;
+      return data;
+    } else if (block.blockType == BlockType.XBLOCK) {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      for (int i = 0; i < block.rgbid.length; i++) {
+        long blockId = block.rgbid[i];
+        Block subBlock = ndb.getBlockFromBID(blockId);
+        Preconditions.checkArgument(subBlock.blockType == Block.BlockType.DATA_BLOCK);
+        if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+          PermutativeEncoding.decode(subBlock.data);
+        }
+        baos.write(subBlock.data);
+      }
+      return baos.toByteArray();
     }
-    byte data[] = block.data;
-    return data;
+    return null;
   }
   
   public int getInt() {
