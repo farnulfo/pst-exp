@@ -14,7 +14,7 @@ public class BTH {
   
   public final HN hn;
   private final BTHHEADER bthHeader;
-  public List<KeyData> keyDatas = new ArrayList<>();
+  public final List<KeyData> keyDatas = new ArrayList<>();
   
   public BTH(HN aHN) {
     this(aHN, aHN.getHidUserRoot());
@@ -40,7 +40,6 @@ public class BTH {
     ByteBuffer bb = ByteBuffer.wrap(b);
     Preconditions.checkArgument(b.length % (bthHeader.cbKey + bthHeader.cbEnt) == 0);
     
-    keyDatas = new ArrayList<>();
     int nbRecords = b.length / (bthHeader.cbKey + bthHeader.cbEnt);
     for (int i = 0; i < nbRecords; i++) {
       byte[] key = new byte[bthHeader.cbKey];
