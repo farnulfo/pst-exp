@@ -59,6 +59,7 @@ public class PCItem {
         for (SLENTRY slEntry : block.rgentries_slentry) {
           if (dwValueHnid == slEntry.nid) {
             Block b = ndb.getBlockFromBID(slEntry.bidData);
+            Preconditions.checkArgument(b.blockType == BlockType.DATA_BLOCK);
             byte bCryptMethod = ndb.pst.getHeader().getBCryptMethod();
             Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
             if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
