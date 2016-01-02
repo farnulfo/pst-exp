@@ -54,20 +54,21 @@ public class PCItem {
         }
       } else {
         // dwValueHnid = NID (subnode)
-        long blockId = nbtentry.bidSub;
-        Block block = ndb.getBlockFromBID(blockId);
-        Preconditions.checkArgument(block.blockType == BlockType.SLBLOCK, "Not yet supported block type : " + block.blockType);
-        for (SLENTRY slEntry : block.rgentries_slentry) {
+        long subBlockId = nbtentry.bidSub;
+        Block subBlock = ndb.getBlockFromBID(subBlockId);
+        Preconditions.checkArgument(subBlock.blockType == BlockType.SLBLOCK, "Not yet supported block type : " + subBlock.blockType);
+        Block block = null;
+        for (SLENTRY slEntry : subBlock.rgentries_slentry) {
           if (dwValueHnid == slEntry.nid) {
-            Block b = ndb.getBlockFromBID(slEntry.bidData);
-            Preconditions.checkArgument(b.blockType == BlockType.DATA_BLOCK);
-            byte bCryptMethod = ndb.pst.getHeader().getBCryptMethod();
-            Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
-            if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
-              PermutativeEncoding.decode(b.data);
-            }
-            dataValue = Arrays.copyOf(b.data, b.data.length);
+            block = ndb.getBlockFromBID(slEntry.bidData);
+            break;
           }
+        }
+        if (block != null) {
+          byte[] data = getBlockData(block, ndb);
+          dataValue = Arrays.copyOf(data, data.length);
+        } else {
+          throw new IllegalArgumentException("dwValueHnid(" + dwValueHnid + ") not found");
         }
       }
       if (propertyDataType == PropertyDataType.PtypString) {
@@ -93,6 +94,17 @@ public class PCItem {
       }
     }
     
+  }
+
+  private byte[] getBlockData(Block block, NDB ndb) {
+    Preconditions.checkArgument(block.blockType == BlockType.DATA_BLOCK);
+    byte bCryptMethod = ndb.pst.getHeader().getBCryptMethod();
+    Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+    if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+      PermutativeEncoding.decode(block.data);
+    }
+    byte data[] = block.data;
+    return data;
   }
   
   public int getInt() {
