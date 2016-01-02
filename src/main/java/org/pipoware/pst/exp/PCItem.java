@@ -76,7 +76,7 @@ public class PCItem {
     } else {
       if (propertyDataType.getFixedDataSizeInByte() > 4) {
         hid = new HID(dwValueHnid);
-        throw new UnsupportedOperationException("Not yet implemented !");
+        dataValue = bth.hn.getHeapItem(hid);
       } else {
         switch (propertyDataType) {
           case PtypBoolean:
