@@ -146,7 +146,11 @@ public class Block {
           blockType = BlockType.SLBLOCK;
           
           int dwPadding = bb.getInt();
-          Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
+          
+          // Some ANSI pst file doesn't respect dwPadding = 0
+          if (pstFile.getHeader().getType() == Header.PST_TYPE.UNICODE) {
+            Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
+          }
           
           rgentries_slentry = new SLENTRY[cEnt];
           for (int i = 0; i < cEnt; i++) {
