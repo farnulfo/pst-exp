@@ -43,9 +43,7 @@ public class MessageStoreTest {
     PSTFile pstFile = new PSTFile(path);
     MessageStore messageStore = pstFile.getMessageStore();
     Folder rootFolder = messageStore.getRootFolder();
-    if (rootFolder.hasSubFolers()) {
-      List<Folder> folders = rootFolder.getFolders();
-    }
+    processFolder(rootFolder, 0);
   }
 
   @Test
@@ -65,8 +63,32 @@ public class MessageStoreTest {
     
     MessageStore messageStore = pstFile.getMessageStore();
     Folder rootFolder = messageStore.getRootFolder();
-    if (rootFolder.hasSubFolers()) {
-      List<Folder> folders = rootFolder.getFolders();
+    processFolder(rootFolder, 0);
+  }
+  
+    private void processFolder(Folder folder, int i) throws IOException {
+    printDepth(i);
+    System.out.println("DisplayName : " + folder.getDisplayName());
+    printDepth(i);
+    System.out.println("folder #msg:" + folder.getContentCount());
+    if (folder.getContentCount() > 0) {
+      for (Message message : folder.getMessages()) {
+        printDepth(i);
+        System.out.println("Message : " + message.toString());
+      }
     }
+    if (folder.hasSubFolers()) {
+      List<Folder> folders = folder.getFolders();
+      for (Folder f : folders) {
+        processFolder(f, i + 1);
+      }
+    }
+  }
+  
+  public void printDepth(int depth) {
+    for (int x = 0; x < depth - 1; x++) {
+      System.out.print(" | ");
+    }
+    System.out.print(" |- ");
   }
 }
