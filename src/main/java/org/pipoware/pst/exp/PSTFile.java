@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
-import static org.pipoware.pst.exp.PropertyIdentifier.PidTagIpmSubTreeEntryId;
 
 /**
  *
