@@ -9,7 +9,7 @@ import static org.pipoware.pst.exp.PropertyIdentifier.PidTagSubfolders;
  *
  * @author Franck Arnulfo
  */
-class MessageStore {
+public class MessageStore {
 
   private final String displayName;
   private final PC messageStorePC;
