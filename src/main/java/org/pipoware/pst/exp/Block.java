@@ -159,7 +159,8 @@ public class Block {
             long bidSub;
 
             if (type == Header.PST_TYPE.UNICODE) {
-              nid = bb.getLong();
+              nid = bb.getInt();
+              bb.getInt(); // Don't read this as it's not allways 0
               bidData = bb.getLong();
               bidSub = bb.getLong();
             } else {
