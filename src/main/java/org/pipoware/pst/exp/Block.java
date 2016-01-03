@@ -145,10 +145,9 @@ public class Block {
         if (cLevel == 0x00) {
           blockType = BlockType.SLBLOCK;
           
-          int dwPadding = bb.getInt();
-          
-          // Some ANSI pst file doesn't respect dwPadding = 0
+          // MS-PST is wrong, dwPadding only in UNICODE file format
           if (pstFile.getHeader().getType() == Header.PST_TYPE.UNICODE) {
+            int dwPadding = bb.getInt();
             Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
           }
           
@@ -175,8 +174,11 @@ public class Block {
         } else if (cLevel == 0x01) {
           blockType = BlockType.SIBLOCK;
 
-          int dwPadding = bb.getInt();
-          Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
+          // MS-PST is wrong, dwPadding only in UNICODE file format
+          if (pstFile.getHeader().getType() == Header.PST_TYPE.UNICODE) {
+            int dwPadding = bb.getInt();
+            Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
+          }
           
           readRgSIENTRY(cEnt, type, bb);
         }

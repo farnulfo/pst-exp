@@ -10,3 +10,7 @@ In this page : https://msdn.microsoft.com/en-us/library/ff387624%28v=office.12%2
 2.2.2.7.7.1 BTPAGE
 For BBT BTree Type, if cLevel = 0 rgEntries type is BBTENTRY else if cLevel is less than 0, it's BTENTRY.
 It seems that cLevel is never less than 0.
+
+2.2.2.8.3.3.1 SLBLOCKs
+2.2.2.8.3.3.2 SIBLOCKs
+Documentation is wrong about dwPadding : only in UNICODE format, no dwPadding in ANSI
