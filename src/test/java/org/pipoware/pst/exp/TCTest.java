@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -22,12 +24,28 @@ public class TCTest {
   public void testTC() throws URISyntaxException, IOException {
     Path path = Paths.get(getClass().getResource("/ltp/sample_tc.bin").toURI());
     byte[] bytes = Files.readAllBytes(path);
+    
+    
+    Header mockedHeader = mock(Header.class);
+    when(mockedHeader.getType()).thenReturn(Header.PST_TYPE.UNICODE);
+    PSTFile mockedPSTFile = mock(PSTFile.class);
+    when(mockedPSTFile.getHeader()).thenReturn(mockedHeader);
 
-    HN hn = new HN(null, bytes);
+    NDB ndb = new NDB(mockedPSTFile, mockedHeader);
+    HN hn = new HN(ndb, bytes);
     TC tc = new TC(hn, null);
 
     System.out.println(tc);
 
+  }
+  
+  @Test
+  public void testRowsPerBlock() {
+    int blockSize = 10;
+    for(int i = 1; i < 15; i++) {
+      int tmp = blockSize / i;
+      System.out.println("Blocksize=" + blockSize + ", row size=" + i + ", Rows per block=" + tmp);
+    }
   }
 
 }
