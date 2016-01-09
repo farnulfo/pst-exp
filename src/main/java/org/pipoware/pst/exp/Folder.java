@@ -80,8 +80,12 @@ public class Folder {
   public List<Message> getMessages() throws IOException {
     List<Message> messages = new ArrayList<>();
     for (TCROWID tcrowid : contentTable.getRows()) {
-      Message message = new Message(ndb, tcrowid.dwRowID);
-      messages.add(message);
+      try {
+        Message message = new Message(ndb, tcrowid.dwRowID);
+        messages.add(message);
+      } catch (Exception e) {
+        System.out.println("getMessages() Exception : " + e);
+      }
     }
     return messages;
   }

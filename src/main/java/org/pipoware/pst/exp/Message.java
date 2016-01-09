@@ -21,9 +21,15 @@ public class Message {
   
   @Override
   public String toString() {
+    String subject = "ERROR: Subject not found!";
+    try {
+      subject = messageObjectPC.getPCItemByPropertyIdentifier((short) 0x37).getString();
+    } catch (Exception e) {
+      System.out.println(e);
+    }
     return MoreObjects.toStringHelper(this)
       .add("nid", "0x" + Integer.toHexString(nid))
-      .add("subject", messageObjectPC.getPCItemByPropertyIdentifier((short) 0x37).getString())
+      .add("subject", subject)
       .toString();
   }
   

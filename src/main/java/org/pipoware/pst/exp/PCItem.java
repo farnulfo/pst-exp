@@ -59,9 +59,11 @@ public class PCItem {
         Block subBlock = ndb.getBlockFromBID(subBlockId);
         Preconditions.checkArgument(subBlock.blockType == BlockType.SLBLOCK, "Not yet supported block type : " + subBlock.blockType);
         Block block = null;
+        long blockId = 0;
         for (SLENTRY slEntry : subBlock.rgentries_slentry) {
           if (dwValueHnid == slEntry.nid) {
-            block = ndb.getBlockFromBID(slEntry.bidData);
+            blockId = slEntry.bidData;
+            block = ndb.getBlockFromBID(blockId);
             break;
           }
         }
@@ -69,7 +71,13 @@ public class PCItem {
           byte[] data = getBlockData(block, ndb);
           dataValue = Arrays.copyOf(data, data.length);
         } else {
-          throw new IllegalArgumentException("dwValueHnid(" + dwValueHnid + ") not found");
+          StringBuilder sb = new StringBuilder();
+          sb.append("Block Id ").append(blockId).append(" not found, context : ")
+            .append("dwValueHnid=").append(dwValueHnid)
+            .append(",propertyIdentifier=").append(propertyIdentifier)
+            .append(",propertyDataType=").append(propertyDataType);
+          //throw new IllegalArgumentException(sb.toString());
+          System.out.println(sb);
         }
       }
       if (propertyDataType == PropertyDataType.PtypString) {
