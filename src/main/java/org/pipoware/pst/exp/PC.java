@@ -18,7 +18,7 @@ public class PC {
 
   public static final int NAMEID_RECORD_LENGTH = 8;
   private final BTH bth;
-  private final List<PCItem> items = new ArrayList<>();
+  public final List<PCItem> items = new ArrayList<>();
 
   public PC(BTH aBTH, NDB ndb, NBTENTRY nbtentry) throws IOException {
     this.bth = aBTH;
