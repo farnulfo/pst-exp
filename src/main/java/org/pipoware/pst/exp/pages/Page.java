@@ -54,7 +54,7 @@ public class Page {
   public BTENTRY[] btentries;
   public BBTENTRY[] bbtentries;
 
-  private enum PageType {
+  public enum PageType {
 
     ptypeBBT((byte) 0x80),
     ptypeNBT((byte) 0x81),
@@ -251,6 +251,10 @@ public class Page {
     } else {
       throw new IllegalArgumentException("Depth level is not a field of type " + pageType);
     }
+  }
+  
+  public PageType getType() {
+    return pageType;
   }
   
   @Override
