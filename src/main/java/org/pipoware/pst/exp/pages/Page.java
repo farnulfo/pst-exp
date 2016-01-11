@@ -256,6 +256,22 @@ public class Page {
   public PageType getType() {
     return pageType;
   }
+
+  public byte getcEnt() {
+    return cEnt;
+  }
+
+  public byte getcEntMax() {
+    return cEntMax;
+  }
+
+  public byte getcbEnt() {
+    return cbEnt;
+  }
+
+  public byte getcLevel() {
+    return cLevel;
+  }
   
   @Override
   public String toString() {
