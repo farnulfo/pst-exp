@@ -207,6 +207,10 @@ public class Block {
       rgentries_sientry[i] = new SIENTRY(nid, bid);
     }
   }
+
+  public BREF getBREF() {
+    return bref;
+  }
   
   public static int computeSig(long ib, long bid) {
     ib ^= bid;
