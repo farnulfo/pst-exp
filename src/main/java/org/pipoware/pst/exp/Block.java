@@ -84,7 +84,7 @@ public class Block {
     short wSig = bb.getShort();
     
     int wSigComputed = computeSig(bbtentry.bref.getIb(), bbtentry.bref.getBid());
-    Preconditions.checkArgument(Short.toUnsignedInt(wSig) == wSigComputed,
+    Preconditions.checkArgument(wSig == wSigComputed,
       "wSig (0x%s) <> wSigComputed (0x%s) (BREF=%s)",
       Integer.toHexString(wSig),
       Integer.toHexString(wSigComputed),
@@ -212,11 +212,11 @@ public class Block {
     return bref;
   }
   
-  public static int computeSig(long ib, long bid) {
+  public static short computeSig(long ib, long bid) {
     ib ^= bid;
     int a = (int) (ib >>> 16);
     int b = (int) ib & 0x0000FFFF;
-    return a ^ b;
+    return (short) (a ^ b);
   }
 
   @Override
