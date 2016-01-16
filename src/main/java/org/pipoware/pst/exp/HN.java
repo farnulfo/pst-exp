@@ -26,15 +26,6 @@ public class HN {
   public static final byte CLIENT_SIG_PC_BTH = (byte) 0xBC;
   public static final byte CLIENT_SIG_RESERVED6 = (byte) 0xCC;
 
-//  private final byte[] data;
-//  short ibHnpm;
-//  public final byte bSig;
-//  public final byte bClientSig;
-//  public final int hidUserRoot;
-//  public final int rgbFillLevel;
-//  public final short cAlloc;
-//  public final short cFree;
-//  public final short[] rgibAlloc;
   public final NDB ndb;
   private final List<HNDataBlock> hnDataBlocks = new ArrayList<>();
 
