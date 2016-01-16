@@ -19,6 +19,12 @@ public class Message {
     messageObjectPC = ndb.getPCFromNID(nid);
   }
   
+  public void toStringMessageObjectPC() {
+    for (PCItem item : messageObjectPC.items) {
+      System.out.println(item.toString());      
+    }
+  }
+  
   @Override
   public String toString() {
     String subject = "ERROR: Subject not found!";

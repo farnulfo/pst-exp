@@ -17,7 +17,7 @@ public class HNTest {
     Path path = Paths.get(getClass().getResource("/ltp/sample_heap_on_node.bin").toURI());
     byte[] bytes = Files.readAllBytes(path);
 
-    HN hn = new HN(null, bytes);
+    HN hn = new HN(null, 0, bytes);
 
     assertEquals(0xEC, Byte.toUnsignedInt(hn.getSig()));
     assertEquals(0xBC, Byte.toUnsignedInt(hn.getClientSig()));

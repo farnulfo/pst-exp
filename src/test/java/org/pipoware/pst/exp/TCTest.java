@@ -32,7 +32,7 @@ public class TCTest {
     when(mockedPSTFile.getHeader()).thenReturn(mockedHeader);
 
     NDB ndb = new NDB(mockedPSTFile, mockedHeader);
-    HN hn = new HN(ndb, bytes);
+    HN hn = new HN(ndb, 0, bytes);
     TC tc = new TC(hn, null);
 
     System.out.println(tc);

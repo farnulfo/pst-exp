@@ -30,7 +30,7 @@ public class PC {
         PCItem item = new PCItem(bth, keyData, ndb, nbtentry);
         items.add(item);
       } catch (UnknownPropertyDataTypeException ex) {
-        Logger.getLogger(PC.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(PC.class.getName()).log(Level.SEVERE, "NID 0x" + Integer.toHexString(bth.hn.nid) + ", " + keyData, ex);
       }
     }
     

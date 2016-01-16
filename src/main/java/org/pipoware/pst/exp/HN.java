@@ -27,10 +27,17 @@ public class HN {
   public static final byte CLIENT_SIG_RESERVED6 = (byte) 0xCC;
 
   public final NDB ndb;
+  
+  /**
+   * nid is not used by HN, only for context when there is an error to have.
+   */
+  public final int nid;
+  
   private final List<HNDataBlock> hnDataBlocks = new ArrayList<>();
 
-  public HN(NDB ndb, byte[]... blockDatasArray) {
+  public HN(NDB ndb, int nid, byte[]... blockDatasArray) {
     this.ndb = ndb;
+    this.nid = nid;
 
     for (int i = 0; i < blockDatasArray.length; i++) {
       byte[] data = Arrays.copyOf(blockDatasArray[i], blockDatasArray[i].length);

@@ -80,7 +80,7 @@ public class NDB {
     if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
       PermutativeEncoding.decode(block.data);
     }
-    HN hn = new HN(this, block.data);
+    HN hn = new HN(this, nid, block.data);
     BTH bth = new BTH(hn);
     PC pc = new PC(bth, this, nbtentry);
     return pc;
@@ -128,7 +128,7 @@ public class NDB {
       if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
         PermutativeEncoding.decode(block.data);
       }
-      hn = new HN(this, block.data);
+      hn = new HN(this, nid, block.data);
     } else if (block.blockType == Block.BlockType.XBLOCK) {
       byte[][] datas = new byte[block.rgbid.length][];
       for (int i = 0; i < block.rgbid.length; i++) {
@@ -141,7 +141,7 @@ public class NDB {
         }
         datas[i] = subBlock.data;
       }
-      hn = new HN(this, datas);
+      hn = new HN(this, nid, datas);
     }
     TC tc = new TC(hn, nbtentry);
     return tc;

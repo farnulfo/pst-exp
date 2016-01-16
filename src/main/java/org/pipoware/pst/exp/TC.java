@@ -99,7 +99,7 @@ public class TC {
       }
     }
 
-    displayRowMatrixData(rowMatrixDataBlocks);
+    //displayRowMatrixData(rowMatrixDataBlocks);
   }
 
   private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
