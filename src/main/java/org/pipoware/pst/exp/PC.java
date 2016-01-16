@@ -8,6 +8,8 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.pipoware.pst.exp.pages.NBTENTRY;
 
 /**
@@ -24,8 +26,12 @@ public class PC {
     this.bth = aBTH;
     
     for(KeyData keyData : bth.keyDatas) {
-      PCItem item = new PCItem(bth, keyData, ndb, nbtentry);
-      items.add(item);
+      try {
+        PCItem item = new PCItem(bth, keyData, ndb, nbtentry);
+        items.add(item);
+      } catch (UnknownPropertyDataTypeException ex) {
+        Logger.getLogger(PC.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
     
   }

@@ -51,13 +51,13 @@ public enum PropertyDataType {
     return variableSize;
   }
 
-  public static PropertyDataType get(int propertyTypeValue) {
+  public static PropertyDataType get(int propertyTypeValue) throws UnknownPropertyDataTypeException {
     for (PropertyDataType p : EnumSet.allOf(PropertyDataType.class)) {
       if (p.propertyTypeValue == propertyTypeValue) {
         return p;
       }
     }
-    throw new IllegalArgumentException("Unsupported PropertyDataType : 0x" + Integer.toHexString(propertyTypeValue));
+    throw new UnknownPropertyDataTypeException("Unsupported PropertyDataType : 0x" + Integer.toHexString(propertyTypeValue), propertyTypeValue);
   }
 
   int getFixedDataSizeInByte() {
