@@ -57,7 +57,7 @@ public enum PropertyDataType {
         return p;
       }
     }
-    throw new IllegalArgumentException("Unsupported PropertyDataType : " + Integer.toHexString(propertyTypeValue));
+    throw new IllegalArgumentException("Unsupported PropertyDataType : 0x" + Integer.toHexString(propertyTypeValue));
   }
 
   int getFixedDataSizeInByte() {
