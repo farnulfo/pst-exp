@@ -42,23 +42,7 @@ public class TC {
     
     bthRowIndex = new BTH(hn, tcinfo.hidRowIndex);
     
-    tcRowIds = new ArrayList<>();
-    for(KeyData keyData : bthRowIndex.keyDatas) {
-      Preconditions.checkArgument(keyData.key.length == 4);
-      int dwRowId = ByteBuffer.wrap(keyData.key).order(ByteOrder.LITTLE_ENDIAN).getInt();
-      
-      int dwRowIndex;
-      Header.PST_TYPE type = hn.ndb.pst.getHeader().getType();
-      if (type == Header.PST_TYPE.UNICODE) {
-        Preconditions.checkArgument(keyData.data.length == 4);
-        dwRowIndex = ByteBuffer.wrap(keyData.data).order(ByteOrder.LITTLE_ENDIAN).getInt();
-      } else {
-        Preconditions.checkArgument(keyData.data.length == 2);
-        dwRowIndex = ByteBuffer.wrap(keyData.data).order(ByteOrder.LITTLE_ENDIAN).getShort();
-      }
-      
-      tcRowIds.add(new TCROWID(dwRowId, dwRowIndex));
-    }
+    tcRowIds = getRowIds();
 
     List<byte[]> rowMatrixDataBlocks = new ArrayList<>();
     HID hnidRows = new HID(tcinfo.hnidRows);
@@ -100,6 +84,27 @@ public class TC {
     }
 
     //displayRowMatrixData(rowMatrixDataBlocks);
+  }
+
+  private List<TCROWID> getRowIds() {
+    List<TCROWID> rowIds = new ArrayList<>();
+    for(KeyData keyData : bthRowIndex.keyDatas) {
+      Preconditions.checkArgument(keyData.key.length == 4);
+      int dwRowId = ByteBuffer.wrap(keyData.key).order(ByteOrder.LITTLE_ENDIAN).getInt();
+      
+      int dwRowIndex;
+      Header.PST_TYPE type = hn.ndb.pst.getHeader().getType();
+      if (type == Header.PST_TYPE.UNICODE) {
+        Preconditions.checkArgument(keyData.data.length == 4);
+        dwRowIndex = ByteBuffer.wrap(keyData.data).order(ByteOrder.LITTLE_ENDIAN).getInt();
+      } else {
+        Preconditions.checkArgument(keyData.data.length == 2);
+        dwRowIndex = ByteBuffer.wrap(keyData.data).order(ByteOrder.LITTLE_ENDIAN).getShort();
+      }
+      
+      rowIds.add(new TCROWID(dwRowId, dwRowIndex));
+    }
+    return rowIds;
   }
 
   private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
