@@ -46,40 +46,42 @@ public class TC {
     tcRowIds = getRowIds();
 
     rowMatrixDataBlocks = new ArrayList<>();
-    HID hnidRows = new HID(tcinfo.hnidRows);
-    if (hnidRows.type == NID.NID_TYPE_HID) {
-      rowMatrixDataBlocks.add(hn.getHeapItem(hnidRows));
-    } else {
-      Block block = hn.ndb.getBlockFromBID(nbtentry.bidSub);
-      Preconditions.checkArgument(block.blockType == Block.BlockType.SLBLOCK, "Not yet supported BlockType %s", block.blockType);
-      SLENTRY slentry = null;
-      for (SLENTRY s : block.rgentries_slentry) {
-        if (s.nid == tcinfo.hnidRows) {
-          slentry = s;
+    if (tcinfo.hnidRows != 0) {
+      HID hnidRows = new HID(tcinfo.hnidRows);
+      if (hnidRows.type == NID.NID_TYPE_HID) {
+        rowMatrixDataBlocks.add(hn.getHeapItem(hnidRows));
+      } else {
+        Block block = hn.ndb.getBlockFromBID(nbtentry.bidSub);
+        Preconditions.checkArgument(block.blockType == Block.BlockType.SLBLOCK, "Not yet supported BlockType %s", block.blockType);
+        SLENTRY slentry = null;
+        for (SLENTRY s : block.rgentries_slentry) {
+          if (s.nid == tcinfo.hnidRows) {
+            slentry = s;
+          }
         }
-      }
-      Preconditions.checkNotNull(slentry, "SLENTRY not found");
-      Block b = hn.ndb.getBlockFromBID(slentry.bidData);
-      System.out.println("Block : " + b);
-      Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK || b.blockType == Block.BlockType.XBLOCK,
-        "Blocktype %s not yet handled!", b.blockType);
-      if (b.blockType == Block.BlockType.DATA_BLOCK) {
-        byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
-        Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
-        if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
-          PermutativeEncoding.decode(b.data);
-        }
-        rowMatrixDataBlocks.add(b.data);
-      } else if (b.blockType == Block.BlockType.XBLOCK) {
-        for (long bid : b.rgbid) {
-          Block b1 = hn.ndb.getBlockFromBID(bid);
-          Preconditions.checkArgument(b1.blockType == Block.BlockType.DATA_BLOCK);
+        Preconditions.checkNotNull(slentry, "SLENTRY not found");
+        Block b = hn.ndb.getBlockFromBID(slentry.bidData);
+        System.out.println("Block : " + b);
+        Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK || b.blockType == Block.BlockType.XBLOCK,
+          "Blocktype %s not yet handled!", b.blockType);
+        if (b.blockType == Block.BlockType.DATA_BLOCK) {
           byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
           Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
           if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
-            PermutativeEncoding.decode(b1.data);
+            PermutativeEncoding.decode(b.data);
           }
-          rowMatrixDataBlocks.add(b1.data);
+          rowMatrixDataBlocks.add(b.data);
+        } else if (b.blockType == Block.BlockType.XBLOCK) {
+          for (long bid : b.rgbid) {
+            Block b1 = hn.ndb.getBlockFromBID(bid);
+            Preconditions.checkArgument(b1.blockType == Block.BlockType.DATA_BLOCK);
+            byte bCryptMethod = hn.ndb.pst.getHeader().getBCryptMethod();
+            Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
+            if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
+              PermutativeEncoding.decode(b1.data);
+            }
+            rowMatrixDataBlocks.add(b1.data);
+          }
         }
       }
     }
@@ -113,7 +115,9 @@ public class TC {
   }
 
   private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
-    Preconditions.checkArgument(rowMatrixDataBlocks.size() > 0);
+    if (rowMatrixDataBlocks.isEmpty()) {
+      return;
+    }
     if (rowMatrixDataBlocks.size() == 1) {
       Preconditions.checkArgument((rowMatrixDataBlocks.get(0).length / tcRowIds.size()) == tcinfo.TCI_bm);
     } else {
