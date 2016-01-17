@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class TCINFO {
 
   public final byte bType;
-  public final byte cCols;
+  public final int cCols;
   public final short TCI_4b;
   public final short TCI_2b;
   public final short TCI_1b;
@@ -34,7 +34,7 @@ public class TCINFO {
 
     Preconditions.checkArgument(bType == HN.CLIENT_SIG_TC, "Invalid bType(%s) for a TC", bType);
 
-    cCols = bb.get();
+    cCols = Byte.toUnsignedInt(bb.get());
 
     TCI_4b = bb.getShort();
     TCI_2b = bb.getShort();
