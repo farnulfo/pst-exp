@@ -4,7 +4,9 @@ import com.google.common.base.Preconditions;
 import java.util.EnumSet;
 
 /**
- *
+ * [MS-OXCDATA].pdf, 2.11.1 Property Data Types
+ * 
+ * 
  * @author Franck Arnulfo
  */
 public enum PropertyDataType {
@@ -32,7 +34,12 @@ public enum PropertyDataType {
   PtypMultipleFloating64((short) 0x1005, true, 0),
   PtypMultipleCurrency((short) 0x1006, true, 0),
   PtypMultipleFloatingTime((short) 0x1007, true, 0),
-  PtypMultipleString((short) 0x101F, true, 0);
+  PtypMultipleInteger64((short) 0x1014, true, 0),
+  PtypMultipleString((short) 0x101F, true, 0),
+  PtypMultipleString8((short) 0x101E, true, 0),
+  PtypMultipleTime((short) 0x1040, true, 0),
+  PtypMultipleGuid((short) 0x1048, true, 0),
+  PtypMultipleBinary((short) 0x1102, true, 0);
 
   private final short propertyTypeValue;
   private final boolean variableSize;
