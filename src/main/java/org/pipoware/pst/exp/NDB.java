@@ -37,7 +37,7 @@ public class NDB {
     return new Page(bytes, pst.getHeader().getType());
   }
 
-  public NBTENTRY geNBTENTRYFromNID(int nid) throws IOException {
+  public NBTENTRY getNBTENTRYFromNID(int nid) throws IOException {
     Page rootNBTPage = getPage(header.getRoot().bRefNBT.getIb());
     NBTENTRY nbtentry = getNBTENTRYFromNID(rootNBTPage, nid);
     if (nbtentry == null) {
@@ -71,7 +71,7 @@ public class NDB {
   }
 
   public PC getPCFromNID(int nid) throws IOException {
-    NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
+    NBTENTRY nbtentry = getNBTENTRYFromNID(nid);
     Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
@@ -117,7 +117,7 @@ public class NDB {
   
   public TC getTCFromNID(int nid) throws IOException {
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
-    NBTENTRY nbtentry = geNBTENTRYFromNID(nid);
+    NBTENTRY nbtentry = getNBTENTRYFromNID(nid);
     Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
     Block block = getBlockFromBID(page, nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK || block.blockType == Block.BlockType.XBLOCK,
