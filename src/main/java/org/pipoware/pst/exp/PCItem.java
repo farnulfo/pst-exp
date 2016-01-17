@@ -95,6 +95,7 @@ public class PCItem {
             bool = dwValueHnid != 0;
             break;
           case PtypInteger32:
+          case PtypInteger16:
             int32 = dwValueHnid;
             break;
           default:
