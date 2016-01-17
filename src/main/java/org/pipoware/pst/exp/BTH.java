@@ -37,18 +37,20 @@ public class BTH {
 
   private void handleLevel(int level, int hid) {
     if (level == 0) {
-      byte[] b = hn.getHeapItem(new HID(hid));
-      ByteBuffer bb = ByteBuffer.wrap(b);
-      Preconditions.checkArgument(b.length % (bthHeader.cbKey + bthHeader.cbEnt) == 0);
+      if (hid != 0) {
+        byte[] b = hn.getHeapItem(new HID(hid));
+        ByteBuffer bb = ByteBuffer.wrap(b);
+        Preconditions.checkArgument(b.length % (bthHeader.cbKey + bthHeader.cbEnt) == 0);
 
-      int nbRecords = b.length / (bthHeader.cbKey + bthHeader.cbEnt);
-      for (int i = 0; i < nbRecords; i++) {
-        byte[] key = new byte[bthHeader.cbKey];
-        bb.get(key);
-        byte[] data = new byte[bthHeader.cbEnt];
-        bb.get(data);
-        KeyData keyData = new KeyData(key, data);
-        keyDatas.add(keyData);
+        int nbRecords = b.length / (bthHeader.cbKey + bthHeader.cbEnt);
+        for (int i = 0; i < nbRecords; i++) {
+          byte[] key = new byte[bthHeader.cbKey];
+          bb.get(key);
+          byte[] data = new byte[bthHeader.cbEnt];
+          bb.get(data);
+          KeyData keyData = new KeyData(key, data);
+          keyDatas.add(keyData);
+        }
       }
     } else {
       byte[] b = hn.getHeapItem(new HID(hid));
