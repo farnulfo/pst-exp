@@ -89,6 +89,7 @@ public class Folder implements Iterable<Message> {
         messages.add(message);
       } catch (Exception e) {
         System.out.println("getMessages() Exception : " + e);
+        e.printStackTrace();
       }
     }
     return messages;
