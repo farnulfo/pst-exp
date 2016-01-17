@@ -14,4 +14,5 @@ public class PropertyIdentifier {
   public static final short PidTagContentUnreadCount = (short) 0x3603;
   public static final short PidTagSubfolders = (short) 0x360A;
   public static final short PidTagIpmSubTreeEntryId = (short) 0x35E0;
+  public static final short PR_SUBJECT = (short) 0x0037;
 }

@@ -29,7 +29,7 @@ public class Message {
   public String toString() {
     String subject = "ERROR: Subject not found!";
     try {
-      subject = messageObjectPC.getPCItemByPropertyIdentifier((short) 0x37).getString();
+      subject = messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PR_SUBJECT).getString();
     } catch (Exception e) {
       System.out.println(e);
     }
