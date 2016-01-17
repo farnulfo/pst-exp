@@ -27,6 +27,7 @@ public class TC {
   private final BTH bthRowIndex;
   private final List<TCROWID> tcRowIds;
   private final NBTENTRY nbtentry;
+  private final List<byte[]> rowMatrixDataBlocks;
 
   public TC(HN aHN, NBTENTRY aNBTENTRY) throws IOException {
     Preconditions.checkArgument(
@@ -44,7 +45,7 @@ public class TC {
     
     tcRowIds = getRowIds();
 
-    List<byte[]> rowMatrixDataBlocks = new ArrayList<>();
+    rowMatrixDataBlocks = new ArrayList<>();
     HID hnidRows = new HID(tcinfo.hnidRows);
     if (hnidRows.type == NID.NID_TYPE_HID) {
       rowMatrixDataBlocks.add(hn.getHeapItem(hnidRows));
@@ -105,6 +106,10 @@ public class TC {
       rowIds.add(new TCROWID(dwRowId, dwRowIndex));
     }
     return rowIds;
+  }
+  
+  public void displayRowMatrixData() {
+    displayRowMatrixData(rowMatrixDataBlocks);
   }
 
   private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
