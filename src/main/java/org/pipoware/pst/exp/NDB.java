@@ -57,11 +57,7 @@ public class NDB {
       return null;
     } else {
       for (BTENTRY btentry : page.btentries) {
-        pst.position(btentry.bref.getIb());
-        byte[] b = new byte[Page.PAGE_SIZE];
-        pst.read(b);
-        Page p = new Page(b, pst.getHeader().getType());
-        NBTENTRY nbtentry = getNBTENTRYFromNID(p, nid);
+        NBTENTRY nbtentry = getNBTENTRYFromNID(getPage(btentry.bref), nid);
         if (nbtentry != null) {
           return nbtentry;
         }
@@ -72,8 +68,7 @@ public class NDB {
 
   public PC getPCFromNID(int nid) throws IOException {
     NBTENTRY nbtentry = getNBTENTRYFromNID(nid);
-    Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
-    Block block = getBlockFromBID(page, nbtentry.bidData);
+    Block block = getBlockFromBID(nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
     Preconditions.checkArgument((bCryptMethod == Header.NDB_CRYPT_NONE) || (bCryptMethod == Header.NDB_CRYPT_PERMUTE));
@@ -102,11 +97,7 @@ public class NDB {
       }
     } else {
       for (BTENTRY btentry : page.btentries) {
-        pst.position(btentry.bref.getIb());
-        byte[] b = new byte[Page.PAGE_SIZE];
-        pst.read(b);
-        Page p = new Page(b, pst.getHeader().getType());
-        Block block = getBlockFromBID(p, bid);
+        Block block = getBlockFromBID(getPage(btentry.bref), bid);
         if (block != null) {
           return block;
         }
@@ -118,8 +109,7 @@ public class NDB {
   public TC getTCFromNID(int nid) throws IOException {
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
     NBTENTRY nbtentry = getNBTENTRYFromNID(nid);
-    Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
-    Block block = getBlockFromBID(page, nbtentry.bidData);
+    Block block = getBlockFromBID(nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK || block.blockType == Block.BlockType.XBLOCK,
             "Blocktype %s not yet handled!", block.blockType);
     HN hn = null;
@@ -133,7 +123,7 @@ public class NDB {
       byte[][] datas = new byte[block.rgbid.length][];
       for (int i = 0; i < block.rgbid.length; i++) {
         long blockId = block.rgbid[i];
-        Block subBlock = getBlockFromBID(page, blockId);
+        Block subBlock = getBlockFromBID(blockId);
         Preconditions.checkNotNull(subBlock, "BlockId %s (rgbid[%s]) not found for XBLOCK %s", blockId, i, nbtentry.bidData);
         Preconditions.checkArgument(subBlock.blockType == Block.BlockType.DATA_BLOCK, "Unexpected block type %s for BlockId %s rgbid[%s]", subBlock.blockType, nbtentry.bidData, i);
         if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
