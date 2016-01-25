@@ -20,6 +20,11 @@ public class BTENTRY {
   public final long btKey;
   public final BREF bref;
 
+  public BTENTRY(long btKey, BREF bref) {
+    this.btKey = btKey;
+    this.bref = bref;
+  }
+
   public BTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
 
