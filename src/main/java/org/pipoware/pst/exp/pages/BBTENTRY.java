@@ -31,6 +31,12 @@ public class BBTENTRY {
    * See section 2.2.2.7.7.3.1 regarding how reference counts work.
    */
   private final short cref;
+  
+  public BBTENTRY(BREF bref, short cb, short cref) {
+    this.bref = bref;
+    this.cb = cb;
+    this.cref = cref;
+  }
 
   public BBTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
