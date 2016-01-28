@@ -69,8 +69,8 @@ public class Folder implements Iterable<Message> {
         }
         
         TC contentTableTC = null;
-        int contentCount = subFolderPC.getPCItemByPropertyIdentifier(PidTagContentCount).getInt();
-        if (contentCount > 0) {
+        int nbSubFolderMessages = subFolderPC.getPCItemByPropertyIdentifier(PidTagContentCount).getInt();
+        if (nbSubFolderMessages > 0) {
           int contentTableNID = (dwRowId & 0xFFFFFFE0) | NID.NID_TYPE_CONTENTS_TABLE;
           contentTableTC = ndb.getTCFromNID(contentTableNID);
         }
