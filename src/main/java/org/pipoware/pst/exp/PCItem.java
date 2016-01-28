@@ -51,7 +51,7 @@ public class PCItem {
         if (dwValueHnid != 0) {
           dataValue = bth.hn.getHeapItem(hid);
         } else {
-          System.out.println("dwValueHnid == null");
+          dataValue = null;
         }
       } else {
         // dwValueHnid = NID (subnode)
