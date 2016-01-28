@@ -11,6 +11,7 @@ import org.pipoware.pst.exp.pages.Page;
 import org.pipoware.pst.exp.pages.NBTENTRY;
 import com.google.common.base.Preconditions;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  *
@@ -20,6 +21,18 @@ public class NDB {
 
   public final PSTFile pst;
   private final Header header;
+  
+  public enum SEARCH_IMPL { SIMPLE_SEARCH, BINARY_SEARCH}
+  
+  private static SEARCH_IMPL searchImplementation = SEARCH_IMPL.BINARY_SEARCH;
+  
+  public static void setSearchImplemation(SEARCH_IMPL search_impl) {
+    NDB.searchImplementation = search_impl;
+  }
+
+  public static SEARCH_IMPL getSearchImplemation() {
+    return NDB.searchImplementation;
+  }
 
   public NDB(PSTFile pst, Header header) {
     this.pst = pst;
@@ -83,11 +96,16 @@ public class NDB {
   
   public Block getBlockFromBID(long bid) throws IOException {
     Page page = getPage(pst.getHeader().getRoot().bRefBBT.getIb());
-    Block block = getBlockFromBID(page, bid);
+    Block block;
+    if (searchImplementation == SEARCH_IMPL.BINARY_SEARCH) {
+      block = getBlockFromBIDBinarySearchImpl(page, bid);
+    } else {
+      block = getBlockFromBIDSimpleImpl(page, bid);
+    }
     return block;
   }
   
-  private Block getBlockFromBID(Page page, long bid) throws IOException {
+  private Block getBlockFromBIDSimpleImpl(Page page, long bid) throws IOException {
     if (page.getDepthLevel() == 0) {
       for (BBTENTRY bbentry : page.bbtentries) {
         if (bbentry.bref.getBid() == bid) {
@@ -97,10 +115,45 @@ public class NDB {
       }
     } else {
       for (BTENTRY btentry : page.btentries) {
-        Block block = getBlockFromBID(getPage(btentry.bref), bid);
+        Block block = getBlockFromBIDSimpleImpl(getPage(btentry.bref), bid);
         if (block != null) {
           return block;
         }
+      }
+    }
+    return null;
+  }
+  
+    private Block getBlockFromBIDBinarySearchImpl(Page page, long bid) throws IOException {
+    if (page.getDepthLevel() == 0) {
+      int index = Arrays.binarySearch(
+        page.bbtentries,
+        new BBTENTRY(new BREF(bid, 0), (short) 0, (short) 0),
+        (BBTENTRY o1, BBTENTRY o2) -> (int) (o1.bref.getBid() - o2.bref.getBid()));
+      if (index >= 0) {
+        Block block = new Block(pst, page.bbtentries[index], pst.getHeader().getType());
+        return block;
+      } else {
+        return null; // not found
+      }
+    } else {
+      int index = Arrays.binarySearch(page.btentries, new BTENTRY(bid, null), (BTENTRY o1, BTENTRY o2) -> (int) (o1.btKey - o2.btKey));
+      if (index >= 0) {
+        Block block = getBlockFromBIDBinarySearchImpl(getPage(page.btentries[index].bref), bid);
+        if (block != null) {
+          return block;
+        }
+      } else if (index < 0) {
+        int insertionPoint = (-1 - index);
+        if (insertionPoint <= 0) {
+          return null;
+        } else {
+          Block block = getBlockFromBIDBinarySearchImpl(getPage(page.btentries[insertionPoint - 1].bref), bid);
+          if (block != null) {
+            return block;
+          }
+        }
+
       }
     }
     return null;
@@ -130,7 +183,7 @@ public class NDB {
           PermutativeEncoding.decode(subBlock.data);
         }
         datas[i] = subBlock.data;
-      }
+        }
       hn = new HN(this, nid, datas);
     }
     TC tc = new TC(hn, nbtentry);
