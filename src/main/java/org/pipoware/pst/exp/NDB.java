@@ -177,7 +177,7 @@ public class NDB {
       for (int i = 0; i < block.rgbid.length; i++) {
         long blockId = block.rgbid[i];
         Block subBlock = getBlockFromBID(blockId);
-        Preconditions.checkNotNull(subBlock, "BlockId %s (rgbid[%s]) not found for XBLOCK %s", blockId, i, nbtentry.bidData);
+        Preconditions.checkNotNull(subBlock, "BlockId 0x%s not found for XBLOCK 0x%s, rgbid[%s]", Long.toHexString(blockId), Long.toHexString(nbtentry.bidData), i);
         Preconditions.checkArgument(subBlock.blockType == Block.BlockType.DATA_BLOCK, "Unexpected block type %s for BlockId %s rgbid[%s]", subBlock.blockType, nbtentry.bidData, i);
         if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
           PermutativeEncoding.decode(subBlock.data);
