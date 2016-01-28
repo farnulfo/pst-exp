@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.pipoware.pst.exp;
 
 import java.util.Arrays;
@@ -43,8 +38,8 @@ public class HN {
       byte[] data = Arrays.copyOf(blockDatasArray[i], blockDatasArray[i].length);
       HNDataBlock hnDataBlock = new HNDataBlock(i, data);
       hnDataBlocks.add(hnDataBlock);
+      }
     }
-  }
   
   public byte getSig() {
     return hnDataBlocks.get(0).bSig;
@@ -58,19 +53,6 @@ public class HN {
     return hnDataBlocks.get(0).hidUserRoot;
   }
 
-//  @Override
-//  public String toString() {
-//    return MoreObjects.toStringHelper(this)
-//      .add("ibHnpm", "0x" + Integer.toHexString(Short.toUnsignedInt(ibHnpm)))
-//      .add("bSig", "0x" + Integer.toHexString(Byte.toUnsignedInt(bSig)))
-//      .add("bClientSig", "0x" + Integer.toHexString(Byte.toUnsignedInt(bClientSig)))
-//      .add("hidUserRoot", "0x" + Integer.toHexString(hidUserRoot) + " " + HID.toString(hidUserRoot))
-//      .add("rgbFillLevel", "0x" + Integer.toHexString(rgbFillLevel))
-//      .add("cAlloc", "0x" + Integer.toHexString(Short.toUnsignedInt(cAlloc)))
-//      .add("cFree", "0x" + Integer.toHexString(Short.toUnsignedInt(cFree)))
-//      .add("rgiAlloc", Arrays.toString(rgibAlloc))
-//      .toString();
-//  }
   byte[] getHeapItem(HID hid) {
     int blockIndex = hid.hidBlockIndex;
     Preconditions.checkArgument(blockIndex >= 0);
