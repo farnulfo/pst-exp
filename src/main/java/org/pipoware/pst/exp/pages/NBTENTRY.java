@@ -22,6 +22,13 @@ public class NBTENTRY {
   public final long bidSub;
   public final long nidParent;
 
+  public NBTENTRY(int nid, long bidData, long bidSub, long nidParent) {
+    this.nid = new NID(nid);
+    this.bidData = bidData;
+    this.bidSub = bidSub;
+    this.nidParent = nidParent;
+  }
+
   public NBTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
 
