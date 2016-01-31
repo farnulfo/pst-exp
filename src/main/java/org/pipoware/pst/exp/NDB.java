@@ -52,7 +52,12 @@ public class NDB {
 
   public NBTENTRY getNBTENTRYFromNID(int nid) throws IOException {
     Page rootNBTPage = getPage(header.getRoot().bRefNBT.getIb());
-    NBTENTRY nbtentry = getNBTENTRYFromNID(rootNBTPage, nid);
+    NBTENTRY nbtentry;
+    if (searchImplementation == SEARCH_IMPL.SIMPLE_SEARCH) {
+      nbtentry = getNBTENTRYFromNIDSimpleImpl(rootNBTPage, nid);
+    } else {
+      nbtentry = getNBTENTRYFromNIDBinarySearchImpl(rootNBTPage, nid);
+    }
     if (nbtentry == null) {
       throw new IllegalArgumentException("NID " + nid +" no found.");
     } else {
@@ -60,7 +65,7 @@ public class NDB {
     }
   }
   
-  public NBTENTRY getNBTENTRYFromNID(Page page, int nid) throws IOException {
+  private NBTENTRY getNBTENTRYFromNIDSimpleImpl(Page page, int nid) throws IOException {
     if (page.getDepthLevel() == 0) {
       for (NBTENTRY nbtentry : page.nbtentries) {
         if (nbtentry.nid.data == nid) {
@@ -70,11 +75,41 @@ public class NDB {
       return null;
     } else {
       for (BTENTRY btentry : page.btentries) {
-        NBTENTRY nbtentry = getNBTENTRYFromNID(getPage(btentry.bref), nid);
+        NBTENTRY nbtentry = getNBTENTRYFromNIDSimpleImpl(getPage(btentry.bref), nid);
         if (nbtentry != null) {
           return nbtentry;
         }
       }
+    }
+    return null;
+  }
+
+  private NBTENTRY getNBTENTRYFromNIDBinarySearchImpl(Page page, int nid) throws IOException {
+    if (page.getDepthLevel() == 0) {
+      int index = Arrays.binarySearch(
+        page.nbtentries,
+        new NBTENTRY(nid, 0, 0, 0),
+        (NBTENTRY o1, NBTENTRY o2) -> (int) (o1.nid.data - o2.nid.data));
+      if (index >= 0) {
+        return page.nbtentries[index];
+      } else {
+        return null; // not found
+      }
+    } else {
+        int index = Arrays.binarySearch(
+          page.btentries,
+          new BTENTRY(nid, null),
+          (BTENTRY o1, BTENTRY o2) -> (int) (o1.btKey - o2.btKey));
+        if (index >= 0) {
+          return getNBTENTRYFromNIDBinarySearchImpl(getPage(page.btentries[index].bref), nid);
+        } else if (index < 0) {
+          int insertionPoint = (-1 - index);
+          if (insertionPoint <= 0) {
+            return null;
+          } else {
+            return getNBTENTRYFromNIDBinarySearchImpl(getPage(page.btentries[insertionPoint - 1].bref), nid);
+          }
+        }
     }
     return null;
   }
