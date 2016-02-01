@@ -36,20 +36,6 @@ public class Block {
   public SLENTRY[] rgentries_slentry;
   public SIENTRY[] rgentries_sientry;
   
-
-  public static int diskSize(int size, Header.PST_TYPE type) {
-    int blocktrailerSize;
-    if (type == Header.PST_TYPE.UNICODE) {
-      blocktrailerSize = UNICODE_BLOCKTRAILER_SIZE;
-    } else if (type == Header.PST_TYPE.ANSI) {
-      blocktrailerSize = ANSI_BLOCKTRAILER_SIZE;
-    } else {
-      throw new AssertionError("Unhandled type :" + type);
-    }
-    int nb = (int) Math.ceil((double) (size + blocktrailerSize) / BLOCK_UNIT_SIZE);
-    return nb * BLOCK_UNIT_SIZE;
-  }
-
   Block(PSTFile pstFile, BBTENTRY bbtentry) throws IOException {
     final Header.PST_TYPE type = pstFile.getHeader().getType();
     Preconditions.checkArgument((type == Header.PST_TYPE.ANSI || 
@@ -220,6 +206,19 @@ public class Block {
     int a = (int) (ib >>> 16);
     int b = (int) ib & 0x0000FFFF;
     return (short) (a ^ b);
+  }
+
+  public static int diskSize(int size, Header.PST_TYPE type) {
+    int blocktrailerSize;
+    if (type == Header.PST_TYPE.UNICODE) {
+      blocktrailerSize = UNICODE_BLOCKTRAILER_SIZE;
+    } else if (type == Header.PST_TYPE.ANSI) {
+      blocktrailerSize = ANSI_BLOCKTRAILER_SIZE;
+    } else {
+      throw new AssertionError("Unhandled type :" + type);
+    }
+    int nb = (int) Math.ceil((double) (size + blocktrailerSize) / BLOCK_UNIT_SIZE);
+    return nb * BLOCK_UNIT_SIZE;
   }
 
   @Override
