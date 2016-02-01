@@ -144,7 +144,7 @@ public class NDB {
     if (page.getDepthLevel() == 0) {
       for (BBTENTRY bbentry : page.bbtentries) {
         if (bbentry.bref.getBid() == bid) {
-          Block block = new Block(pst, bbentry, pst.getHeader().getType());
+          Block block = new Block(pst, bbentry);
           return block;
         }
       }
@@ -166,7 +166,7 @@ public class NDB {
         new BBTENTRY(new BREF(bid, 0), (short) 0, (short) 0),
         (BBTENTRY o1, BBTENTRY o2) -> (int) (o1.bref.getBid() - o2.bref.getBid()));
       if (index >= 0) {
-        Block block = new Block(pst, page.bbtentries[index], pst.getHeader().getType());
+        Block block = new Block(pst, page.bbtentries[index]);
         return block;
       } else {
         return null; // not found

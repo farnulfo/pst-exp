@@ -153,7 +153,7 @@ public class PageTest {
         bbtentry.bref.getBid();
         bbtentry.bref.getIb();
         int cb = bbtentry.cb;
-        Block block = new Block(pstFile, bbtentry, Header.PST_TYPE.UNICODE);
+        Block block = new Block(pstFile, bbtentry);
         System.out.println(block);
       }
     }
@@ -172,7 +172,7 @@ public class PageTest {
   private void displayPage(PSTFile pstFile, Page page, int indent) throws IOException {
     if (page.getDepthLevel() == 0) {
       for (BBTENTRY bbtentry : page.bbtentries) {
-        Block block = new Block(pstFile, bbtentry, Header.PST_TYPE.UNICODE);
+        Block block = new Block(pstFile, bbtentry);
         System.out.println(Strings.repeat(" ", indent) + block);
       }
     } else {

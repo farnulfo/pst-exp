@@ -50,8 +50,11 @@ public class Block {
     return nb * BLOCK_UNIT_SIZE;
   }
 
-  Block(PSTFile pstFile, BBTENTRY bbtentry, Header.PST_TYPE type) throws IOException {
-    Preconditions.checkArgument((type == Header.PST_TYPE.ANSI || type == Header.PST_TYPE.UNICODE), "Unhandled PST Type %s", type);
+  Block(PSTFile pstFile, BBTENTRY bbtentry) throws IOException {
+    final Header.PST_TYPE type = pstFile.getHeader().getType();
+    Preconditions.checkArgument((type == Header.PST_TYPE.ANSI || 
+        type == Header.PST_TYPE.UNICODE),
+      "Unhandled PST Type %s", type);
     
     this.bref = new BREF(bbtentry.bref.getBid(), bbtentry.bref.getIb());
     
@@ -146,7 +149,7 @@ public class Block {
           blockType = BlockType.SLBLOCK;
           
           // MS-PST is wrong, dwPadding only in UNICODE file format
-          if (pstFile.getHeader().getType() == Header.PST_TYPE.UNICODE) {
+          if (type == Header.PST_TYPE.UNICODE) {
             int dwPadding = bb.getInt();
             Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
           }
@@ -175,7 +178,7 @@ public class Block {
           blockType = BlockType.SIBLOCK;
 
           // MS-PST is wrong, dwPadding only in UNICODE file format
-          if (pstFile.getHeader().getType() == Header.PST_TYPE.UNICODE) {
+          if (type == Header.PST_TYPE.UNICODE) {
             int dwPadding = bb.getInt();
             Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
           }
