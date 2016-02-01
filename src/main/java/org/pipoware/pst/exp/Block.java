@@ -35,9 +35,25 @@ public class Block {
   private long lcbTotal;
   public SLENTRY[] rgentries_slentry;
   public SIENTRY[] rgentries_sientry;
-  
+
   Block(PSTFile pstFile, BBTENTRY bbtentry) throws IOException {
+    buildBlock(getBytes(pstFile, bbtentry), bbtentry, pstFile.getHeader().getType());
+  }
+  
+  private byte[] getBytes(PSTFile pstFile, BBTENTRY bbtentry) throws IOException {
     final Header.PST_TYPE type = pstFile.getHeader().getType();
+    int diskBlockSize = diskSize(bbtentry.cb, type);
+    byte bytes[] = new byte[diskBlockSize];
+    pstFile.position(bbtentry.bref.getIb());
+    pstFile.read(bytes);
+    return bytes;
+  }
+  
+  Block(byte[] bytes, BBTENTRY bbtentry, Header.PST_TYPE type) throws IOException {
+    buildBlock(bytes, bbtentry, type);
+  }
+
+  private void buildBlock(byte[] bytes, BBTENTRY bbtentry, Header.PST_TYPE type) throws IOException {
     Preconditions.checkArgument((type == Header.PST_TYPE.ANSI || 
         type == Header.PST_TYPE.UNICODE),
       "Unhandled PST Type %s", type);
@@ -45,9 +61,7 @@ public class Block {
     this.bref = new BREF(bbtentry.bref.getBid(), bbtentry.bref.getIb());
     
     int diskBlockSize = diskSize(bbtentry.cb, type);
-    byte bytes[] = new byte[diskBlockSize];
-    pstFile.position(bbtentry.bref.getIb());
-    pstFile.read(bytes);
+    Preconditions.checkArgument(bytes.length == diskBlockSize);
 
     int offset;
     ByteBuffer bb;
