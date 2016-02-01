@@ -234,17 +234,23 @@ public class Block {
     int nb = (int) Math.ceil((double) (size + blocktrailerSize) / BLOCK_UNIT_SIZE);
     return nb * BLOCK_UNIT_SIZE;
   }
-
-  public static byte[] buildXBlock(long bid, long ib, int lcbTotal, long[] rgbid, Header.PST_TYPE type) {
+  
+  public static short computeXBlockDataSize(int numberOfBids, Header.PST_TYPE type) {
     final int XBLOCK_HEADER
       = /* sizeof(btype) */ 1 + /* sizeof(cLevel) */ 1 + /* sizeof(cEnt) */ 2
       + /* sizeof(lcbTotal) */ 4;
 
-    int sizeOfBids = rgbid.length * (type == Header.PST_TYPE.UNICODE ? 8 : 4);
+    int sizeOfBids = numberOfBids * (type == Header.PST_TYPE.UNICODE ? 8 : 4);
 
-    int sizeOfBlock = diskSize(XBLOCK_HEADER + sizeOfBids, type);
+    return (short) (XBLOCK_HEADER + sizeOfBids);
+  }
 
-    byte[] blockBytes = new byte[sizeOfBlock];
+  public static byte[] buildXBlock(long bid, long ib, int lcbTotal, long[] rgbid, Header.PST_TYPE type) {
+    final int computeXBlockDataSize = computeXBlockDataSize(rgbid.length, type);
+
+    int sizeOfBlockOnDisk = diskSize(computeXBlockDataSize, type);
+
+    byte[] blockBytes = new byte[sizeOfBlockOnDisk];
 
     ByteBuffer bb = ByteBuffer.wrap(blockBytes).order(ByteOrder.LITTLE_ENDIAN);
 
@@ -261,15 +267,15 @@ public class Block {
     }
 
     int blockTrailerSize = (type == Header.PST_TYPE.UNICODE ? Block.UNICODE_BLOCKTRAILER_SIZE : ANSI_BLOCKTRAILER_SIZE);
-    bb.position(sizeOfBlock - blockTrailerSize);
-    bb.putShort((short) (XBLOCK_HEADER + sizeOfBids));
+    bb.position(sizeOfBlockOnDisk - blockTrailerSize);
+    bb.putShort((short) (computeXBlockDataSize));
     bb.putShort(computeSig(bid, ib));
     if (type == Header.PST_TYPE.UNICODE) {
-      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, XBLOCK_HEADER + sizeOfBids)));
+      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeXBlockDataSize)));
       bb.putLong(bid);
     } else {
       bb.putInt((int) bid);
-      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, XBLOCK_HEADER + sizeOfBids)));
+      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeXBlockDataSize)));
     }
 
     return blockBytes;
