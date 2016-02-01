@@ -39,7 +39,7 @@ public class Block {
   Block(PSTFile pstFile, BBTENTRY bbtentry) throws IOException {
     buildBlock(getBytes(pstFile, bbtentry), bbtentry, pstFile.getHeader().getType());
   }
-  
+
   private byte[] getBytes(PSTFile pstFile, BBTENTRY bbtentry) throws IOException {
     final Header.PST_TYPE type = pstFile.getHeader().getType();
     int diskBlockSize = diskSize(bbtentry.cb, type);
@@ -48,7 +48,7 @@ public class Block {
     pstFile.read(bytes);
     return bytes;
   }
-  
+
   Block(byte[] bytes, BBTENTRY bbtentry, Header.PST_TYPE type) throws IOException {
     buildBlock(bytes, bbtentry, type);
   }
@@ -57,9 +57,9 @@ public class Block {
     Preconditions.checkArgument((type == Header.PST_TYPE.ANSI || 
         type == Header.PST_TYPE.UNICODE),
       "Unhandled PST Type %s", type);
-    
+
     this.bref = new BREF(bbtentry.bref.getBid(), bbtentry.bref.getIb());
-    
+
     int diskBlockSize = diskSize(bbtentry.cb, type);
     Preconditions.checkArgument(bytes.length == diskBlockSize);
 
@@ -85,7 +85,7 @@ public class Block {
 
     short cb = bb.getShort();
     short wSig = bb.getShort();
-    
+
     int wSigComputed = computeSig(bbtentry.bref.getIb(), bbtentry.bref.getBid());
     Preconditions.checkArgument(wSig == wSigComputed,
       "wSig (0x%s) <> wSigComputed (0x%s) (BREF=%s)",
@@ -138,22 +138,22 @@ public class Block {
           throw new IllegalArgumentException("Unsupported cLevel (" + cLevel + ") for btype " + btype);
         }
 
-          lcbTotal = bb.getInt();
+        lcbTotal = bb.getInt();
 
-          rgbid = new long[cEnt];
-          for (int i = 0; i < cEnt; i++) {
-            rgbid[i] = (type == Header.PST_TYPE.UNICODE) ? bb.getLong() : bb.getInt();
-          }
+        rgbid = new long[cEnt];
+        for (int i = 0; i < cEnt; i++) {
+          rgbid[i] = (type == Header.PST_TYPE.UNICODE) ? bb.getLong() : bb.getInt();
+        }
       } else if (btype == BTYPE_SLBLOCK_OR_SIBLOCK) {
         if (cLevel == 0x00) {
           blockType = BlockType.SLBLOCK;
-          
+
           // MS-PST is wrong, dwPadding only in UNICODE file format
           if (type == Header.PST_TYPE.UNICODE) {
             int dwPadding = bb.getInt();
             Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
           }
-          
+
           rgentries_slentry = new SLENTRY[cEnt];
           for (int i = 0; i < cEnt; i++) {
             long nid;
@@ -170,10 +170,10 @@ public class Block {
               bidData = bb.getInt();
               bidSub = bb.getInt();
             }
-            
+
             rgentries_slentry[i] = new SLENTRY(nid, bidData, bidSub);
           }
-          
+
         } else if (cLevel == 0x01) {
           blockType = BlockType.SIBLOCK;
 
@@ -182,7 +182,7 @@ public class Block {
             int dwPadding = bb.getInt();
             Preconditions.checkArgument(dwPadding == 0, "dwPadding %s <> 0", dwPadding);
           }
-          
+
           readRgSIENTRY(cEnt, type, bb);
         }
         else {
@@ -198,7 +198,7 @@ public class Block {
     for (int i = 0; i < cEnt; i++) {
       long nid;
       long bid;
-      
+
       if (type == Header.PST_TYPE.UNICODE) {
         nid = bb.getLong();
         bid = bb.getLong();
@@ -206,7 +206,7 @@ public class Block {
         nid = bb.getInt();
         bid = bb.getInt();
       }
-      
+
       rgentries_sientry[i] = new SIENTRY(nid, bid);
     }
   }
@@ -214,7 +214,7 @@ public class Block {
   public BREF getBREF() {
     return bref;
   }
-  
+
   public static short computeSig(long ib, long bid) {
     ib ^= bid;
     int a = (int) (ib >>> 16);
@@ -233,6 +233,46 @@ public class Block {
     }
     int nb = (int) Math.ceil((double) (size + blocktrailerSize) / BLOCK_UNIT_SIZE);
     return nb * BLOCK_UNIT_SIZE;
+  }
+
+  public static byte[] buildXBlock(long bid, long ib, int lcbTotal, long[] rgbid, Header.PST_TYPE type) {
+    final int XBLOCK_HEADER
+      = /* sizeof(btype) */ 1 + /* sizeof(cLevel) */ 1 + /* sizeof(cEnt) */ 2
+      + /* sizeof(lcbTotal) */ 4;
+
+    int sizeOfBids = rgbid.length * (type == Header.PST_TYPE.UNICODE ? 8 : 4);
+
+    int sizeOfBlock = diskSize(XBLOCK_HEADER + sizeOfBids, type);
+
+    byte[] blockBytes = new byte[sizeOfBlock];
+
+    ByteBuffer bb = ByteBuffer.wrap(blockBytes).order(ByteOrder.LITTLE_ENDIAN);
+
+    bb.put(Block.BTYPE_XBLOCK_OR_XXBLOCK);
+    bb.put(Block.BTYPE_XBLOCK_OR_XXBLOCK);
+    bb.putShort((short) rgbid.length);
+    bb.putInt(lcbTotal);
+    for (long abid : rgbid) {
+      if (type == Header.PST_TYPE.UNICODE) {
+        bb.putLong(abid);
+      } else {
+        bb.putInt((int) abid);
+      }
+    }
+
+    int blockTrailerSize = (type == Header.PST_TYPE.UNICODE ? Block.UNICODE_BLOCKTRAILER_SIZE : ANSI_BLOCKTRAILER_SIZE);
+    bb.position(sizeOfBlock - blockTrailerSize);
+    bb.putShort((short) (XBLOCK_HEADER + sizeOfBids));
+    bb.putShort(computeSig(bid, ib));
+    if (type == Header.PST_TYPE.UNICODE) {
+      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, XBLOCK_HEADER + sizeOfBids)));
+      bb.putLong(bid);
+    } else {
+      bb.putInt((int) bid);
+      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, XBLOCK_HEADER + sizeOfBids)));
+    }
+
+    return blockBytes;
   }
 
   @Override
