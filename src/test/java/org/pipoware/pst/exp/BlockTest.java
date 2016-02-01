@@ -45,13 +45,7 @@ public class BlockTest {
     BREF bref = new BREF(bid, ib);
 
     int nbBIDs = 0x35;
-    int sizeOfBID_UNICODE = 8;
-    final int btype_size = 1;
-    final int cLevel_size = 1;
-    final int cEnt_size = 2;
-    final int lcbTotal_size = 4;
-    int xblock_header = btype_size + cLevel_size + cEnt_size + lcbTotal_size;
-    short bbtentry_cb = (short) (xblock_header + nbBIDs * sizeOfBID_UNICODE);
+    short bbtentry_cb = Block.computeXBlockDataSize(nbBIDs, UNICODE);
     // cref is not part of block data
     // MS-PST 3.6 Sample Data Tree didn't tell what value is so 0 (not used in building a block)
     short bbtentry_cref = 0;
