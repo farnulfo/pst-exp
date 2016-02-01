@@ -15,6 +15,11 @@ public class BlockTest {
     Assert.assertEquals(192, Block.diskSize(156, UNICODE));
     Assert.assertEquals(320, Block.diskSize(276, UNICODE));
     Assert.assertEquals(192, Block.diskSize(124, UNICODE));
+    
+    // MS-PST 3.6 Sample Data Tree
+    int nbBIDs = 0x35;
+    int sizeOfBID_UNICODE = 8;
+    Assert.assertEquals(448, Block.diskSize(nbBIDs * sizeOfBID_UNICODE, UNICODE));
   }
   
   @Test
