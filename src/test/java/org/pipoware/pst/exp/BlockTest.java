@@ -84,6 +84,36 @@ public class BlockTest {
     Assert.assertArrayEquals(expectedBytes, Block.buildXBlock(bid, ib, lcbTotal, bids, Header.PST_TYPE.UNICODE));
   }
 
+  /*
+   * Last bit of a BID according to MS-PST documentation v20100627 : Reserved bit.
+   * Readers MUST ignore this bit and treat it as zero (0) before looking up the BID from the BBT.
+   * Writers MUST set this bit to zero (0).
+   */
+  @Test
+  public void testXBlockWithIncorrectBID() throws URISyntaxException, IOException {
+    long bid = 0x162;
+    long ib = 0x5A6600;
+    int lcbTotal = 0x00069C49;
+    long[] expectedBids = new long[]{
+      0x200,
+      0x204,
+      0x208,
+      0x20c,
+      0x210};
+
+    long[] bidsWithReservedBitSet = new long[expectedBids.length];
+    for (int i = 0; i < expectedBids.length; i++) {
+      bidsWithReservedBitSet[i] = expectedBids[i] | 0x1;
+    }
+
+    byte[] blockBytes = Block.buildXBlock(bid, ib, lcbTotal, bidsWithReservedBitSet, Header.PST_TYPE.UNICODE);
+    final BREF bref = new BREF(bid, ib);
+    BBTENTRY bbtentry = new BBTENTRY(bref, Block.computeXBlockDataSize(expectedBids.length, UNICODE), (short) 0);
+    Block block = new Block(blockBytes, bbtentry, UNICODE);
+
+    Assert.assertArrayEquals(expectedBids, block.rgbid);
+  }
+
   @Test
   public void testSignature() {
     Assert.assertEquals((short) 0x4C04, Block.computeSig(19456, 0x4));
