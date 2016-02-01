@@ -142,7 +142,8 @@ public class Block {
 
         rgbid = new long[cEnt];
         for (int i = 0; i < cEnt; i++) {
-          rgbid[i] = (type == Header.PST_TYPE.UNICODE) ? bb.getLong() : bb.getInt();
+          final long tmpBid = (type == Header.PST_TYPE.UNICODE) ? bb.getLong() : bb.getInt();
+          rgbid[i] = BID.sanitize(tmpBid);
         }
       } else if (btype == BTYPE_SLBLOCK_OR_SIBLOCK) {
         if (cLevel == 0x00) {

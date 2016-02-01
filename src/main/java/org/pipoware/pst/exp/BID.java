@@ -28,6 +28,19 @@ public class BID {
     return (bid & 0b10) != 0 ;
   }
   
+  /**
+   * Last bit of a BID according to MS-PST documentation v20100627
+   * Reserved bit.
+   * Readers MUST ignore this bit and treat it as zero (0) before looking up the BID from the BBT.
+   * Writers MUST set this bit to zero (0).
+   *  
+   * @param bid
+   * @return sanitized bid
+   */
+  public static long sanitize(long bid) {
+    return bid &= 0xFFFFFFFE;
+  }
+  
   public static String toString(long bid) {
     return "0x" + Long.toHexString(bid) + " " + ((isInternal(bid) ? "INTERNAL" : "NOT INTERNAL"));
   }
