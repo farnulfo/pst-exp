@@ -61,6 +61,7 @@ public class TC {
         }
         Preconditions.checkNotNull(slentry, "SLENTRY not found");
         Block b = hn.ndb.getBlockFromBID(slentry.bidData);
+        Preconditions.checkNotNull(b, "Block Id 0x%s not found for SLENTRY:%s in Block %s", Long.toHexString(slentry.bidData), slentry, block);
         Preconditions.checkArgument(b.blockType == Block.BlockType.DATA_BLOCK || b.blockType == Block.BlockType.XBLOCK,
           "Blocktype %s not yet handled!", b.blockType);
         if (b.blockType == Block.BlockType.DATA_BLOCK) {
