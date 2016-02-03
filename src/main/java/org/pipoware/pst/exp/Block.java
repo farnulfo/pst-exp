@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+import static org.pipoware.pst.exp.Header.PST_TYPE.UNICODE;
 
 /**
  *
@@ -277,6 +278,68 @@ public class Block {
     } else {
       bb.putInt((int) bid);
       bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeXBlockDataSize)));
+    }
+
+    return blockBytes;
+  }
+
+  public static short computeSBlockDataSize(int numberOfSLENTRY, Header.PST_TYPE type) {
+    final int SBLOCK_HEADER
+      = /* sizeof(btype) */ 1 + /* sizeof(cLevel) */ 1 + /* sizeof(cEnt) */ 2;
+    
+    int SLENTRY_SIZE_ANSI = 
+      /* sizeof(nid) */  4 + /* sizeof(bidData) */ 4 + /* sizeof(bidSub) */ 4;
+    int SLENTRY_SIZE_UNICODE = SLENTRY_SIZE_ANSI * 2;
+
+    int sizeOfSLENTRIES = 
+      numberOfSLENTRY * (type == UNICODE ? SLENTRY_SIZE_UNICODE : SLENTRY_SIZE_ANSI);
+    
+    final int dwPaddingSize = type == UNICODE ? 4 : 0;
+
+    return (short) (SBLOCK_HEADER + dwPaddingSize + sizeOfSLENTRIES );
+  }
+
+  public static byte[] buildSBlock(long bid, long ib, SLENTRY[] slentries, Header.PST_TYPE type) {
+    final int computeSBlockDataSize = computeSBlockDataSize(slentries.length, type);
+
+    int sizeOfBlockOnDisk = diskSize(computeSBlockDataSize, type);
+
+    byte[] blockBytes = new byte[sizeOfBlockOnDisk];
+
+    ByteBuffer bb = ByteBuffer.wrap(blockBytes).order(ByteOrder.LITTLE_ENDIAN);
+
+    final byte SBLOCK_CLEVEL = 0x00;
+    bb.put(Block.BTYPE_SLBLOCK_OR_SIBLOCK);
+    bb.put(SBLOCK_CLEVEL);
+    bb.putShort((short) slentries.length);
+    
+    if (type == UNICODE) {
+      // dwPadding
+      bb.putInt(0);
+    }
+    
+    for (SLENTRY slentry : slentries) {
+      if (type == Header.PST_TYPE.UNICODE) {
+        bb.putLong(slentry.nid);
+        bb.putLong(slentry.bidData);
+        bb.putLong(slentry.bidSub);
+      } else {
+        bb.putInt((int) slentry.nid);
+        bb.putInt((int) slentry.bidData);
+        bb.putInt((int) slentry.bidSub);
+      }
+    }
+
+    int blockTrailerSize = (type == Header.PST_TYPE.UNICODE ? Block.UNICODE_BLOCKTRAILER_SIZE : ANSI_BLOCKTRAILER_SIZE);
+    bb.position(sizeOfBlockOnDisk - blockTrailerSize);
+    bb.putShort((short) (computeSBlockDataSize));
+    bb.putShort(computeSig(bid, ib));
+    if (type == Header.PST_TYPE.UNICODE) {
+      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeSBlockDataSize)));
+      bb.putLong(bid);
+    } else {
+      bb.putInt((int) bid);
+      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeSBlockDataSize)));
     }
 
     return blockBytes;

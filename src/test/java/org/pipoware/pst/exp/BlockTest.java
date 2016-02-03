@@ -115,6 +115,48 @@ public class BlockTest {
   }
 
   @Test
+  public void testSampleDataTreeSBlock() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/blocks/sample_data_sblock.bin").toURI());
+    byte[] bytes = Files.readAllBytes(path);
+    // MS-PST 3.7 Sample Data Tree
+
+    // 0000000000594DB0 20 00 5F 5E 50 5E D4 D9-86 13 00 00 00 00 00 00
+    //                    BID = LITTLE ENDIAN ( ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ )
+    long bid = 0x1386;
+
+    // 0000000000594D80 02 00 01 00 00 00 00 00-7F 81 00 00 00 00 00 00
+    // ^^^^^^^^^^^^^^^^ = Byte Index (IB) of block  
+    long ib = 0x594D80;
+
+    BREF bref = new BREF(bid, ib);
+
+    short bbtentry_cb = Block.computeSBlockDataSize(1, UNICODE);
+
+    // cref is not part of block data
+    // MS-PST 3.7 Sample Data Tree didn't tell what value is so 0 (not used in building a block)
+    short bbtentry_cref = 0;
+
+    BBTENTRY bbtentry = new BBTENTRY(bref, bbtentry_cb, bbtentry_cref);
+    Block block = new Block(bytes, bbtentry, UNICODE);
+
+    Assert.assertEquals(Block.BlockType.SLBLOCK, block.blockType);
+    Assert.assertEquals(1, block.rgentries_slentry.length);
+    SLENTRY[] expectedSLENTRY = new SLENTRY[] { new SLENTRY(0x817f, 0x1380, 0x0) };
+    Assert.assertArrayEquals(expectedSLENTRY, block.rgentries_slentry);
+  }
+
+  @Test
+  public void testBuildSBlock() throws URISyntaxException, IOException {
+    Path path = Paths.get(getClass().getResource("/blocks/sample_data_sblock.bin").toURI());
+    byte[] expectedBytes = Files.readAllBytes(path);
+    long bid = 0x1386;
+    long ib = 0x594D80;
+    SLENTRY[] expectedSLENTRY = new SLENTRY[] { new SLENTRY(0x817f, 0x1380, 0x0) };
+
+    Assert.assertArrayEquals(expectedBytes, Block.buildSBlock(bid, ib, expectedSLENTRY, UNICODE));
+  }
+
+  @Test
   public void testSignature() {
     Assert.assertEquals((short) 0x4C04, Block.computeSig(19456, 0x4));
     Assert.assertEquals((short) 0x8DD8, Block.computeSig(36160, 0x98));
