@@ -15,6 +15,39 @@ class SLENTRY {
 
   public final long nid;
   public final long bidData;
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 31 * hash + (int) (this.nid ^ (this.nid >>> 32));
+    hash = 31 * hash + (int) (this.bidData ^ (this.bidData >>> 32));
+    hash = 31 * hash + (int) (this.bidSub ^ (this.bidSub >>> 32));
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final SLENTRY other = (SLENTRY) obj;
+    if (this.nid != other.nid) {
+      return false;
+    }
+    if (this.bidData != other.bidData) {
+      return false;
+    }
+    if (this.bidSub != other.bidSub) {
+      return false;
+    }
+    return true;
+  }
   public final long bidSub;
 
   SLENTRY(long nid, long bidData, long bidSub) {
