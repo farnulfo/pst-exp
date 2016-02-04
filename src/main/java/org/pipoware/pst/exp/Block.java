@@ -268,17 +268,7 @@ public class Block {
       }
     }
 
-    int blockTrailerSize = (type == Header.PST_TYPE.UNICODE ? Block.UNICODE_BLOCKTRAILER_SIZE : ANSI_BLOCKTRAILER_SIZE);
-    bb.position(sizeOfBlockOnDisk - blockTrailerSize);
-    bb.putShort((short) (computeXBlockDataSize));
-    bb.putShort(computeSig(bid, ib));
-    if (type == Header.PST_TYPE.UNICODE) {
-      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeXBlockDataSize)));
-      bb.putLong(bid);
-    } else {
-      bb.putInt((int) bid);
-      bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeXBlockDataSize)));
-    }
+    writeBlockTrailer(type, bb, sizeOfBlockOnDisk, computeXBlockDataSize, bid, ib, blockBytes);
 
     return blockBytes;
   }
@@ -330,6 +320,12 @@ public class Block {
       }
     }
 
+    writeBlockTrailer(type, bb, sizeOfBlockOnDisk, computeSBlockDataSize, bid, ib, blockBytes);
+
+    return blockBytes;
+  }
+
+  private static void writeBlockTrailer(Header.PST_TYPE type, ByteBuffer bb, int sizeOfBlockOnDisk, final int computeSBlockDataSize, long bid, long ib, byte[] blockBytes) {
     int blockTrailerSize = (type == Header.PST_TYPE.UNICODE ? Block.UNICODE_BLOCKTRAILER_SIZE : ANSI_BLOCKTRAILER_SIZE);
     bb.position(sizeOfBlockOnDisk - blockTrailerSize);
     bb.putShort((short) (computeSBlockDataSize));
@@ -341,8 +337,6 @@ public class Block {
       bb.putInt((int) bid);
       bb.putInt(CRC.computeCRC(0, Arrays.copyOf(blockBytes, computeSBlockDataSize)));
     }
-
-    return blockBytes;
   }
 
   @Override
