@@ -156,6 +156,33 @@ public class BlockTest {
     Assert.assertArrayEquals(expectedBytes, Block.buildSBlock(bid, ib, expectedSLENTRY, UNICODE));
   }
 
+  /*
+   * Last bit of a BID according to MS-PST documentation v20100627 : Reserved bit.
+   * Readers MUST ignore this bit and treat it as zero (0) before looking up the BID from the BBT.
+   * Writers MUST set this bit to zero (0).
+   */
+  @Test
+  public void testSBlockWithIncorrectBID() throws URISyntaxException, IOException {
+    long bid = 0x162;
+    long ib = 0x5A6600;
+    long expectedBidData = 0x200;
+    long expectedBidSub =0x1380;
+    
+    SLENTRY[] expectedSlentries = new SLENTRY[] { new SLENTRY(0x817f, expectedBidData, expectedBidSub) };
+
+    long bidDataWithReservedBitSet = expectedBidData | 0x1;
+    long bidSubWithReservedBitSet = expectedBidSub | 0x1;
+    
+    SLENTRY[] slentries = new SLENTRY[] { new SLENTRY(0x817f, bidDataWithReservedBitSet, bidSubWithReservedBitSet) };
+    
+    byte[] blockBytes = Block.buildSBlock(bid, ib, slentries, UNICODE);
+    final BREF bref = new BREF(bid, ib);
+    BBTENTRY bbtentry = new BBTENTRY(bref, Block.computeSBlockDataSize(slentries.length, UNICODE), (short) 0);
+    Block block = new Block(blockBytes, bbtentry, UNICODE);
+
+    Assert.assertArrayEquals(expectedSlentries, block.rgentries_slentry);
+  }
+
   @Test
   public void testSignature() {
     Assert.assertEquals((short) 0x4C04, Block.computeSig(19456, 0x4));

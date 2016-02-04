@@ -165,12 +165,12 @@ public class Block {
             if (type == Header.PST_TYPE.UNICODE) {
               nid = bb.getInt();
               bb.getInt(); // Don't read this as it's not allways 0
-              bidData = bb.getLong();
-              bidSub = bb.getLong();
+              bidData = BID.sanitize(bb.getLong());
+              bidSub = BID.sanitize(bb.getLong());
             } else {
               nid = bb.getInt();
-              bidData = bb.getInt();
-              bidSub = bb.getInt();
+              bidData = BID.sanitize(bb.getInt());
+              bidSub = BID.sanitize(bb.getInt());
             }
 
             rgentries_slentry[i] = new SLENTRY(nid, bidData, bidSub);
