@@ -24,6 +24,12 @@ public class Block {
   public static final byte BTYPE_XBLOCK_OR_XXBLOCK = 0x01;
   public static final byte BTYPE_SLBLOCK_OR_SIBLOCK = 0x02;
 
+  public static final int XBLOCK_HEADER_SIZE
+      = /* sizeof(btype) */ 1 + /* sizeof(cLevel) */ 1 + /* sizeof(cEnt) */ 2
+      + /* sizeof(lcbTotal) */ 4;
+  public static final int SBLOCK_HEADER_SIZE
+      = /* sizeof(btype) */ 1 + /* sizeof(cLevel) */ 1 + /* sizeof(cEnt) */ 2;
+
   public enum BlockType {
 
     DATA_BLOCK, XBLOCK, XXBLOCK, SLBLOCK, SIBLOCK
@@ -238,13 +244,9 @@ public class Block {
   }
   
   public static short computeXBlockDataSize(int numberOfBids, Header.PST_TYPE type) {
-    final int XBLOCK_HEADER
-      = /* sizeof(btype) */ 1 + /* sizeof(cLevel) */ 1 + /* sizeof(cEnt) */ 2
-      + /* sizeof(lcbTotal) */ 4;
-
     int sizeOfBids = numberOfBids * (type == Header.PST_TYPE.UNICODE ? 8 : 4);
 
-    return (short) (XBLOCK_HEADER + sizeOfBids);
+    return (short) (XBLOCK_HEADER_SIZE + sizeOfBids);
   }
 
   public static byte[] buildXBlock(long bid, long ib, int lcbTotal, long[] rgbid, Header.PST_TYPE type) {
@@ -274,9 +276,6 @@ public class Block {
   }
 
   public static short computeSBlockDataSize(int numberOfSLENTRY, Header.PST_TYPE type) {
-    final int SBLOCK_HEADER
-      = /* sizeof(btype) */ 1 + /* sizeof(cLevel) */ 1 + /* sizeof(cEnt) */ 2;
-    
     int SLENTRY_SIZE_ANSI = 
       /* sizeof(nid) */  4 + /* sizeof(bidData) */ 4 + /* sizeof(bidSub) */ 4;
     int SLENTRY_SIZE_UNICODE = SLENTRY_SIZE_ANSI * 2;
@@ -286,7 +285,7 @@ public class Block {
     
     final int dwPaddingSize = type == UNICODE ? 4 : 0;
 
-    return (short) (SBLOCK_HEADER + dwPaddingSize + sizeOfSLENTRIES );
+    return (short) (SBLOCK_HEADER_SIZE + dwPaddingSize + sizeOfSLENTRIES );
   }
 
   public static byte[] buildSBlock(long bid, long ib, SLENTRY[] slentries, Header.PST_TYPE type) {
