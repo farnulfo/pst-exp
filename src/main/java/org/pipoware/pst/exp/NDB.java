@@ -102,7 +102,7 @@ public class NDB {
           (BTENTRY o1, BTENTRY o2) -> (int) (o1.btKey - o2.btKey));
         if (index >= 0) {
           return getNBTENTRYFromNIDBinarySearchImpl(getPage(page.btentries[index].bref), nid);
-        } else if (index < 0) {
+        } else {
           int insertionPoint = (-1 - index);
           if (insertionPoint <= 0) {
             return null;
@@ -111,7 +111,6 @@ public class NDB {
           }
         }
     }
-    return null;
   }
 
   public PC getPCFromNID(int nid) throws IOException {
@@ -178,7 +177,7 @@ public class NDB {
         if (block != null) {
           return block;
         }
-      } else if (index < 0) {
+      } else {
         int insertionPoint = (-1 - index);
         if (insertionPoint <= 0) {
           return null;
