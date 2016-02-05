@@ -38,7 +38,7 @@ public class BID {
    * @return sanitized bid
    */
   public static long sanitize(long bid) {
-    return bid &= 0xFFFFFFFE;
+    return bid & 0xFFFFFFFE;
   }
   
   public static String toString(long bid) {
