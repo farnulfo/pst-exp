@@ -15,6 +15,13 @@ class SLENTRY {
 
   public final long nid;
   public final long bidData;
+  public final long bidSub;
+
+  SLENTRY(long nid, long bidData, long bidSub) {
+    this.nid = nid;
+    this.bidData = bidData;
+    this.bidSub = bidSub;
+  }
 
   @Override
   public int hashCode() {
@@ -47,13 +54,6 @@ class SLENTRY {
       return false;
     }
     return true;
-  }
-  public final long bidSub;
-
-  SLENTRY(long nid, long bidData, long bidSub) {
-    this.nid = nid;
-    this.bidData = bidData;
-    this.bidSub = bidSub;
   }
 
   @Override
