@@ -51,6 +51,7 @@ public class Message {
       subject = messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PR_SUBJECT).getString();
     } catch (Exception e) {
       System.out.println(e);
+      System.out.println(messageObjectPC);
     }
     return MoreObjects.toStringHelper(this)
       .add("nid", "0x" + Integer.toHexString(nid))
