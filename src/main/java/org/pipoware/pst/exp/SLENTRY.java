@@ -11,7 +11,7 @@ import com.google.common.base.MoreObjects;
  *
  * @author Franck Arnulfo
  */
-class SLENTRY {
+public class SLENTRY {
 
   public final long nid;
   public final long bidData;
