@@ -110,6 +110,14 @@ public class NDB {
 
   public PC getPCFromNID(int nid) throws IOException {
     NBTENTRY nbtentry = getNBTENTRYFromNID(nid);
+    return getPCFromNBTENTRY(nbtentry);
+  }
+
+  public PC getPCFromNID(SLENTRY slentry) throws IOException {
+    return getPCFromNBTENTRY(new NBTENTRY((int) slentry.nid, slentry.bidData, slentry.bidSub, 0));
+  }
+
+  public PC getPCFromNBTENTRY(NBTENTRY nbtentry) throws IOException {
     Block block = getBlockFromBID(nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK, "Blocktype %s not yet handled!", block.blockType);
     byte bCryptMethod = pst.getHeader().getBCryptMethod();
@@ -117,7 +125,7 @@ public class NDB {
     if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
       PermutativeEncoding.decode(block.data);
     }
-    HN hn = new HN(this, nid, block.data);
+    HN hn = new HN(this, (int) nbtentry.nid.data, block.data);
     BTH bth = new BTH(hn);
     PC pc = new PC(bth, this, nbtentry);
     return pc;
