@@ -19,7 +19,7 @@ public class TCROWID {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("dwRowID", dwRowID)
+      .add("dwRowID", "0x" + Long.toHexString(dwRowID))
       .add("dwRowIndex", dwRowIndex)
       .toString();
   }
