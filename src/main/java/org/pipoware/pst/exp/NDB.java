@@ -194,8 +194,17 @@ public class NDB {
   }
   
   public TC getTCFromNID(int nid) throws IOException {
-    byte bCryptMethod = pst.getHeader().getBCryptMethod();
     NBTENTRY nbtentry = getNBTENTRYFromNID(nid);
+    return getTCFromNBTENTRY(nbtentry);
+  }
+
+  public TC getTCFromSLENTRY(SLENTRY slentry) throws IOException {
+    NBTENTRY nbtentry = new NBTENTRY((int) slentry.nid, slentry.bidData, slentry.bidSub, 0);
+    return getTCFromNBTENTRY(nbtentry);
+  }
+
+  public TC getTCFromNBTENTRY(NBTENTRY nbtentry) throws IOException {
+    byte bCryptMethod = pst.getHeader().getBCryptMethod();
     Block block = getBlockFromBID(nbtentry.bidData);
     Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK || block.blockType == Block.BlockType.XBLOCK,
             "Blocktype %s not yet handled!", block.blockType);
@@ -205,7 +214,7 @@ public class NDB {
       if (bCryptMethod == Header.NDB_CRYPT_PERMUTE) {
         PermutativeEncoding.decode(block.data);
       }
-      hn = new HN(this, nid, block.data);
+      hn = new HN(this, (int) nbtentry.nid.data, block.data);
     } else if (block.blockType == Block.BlockType.XBLOCK) {
       byte[][] datas = new byte[block.rgbid.length][];
       for (int i = 0; i < block.rgbid.length; i++) {
@@ -218,7 +227,7 @@ public class NDB {
         }
         datas[i] = subBlock.data;
         }
-      hn = new HN(this, nid, datas);
+      hn = new HN(this, (int) nbtentry.nid.data, datas);
     }
     TC tc = new TC(hn, nbtentry);
     return tc;
