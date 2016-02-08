@@ -85,8 +85,7 @@ public class TC {
         }
       }
     }
-
-    //displayRowMatrixData(rowMatrixDataBlocks);
+    checkMatrixDataBlocks(rowMatrixDataBlocks);
   }
 
   private List<TCROWID> getRowIds() {
@@ -117,15 +116,6 @@ public class TC {
   private void displayRowMatrixData(List<byte[]> rowMatrixDataBlocks) {
     if (rowMatrixDataBlocks.isEmpty()) {
       return;
-    }
-    if (rowMatrixDataBlocks.size() == 1) {
-      Preconditions.checkArgument((rowMatrixDataBlocks.get(0).length / tcRowIds.size()) == tcinfo.TCI_bm);
-    } else {
-      int nbRows = 0;
-      for(byte[] block : rowMatrixDataBlocks) {
-        nbRows += block.length / tcinfo.TCI_bm;
-      }
-      Preconditions.checkArgument(nbRows == tcRowIds.size());
     }
     System.out.println("0x00000000\t" + Strings.repeat("X", tcinfo.TCI_bm));
     for (TCOLDESC tColDesc : tcinfo.tColDesc) {
@@ -203,6 +193,18 @@ public class TC {
         }
         
       }
+    }
+  }
+
+  public void checkMatrixDataBlocks(List<byte[]> rowMatrixDataBlocks1) {
+    if (rowMatrixDataBlocks1.size() == 1) {
+      Preconditions.checkArgument((rowMatrixDataBlocks1.get(0).length / tcRowIds.size()) == tcinfo.TCI_bm);
+    } else {
+      int nbRows = 0;
+      for (byte[] block : rowMatrixDataBlocks1) {
+        nbRows += block.length / tcinfo.TCI_bm;
+      }
+      Preconditions.checkArgument(nbRows == tcRowIds.size());
     }
   }
   
