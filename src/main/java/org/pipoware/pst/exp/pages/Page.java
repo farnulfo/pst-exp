@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import org.pipoware.pst.exp.CRC;
 import org.pipoware.pst.exp.Header;
+import static org.pipoware.pst.exp.Header.PST_TYPE.UNICODE;
 
 /**
  *
@@ -96,15 +97,8 @@ public class Page {
     Preconditions.checkArgument(type == Header.PST_TYPE.ANSI || type == Header.PST_TYPE.UNICODE);
     this.bytes = Arrays.copyOf(bytes, PAGE_SIZE);
 
-    int offset = 0;
-    int length = 0;
-    if (type == Header.PST_TYPE.UNICODE) {
-      offset = PAGE_SIZE - UNICODE_TRAILER_SIZE;
-      length = UNICODE_TRAILER_SIZE;
-    } else {
-      offset = PAGE_SIZE - ANSI_TRAILER_SIZE;
-      length = ANSI_TRAILER_SIZE;
-    }
+    int offset = PAGE_SIZE - (type == UNICODE ? UNICODE_TRAILER_SIZE : ANSI_TRAILER_SIZE);
+    int length = type == UNICODE ? UNICODE_TRAILER_SIZE : ANSI_TRAILER_SIZE;
     
     ByteBuffer bb = ByteBuffer.wrap(this.bytes, offset, length).order(ByteOrder.LITTLE_ENDIAN);
 
