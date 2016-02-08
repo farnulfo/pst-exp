@@ -196,7 +196,7 @@ public class TC {
     }
   }
 
-  public void checkMatrixDataBlocks(List<byte[]> rowMatrixDataBlocks1) {
+  private void checkMatrixDataBlocks(List<byte[]> rowMatrixDataBlocks1) {
     if (rowMatrixDataBlocks1.size() == 1) {
       Preconditions.checkArgument((rowMatrixDataBlocks1.get(0).length / tcRowIds.size()) == tcinfo.TCI_bm);
     } else {
