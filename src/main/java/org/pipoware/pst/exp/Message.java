@@ -32,12 +32,13 @@ public class Message {
     
     for (SLENTRY slEntry : subBlock.rgentries_slentry) {
       if (new NID(slEntry.nid).nidType == NID.NID_TYPE_RECIPIENT_TABLE) {
-        TC recipientTable = ndb.getTCFromNID((int) slEntry.nid);
-        recipientTable.displayRowMatrixData();
+        TC recipientTable = ndb.getTCFromSLENTRY(slEntry);
+        //System.out.println(recipientTable.getRows());
+        //recipientTable.displayRowMatrixData();
       }
     }
   }
-
+  
   public void toStringMessageObjectPC() {
     for (PCItem item : messageObjectPC.items) {
       System.out.println(item.toString());
