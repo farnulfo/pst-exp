@@ -138,7 +138,7 @@ public class TC {
 
     });
     for (int i = 0; i < tcRowIds.size(); i++) {
-      byte[] rowData = null;
+      byte[] rowData;
       if (rowMatrixDataBlocks.size() == 1) {
         rowData = Arrays.copyOfRange(rowMatrixDataBlocks.get(0), i * tcinfo.TCI_bm, i * tcinfo.TCI_bm + tcinfo.TCI_bm);
       } else {
