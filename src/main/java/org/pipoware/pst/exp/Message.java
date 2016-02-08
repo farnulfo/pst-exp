@@ -3,6 +3,7 @@ package org.pipoware.pst.exp;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import java.io.IOException;
+import java.util.List;
 import org.pipoware.pst.exp.pages.NBTENTRY;
 
 /**
@@ -37,6 +38,39 @@ public class Message {
         //recipientTable.displayRowMatrixData();
       }
     }
+  }
+  
+  public void listAttachments() throws IOException {
+    NBTENTRY nbtentry = ndb.getNBTENTRYFromNID(nid);
+    Block subBlock = ndb.getBlockFromBID(nbtentry.bidSub);
+    Preconditions.checkNotNull(subBlock, "Sub Block Id 0x%s not found for NID 0x%s", Long.toHexString(nbtentry.bidSub), Integer.toHexString(nid));
+    Preconditions.checkArgument(subBlock.blockType == Block.BlockType.SLBLOCK);
+
+    TC attachmentTable = null;
+    for (SLENTRY slEntry : subBlock.rgentries_slentry) {
+      if (new NID(slEntry.nid).nidType == NID.NID_TYPE_ATTACHMENT_TABLE) {
+        attachmentTable = ndb.getTCFromSLENTRY(slEntry);
+        break;
+      }
+    }
+    
+    if (attachmentTable != null) {
+      attachmentTable.displayRowMatrixData();
+      List<TCROWID> rows = attachmentTable.getRows();
+      System.out.println(rows);
+      for (TCROWID row : rows) {
+        for (SLENTRY slEntry : subBlock.rgentries_slentry) {
+          if (slEntry.nid == row.dwRowID) {
+            PC attachmentPC = ndb.getPCFromNID(slEntry);
+            System.out.println(attachmentPC);
+            break;
+          }
+        }
+
+      }
+
+    }
+    
   }
   
   public void toStringMessageObjectPC() {
