@@ -1,6 +1,5 @@
 package org.pipoware.pst.exp;
 
-import com.google.common.io.BaseEncoding;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import org.junit.Test;
