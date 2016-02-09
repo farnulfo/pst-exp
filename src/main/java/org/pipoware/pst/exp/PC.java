@@ -93,7 +93,7 @@ public class PC {
         return item;
       }
     }
-    throw new IllegalArgumentException("propertyIdentier " + propertyIdentifier + " not found.");
+    return null;
   }
 
 }
