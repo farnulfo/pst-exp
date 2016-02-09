@@ -15,6 +15,7 @@ public class Message {
   private final NDB ndb;
   private final int nid;
   private final PC messageObjectPC;
+  private String subject = null;
 
   public Message(NDB aNDB, int aNID) throws IOException {
     this.ndb = aNDB;
@@ -25,7 +26,35 @@ public class Message {
       getRecipients(nbtentry);
     }
   }
+  
+  /**
+   * Return Subject of message Special handling : MS-PST 2.5.3.1.1.1
+   *
+   * @return
+   */
+  public String getSubject() {
+    if (subject == null) {
+      initSubject();
+    }
 
+    return subject;
+  }
+
+  private void initSubject() {
+    PCItem subjectItem = messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PR_SUBJECT);
+    if (subjectItem == null) {
+      subject = "";
+    } else {
+      subject = subjectItem.getString();
+      if ((subject != null) && (subject.length() >= 2)) {
+        if (subject.charAt(0) == 0x1) {
+          Preconditions.checkArgument(subject.charAt(1) == 0x1);
+          subject = subject.substring(2);
+        }
+      }
+    }
+  }
+  
   private void getRecipients(NBTENTRY nbtentry) throws IOException {
     Block subBlock = ndb.getBlockFromBID(nbtentry.bidSub);
     Preconditions.checkNotNull(subBlock, "Sub Block Id 0x%s not found for NID 0x%s", Long.toHexString(nbtentry.bidSub), Integer.toHexString(nid));
@@ -81,16 +110,9 @@ public class Message {
 
   @Override
   public String toString() {
-    String subject = "ERROR: Subject not found!";
-    try {
-      subject = messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PR_SUBJECT).getString();
-    } catch (Exception e) {
-      System.out.println(e);
-      System.out.println(messageObjectPC);
-    }
     return MoreObjects.toStringHelper(this)
       .add("nid", "0x" + Integer.toHexString(nid))
-      .add("subject", subject)
+      .add("subject", getSubject())
       .toString();
   }
 
