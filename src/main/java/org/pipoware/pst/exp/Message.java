@@ -3,6 +3,7 @@ package org.pipoware.pst.exp;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import org.pipoware.pst.exp.pages.NBTENTRY;
 
@@ -55,6 +56,18 @@ public class Message {
     }
   }
   
+  public Date getCreationTime() {
+    return messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagCreationTime).getTime();
+  }
+  
+  public Date getLastModificationTime() {
+    return messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagLastModificationTime).getTime();
+  }
+  
+  public Date getMessageDeliveryTime() {
+    return messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagMessageDeliveryTime).getTime();
+  }
+
   private void getRecipients(NBTENTRY nbtentry) throws IOException {
     Block subBlock = ndb.getBlockFromBID(nbtentry.bidSub);
     Preconditions.checkNotNull(subBlock, "Sub Block Id 0x%s not found for NID 0x%s", Long.toHexString(nbtentry.bidSub), Integer.toHexString(nid));
@@ -113,6 +126,9 @@ public class Message {
     return MoreObjects.toStringHelper(this)
       .add("nid", "0x" + Integer.toHexString(nid))
       .add("subject", getSubject())
+      .add("creationTime", getCreationTime())
+      .add("lastModificationTime", getLastModificationTime())
+      .add("messageDeliveryTime", getMessageDeliveryTime())
       .toString();
   }
 
