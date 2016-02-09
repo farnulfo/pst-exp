@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Date;
 import org.pipoware.pst.exp.Block.BlockType;
 import org.pipoware.pst.exp.pages.NBTENTRY;
 
@@ -153,6 +154,22 @@ public class PCItem {
       throw new IllegalArgumentException("propertyDataType : " + propertyDataType + " <> " + PropertyDataType.PtypBoolean);
     }
     return bool;    
+  }
+  
+  /**
+   * PTypeTime : MS-DTYP 2.3.3
+   * 
+   * @return Date
+   */
+  public Date getTime() {
+    final long EPOCH_DIFF = 11644473600000L;
+    Preconditions.checkArgument(propertyDataType == PropertyDataType.PtypTime, "propertyDataType : %s <> %s", propertyDataType, PropertyDataType.PtypTime);
+    Preconditions.checkArgument(dataValue.length == 8);
+    ByteBuffer bb = ByteBuffer.wrap(dataValue).order(ByteOrder.LITTLE_ENDIAN);
+    long time = bb.getLong();
+    final long ms_since_16010101 = time / (1000 * 10);
+    final long ms_since_19700101 = ms_since_16010101 - EPOCH_DIFF;
+    return new Date(ms_since_19700101);
   }
 
   @Override
