@@ -39,7 +39,8 @@ public enum PropertyDataType {
   PtypMultipleString8((short) 0x101E, true, 0),
   PtypMultipleTime((short) 0x1040, true, 0),
   PtypMultipleGuid((short) 0x1048, true, 0),
-  PtypMultipleBinary((short) 0x1102, true, 0);
+  PtypMultipleBinary((short) 0x1102, true, 0),
+  PtypObject((short) 0x000D, true, 0);
 
   private final short propertyTypeValue;
   private final boolean variableSize;
