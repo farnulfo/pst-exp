@@ -40,7 +40,6 @@ public class PCItem {
     
     bb = ByteBuffer.wrap(keyData.data).order(ByteOrder.LITTLE_ENDIAN);
     short wPropType = bb.getShort();
-    Preconditions.checkArgument(wPropType != 0x000D, "wPropType 0x000D (PtypObject) not yet supported, check MS-PST 2.3.3.5");
     propertyDataType = PropertyDataType.get(wPropType);
     
     int dwValueHnid = bb.getInt();
