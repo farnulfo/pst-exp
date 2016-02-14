@@ -175,7 +175,7 @@ public class PCItem {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("propertyIdentifier", Integer.toHexString(Short.toUnsignedInt(propertyIdentifier)))
+      .add("propertyIdentifier", String.format("0x%04X", Short.toUnsignedInt(propertyIdentifier)))
       .add("propertyTag", PropertyTag.getPropertyTagFromIdentifier(propertyIdentifier))
       .add("propertyData", "[" + BaseEncoding.base16().withSeparator(",", 2).encode(propertyData) + "]")
       .add("propertyDataType", propertyDataType)
