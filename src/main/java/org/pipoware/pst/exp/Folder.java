@@ -26,7 +26,7 @@ public class Folder implements Iterable<Message> {
   private final String displayName;
   private final int contentCount;
   private final int contentUnreadCount;
-  private final boolean subFolders;
+  private final boolean hasSubFolders;
   private final List<Folder> folders = new ArrayList<>();
 
   public Folder(NDB ndb, PC pc, TC hierarchyTable, TC aContentTable) {
@@ -37,7 +37,7 @@ public class Folder implements Iterable<Message> {
     displayName = folderPC.getPCItemByPropertyIdentifier(PidTagDisplayName).getString();
     contentCount = folderPC.getPCItemByPropertyIdentifier(PidTagContentCount).getInt();
     contentUnreadCount = folderPC.getPCItemByPropertyIdentifier(PidTagContentUnreadCount).getInt();
-    subFolders = folderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
+    hasSubFolders = folderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
   }
 
   public String getDisplayName() {
@@ -52,12 +52,12 @@ public class Folder implements Iterable<Message> {
     return contentUnreadCount;
   }
   
-  public boolean hasSubFolers() {
-    return subFolders;
+  public boolean hasSubFolders() {
+    return hasSubFolders;
   }
 
   public List<Folder> getFolders() throws IOException {
-    if (hasSubFolers()) {
+    if (hasSubFolders()) {
       for (TCROWID row : hierarchyTable.getRows()) {
         int dwRowId = row.dwRowID;
         PC subFolderPC = ndb.getPCFromNID(dwRowId);
@@ -111,7 +111,7 @@ public class Folder implements Iterable<Message> {
             .add("displayName", displayName)
             .add("contentCount", contentCount)
             .add("contentUnreadCount", contentUnreadCount)
-            .add("hasSubFolders", subFolders)
+            .add("hasSubFolders", hasSubFolders)
             .toString();
   }
 

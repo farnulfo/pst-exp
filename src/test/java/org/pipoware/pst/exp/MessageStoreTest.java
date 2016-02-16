@@ -77,7 +77,7 @@ public class MessageStoreTest {
         System.out.println("Message : " + message.toString());
       }
     }
-    if (folder.hasSubFolers()) {
+    if (folder.hasSubFolders()) {
       List<Folder> folders = folder.getFolders();
       for (Folder f : folders) {
         processFolder(f, i + 1);
