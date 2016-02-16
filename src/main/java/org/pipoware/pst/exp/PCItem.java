@@ -170,6 +170,10 @@ public class PCItem {
     final long ms_since_19700101 = ms_since_16010101 - EPOCH_DIFF;
     return new Date(ms_since_19700101);
   }
+  
+  public PropertyDataType getPropertyDataType() {
+    return propertyDataType;
+  }
 
   @Override
   public String toString() {
