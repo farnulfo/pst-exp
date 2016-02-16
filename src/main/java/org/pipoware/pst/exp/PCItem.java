@@ -173,6 +173,7 @@ public class PCItem {
 
   @Override
   public String toString() {
+    final int MAX_BYTES = 128;
     return MoreObjects.toStringHelper(this)
       .add("propertyIdentifier", String.format("0x%04X/%s", Short.toUnsignedInt(propertyIdentifier), MoreObjects.firstNonNull(PropertyIdentifier.MAP.get(propertyIdentifier), "")))
       .add("propertyTag", PropertyTag.getPropertyTagFromIdentifier(propertyIdentifier))
@@ -181,7 +182,9 @@ public class PCItem {
       .add("int32", int32)
       .add("bool", bool)
       .add("hid", hid)
-      .add("dataValue", dataValue == null ? "null" : "(size=" + dataValue.length + ") [" + BaseEncoding.base16().withSeparator(",", 2).encode(dataValue)+ "]")
+      .add("dataValue", dataValue == null ? 
+        "null" : 
+        "{size=" + dataValue.length + ", first " + MAX_BYTES + " bytes: [" + BaseEncoding.base16().withSeparator(",", 2).encode(dataValue, 0, Math.min(dataValue.length, MAX_BYTES)) + "]}")
       .add("dataValue String", string)
       .toString();
   }
