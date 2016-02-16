@@ -105,6 +105,9 @@ public class Message {
           if (slEntry.nid == row.dwRowID) {
             PC attachmentPC = ndb.getPCFromNID(slEntry);
             System.out.println(attachmentPC);
+            for (PCItem pcItem : attachmentPC.items) {
+              System.out.println(pcItem);
+            }
             break;
           }
         }
