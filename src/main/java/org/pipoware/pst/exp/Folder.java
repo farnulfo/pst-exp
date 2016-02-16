@@ -83,13 +83,15 @@ public class Folder implements Iterable<Message> {
   
   public List<Message> getMessages() throws IOException {
     List<Message> messages = new ArrayList<>();
-    for (TCROWID tcrowid : contentTable.getRows()) {
-      try {
-        Message message = new Message(ndb, tcrowid.dwRowID);
-        messages.add(message);
-      } catch (Exception e) {
-        System.out.println("getMessages() Exception : " + e);
-        e.printStackTrace();
+    if (contentTable != null) {
+      for (TCROWID tcrowid : contentTable.getRows()) {
+        try {
+          Message message = new Message(ndb, tcrowid.dwRowID);
+          messages.add(message);
+        } catch (Exception e) {
+          System.out.println("getMessages() Exception : " + e);
+          e.printStackTrace();
+        }
       }
     }
     return messages;
