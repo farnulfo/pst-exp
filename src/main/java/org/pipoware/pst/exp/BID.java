@@ -24,6 +24,9 @@ package org.pipoware.pst.exp;
 
 public class BID {
   
+  private BID() {
+  }
+
   public static boolean isInternal(long bid) {
     return (bid & 0b10) != 0 ;
   }
@@ -42,7 +45,7 @@ public class BID {
   }
   
   public static String toString(long bid) {
-    return "0x" + Long.toHexString(bid) + " " + ((isInternal(bid) ? "INTERNAL" : "NOT INTERNAL"));
+    return "0x" + Long.toHexString(bid) + " " + (isInternal(bid) ? "INTERNAL" : "NOT INTERNAL");
   }
 
   public static String toString(long[] arrayOfBID) {

@@ -47,22 +47,22 @@ public class Block {
     buildBlock(getBytes(pstFile, bbtentry), bbtentry, pstFile.getHeader().getType());
   }
 
+  Block(byte[] bytes, BBTENTRY bbtentry, Header.PST_TYPE type) throws IOException {
+    buildBlock(bytes, bbtentry, type);
+  }
+
   private byte[] getBytes(PSTFile pstFile, BBTENTRY bbtentry) throws IOException {
     final Header.PST_TYPE type = pstFile.getHeader().getType();
     int diskBlockSize = diskSize(bbtentry.cb, type);
-    byte bytes[] = new byte[diskBlockSize];
+    byte []bytes = new byte[diskBlockSize];
     pstFile.position(bbtentry.bref.getIb());
     pstFile.read(bytes);
     return bytes;
   }
 
-  Block(byte[] bytes, BBTENTRY bbtentry, Header.PST_TYPE type) throws IOException {
-    buildBlock(bytes, bbtentry, type);
-  }
-
   private void buildBlock(byte[] bytes, BBTENTRY bbtentry, Header.PST_TYPE type) throws IOException {
-    Preconditions.checkArgument((type == Header.PST_TYPE.ANSI || 
-        type == Header.PST_TYPE.UNICODE),
+    Preconditions.checkArgument(type == Header.PST_TYPE.ANSI || 
+        type == Header.PST_TYPE.UNICODE,
       "Unhandled PST Type %s", type);
 
     this.bref = new BREF(bbtentry.bref.getBid(), bbtentry.bref.getIb());
@@ -114,7 +114,7 @@ public class Block {
 
     Preconditions.checkArgument(bbtentry.bref.getBid() == bid, "BBTENTRY bid (%s) <> bid from block bytes (%s)", bbtentry.bref.getBid(), bid);
 
-    byte crcData[] = Arrays.copyOf(bytes, bbtentry.cb);
+    byte []crcData = Arrays.copyOf(bytes, bbtentry.cb);
     int dwComputedCRC = CRC.computeCRC(0, crcData);
 
     Preconditions.checkArgument(dwCRC == dwComputedCRC, "dwCRC (%s) <> dwComputedCRC(%s)", dwCRC, dwComputedCRC);

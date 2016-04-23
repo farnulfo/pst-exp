@@ -18,19 +18,16 @@ public class Header {
   private final int dwMagic;
   private final int wMagicClient;
 
-  private final byte[] DW_MAGIC_BYTE = {0x21, 0x42, 0x44, 0x4E};
-  private final int DW_MAGIC = ByteBuffer.wrap(DW_MAGIC_BYTE).order(ByteOrder.LITTLE_ENDIAN).getInt();
+  private static final byte[] DW_MAGIC_BYTE = {0x21, 0x42, 0x44, 0x4E};
+  private static final int DW_MAGIC = ByteBuffer.wrap(DW_MAGIC_BYTE).order(ByteOrder.LITTLE_ENDIAN).getInt();
 
-  private final byte[] DW_MAGIC_CLIENT_BYTE = {0x53, 0x4D};
-  private final short DW_MAGIC_CLIENT = ByteBuffer.wrap(DW_MAGIC_CLIENT_BYTE).order(ByteOrder.LITTLE_ENDIAN).getShort();
+  private static final byte[] DW_MAGIC_CLIENT_BYTE = {0x53, 0x4D};
+  private static final short DW_MAGIC_CLIENT = ByteBuffer.wrap(DW_MAGIC_CLIENT_BYTE).order(ByteOrder.LITTLE_ENDIAN).getShort();
 
   private int dwCRCPartial;
   private static final int CRC_PARTIAL_BEGIN_OFFSET = 8;
   private static final int CRC_PARTIAL_DATA_SIZE = 471;
   private static final int CRC_FULL_DATA_SIZE = 516;
-  private static final int CRC_FULL_BEGIN_OFFSET = 8;
-
-  private static final int ULONG_SIZE = 8;
 
   private short wVer;
   private short wVerClient;
@@ -42,22 +39,18 @@ public class Header {
   long bidNextP;
   long bidNextB;
 
-  int rgnid[] = new int[32];
-  private long qwUnused;
+  int []rgnid = new int[32];
   private Root root;
-  private int dwAlign;
-  private final byte rgbFM[] = new byte[128];
-  private final byte rgbFP[] = new byte[128];
+  private final byte []rgbFM = new byte[128];
+  private final byte []rgbFP = new byte[128];
   private byte bSentinel;
   private byte bCryptMethod;
   private short rgbReserved;
   private int dwCRCFull;
   private long ullReserved;
   private int dwReservedANSI;
-  private final byte rgbReserved2[] = new byte[3];
-  ;
-  private byte bReserved;
-  private final byte rgbReserved3[] = new byte[32];
+  private final byte []rgbReserved2 = new byte[3];
+  private final byte []rgbReserved3 = new byte[32];
 
   public byte[] getRgbFM() {
     return rgbFM;
@@ -167,13 +160,13 @@ public class Header {
     }
 
     if (type == PST_TYPE.UNICODE) {
-      qwUnused = pst.readULONG();
+      long qwUnused = pst.readULONG();
     }
     
     root = new Root(pst, type);
 
     if (type == PST_TYPE.UNICODE) {
-      dwAlign = pst.readDWORD();
+      int dwAlign = pst.readDWORD();
     }
 
     pst.read(rgbFM);
@@ -216,7 +209,7 @@ public class Header {
 
     pst.read(rgbReserved2);
 
-    bReserved = pst.readBYTE();
+    byte bReserved = pst.readBYTE();
 
     pst.read(rgbReserved3);
   }

@@ -5,7 +5,6 @@
  */
 package org.pipoware.pst.exp;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -39,7 +38,7 @@ public class PSTFile implements IPSTFile {
   private final LTP ltp;
   private final Messaging messaging;
 
-  public PSTFile(Path path) throws FileNotFoundException, IOException {
+  public PSTFile(Path path) throws IOException {
     this.path = path;
     this.file = new RandomAccessFile(this.path.toFile(), "r");
     fileChannel = this.file.getChannel();
@@ -54,7 +53,7 @@ public class PSTFile implements IPSTFile {
   }
 
   @Override
-  public int readDWORD() throws FileNotFoundException, IOException {
+  public int readDWORD() throws IOException {
     dword.clear();
     fileChannel.read(dword);
     dword.flip();
@@ -62,7 +61,7 @@ public class PSTFile implements IPSTFile {
   }
 
   @Override
-  public short readWORD() throws FileNotFoundException, IOException {
+  public short readWORD() throws IOException {
     word.clear();
     fileChannel.read(word);
     word.flip();
@@ -70,7 +69,7 @@ public class PSTFile implements IPSTFile {
   }
 
   @Override
-  public long readULONG() throws FileNotFoundException, IOException {
+  public long readULONG() throws IOException {
     ulong.clear();
     fileChannel.read(ulong);
     ulong.flip();
@@ -78,7 +77,7 @@ public class PSTFile implements IPSTFile {
   }
 
   @Override
-  public byte readBYTE() throws FileNotFoundException, IOException {
+  public byte readBYTE() throws IOException {
     ubyte.clear();
     fileChannel.read(ubyte);
     ubyte.flip();
