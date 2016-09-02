@@ -6,6 +6,7 @@ sudo: false
 language: java
 
 script:
+  - chmod u+x ./runSonarQubeAnalysis.sh
   - ./runSonarQubeAnalysis.sh
 
 # Caching 
