@@ -3,7 +3,7 @@ Outlook PST File format experimentation
 
 [![Build Status](https://travis-ci.org/farnulfo/pst-exp.svg?branch=master)](https://travis-ci.org/farnulfo/pst-exp)
 
-
+[![Build Status](https://sonarqube.com/api/badges/gate?key=org.pipoware%3Apst-exp)](https://sonarqube.com/dashboard/index?id=org.pipoware%3Apst-exp)
 
 Articles about MS-PST file format:
 
