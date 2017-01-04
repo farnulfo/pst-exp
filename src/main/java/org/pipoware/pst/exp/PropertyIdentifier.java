@@ -13,6 +13,7 @@ public class PropertyIdentifier {
   }
 
   public static final short PidTagMessageDeliveryTime = (short) 0x0E06;
+  public static final short PidTagMessageFlags = (short) 0x0E07;
   public static final short PidTagDisplayName = (short) 0x3001;
   public static final short PidTagCreationTime = (short) 0x3007;
   public static final short PidTagLastModificationTime = (short) 0x3008;
@@ -23,6 +24,7 @@ public class PropertyIdentifier {
   public static final short PR_SUBJECT = (short) 0x0037;
   
   public static final ImmutableMap<Short, String> MAP = ImmutableMap.<Short, String>builder()
+    .put((short) 0x0E07, "PidTagMessageFlags")
     .put((short) 0x0E20, "PidTagAttachmentSize")
     .put((short) 0x0E06, "PidTagMessageDeliveryTime")
     .put((short) 0x3001, "PidTagDisplayName")
