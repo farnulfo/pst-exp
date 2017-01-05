@@ -49,7 +49,6 @@ public class Message {
       subject = subjectItem.getString();
       if ((subject != null) && (subject.length() >= 2)) {
         if (subject.charAt(0) == 0x1) {
-          Preconditions.checkArgument(subject.charAt(1) == 0x1);
           subject = subject.substring(2);
         }
       }
