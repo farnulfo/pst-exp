@@ -81,6 +81,12 @@ public class Message {
     }
   }
   
+  public boolean hasAttachment() {
+    PCItem pcItem = messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagMessageFlags);
+    final int mfHasAttach = 0x00000010;
+    return (pcItem.getInt() & mfHasAttach) != 0;
+  }
+
   public void listAttachments() throws IOException {
     NBTENTRY nbtentry = ndb.getNBTENTRYFromNID(nid);
     Block subBlock = ndb.getBlockFromBID(nbtentry.bidSub);
