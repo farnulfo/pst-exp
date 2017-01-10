@@ -80,7 +80,7 @@ public class PC {
 
   private PCItem findPCItemByPropertyTag(PropertyTag propertyTag) {
     for (PCItem item : items) {
-      if (PropertyTag.getPropertyTagFromIdentifier(item.propertyIdentifier) == propertyTag) {
+      if (PropertyTag.getPropertyTagFromIdentifier(item.propertyIdentifier, item.getPropertyDataType()) == propertyTag) {
         return item;
       }
     }
