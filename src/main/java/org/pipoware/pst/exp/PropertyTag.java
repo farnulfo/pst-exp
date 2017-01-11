@@ -6,6 +6,7 @@ import static org.pipoware.pst.exp.PropertyDataType.PtypBoolean;
 import static org.pipoware.pst.exp.PropertyDataType.PtypInteger32;
 import static org.pipoware.pst.exp.PropertyDataType.PtypObject;
 import static org.pipoware.pst.exp.PropertyDataType.PtypString;
+import static org.pipoware.pst.exp.PropertyDataType.PtypTime;
 
 /**
  *
@@ -36,6 +37,13 @@ public enum PropertyTag {
   /*
    * [MS-OXPROPS] v18.0 / 2.X
    */
+  PidTagCreationTime((short) 0x3007, PtypTime),
+  PidTagLastModificationTime((short) 0x3008, PtypTime),
+  PidTagAttachEncoding((short) 0x3702, PtypBinary),
+  PidTagAttachExtension((short) 0x3703, PtypString),
+  PidTagAttachFilename((short) 0x3704, PtypString),
+  PidTagAttachLongFilename((short) 0x3707, PtypString),
+  PidTagAttachRendering((short) 0x3709, PtypBinary),
   PidTagAttachDataBinary((short) 0x3701, PtypBinary),
   PidTagAttachDataObject((short) 0x3701, PtypObject),
   PidTagAttachSize((short) 0x0E20, PtypInteger32),
