@@ -35,8 +35,16 @@ public enum PropertyTag {
   PidTagMapiFormComposeCommand((short) 0x682F, PtypString),
   
   /*
+   * MS-PST v5.2 / 2.4.3.1 Minimum Set of Required Properties
+   */
+  PidTagIpmSubTreeEntryId((short) 0x35E0, PtypBinary),
+
+  /*
    * [MS-OXPROPS] v18.0 / 2.X
    */
+  PidTagSubject((short) 0x0037, PtypString),
+  PidTagMessageDeliveryTime((short) 0x0E06, PtypTime),
+  PidTagMessageFlags((short) 0x0E07, PtypInteger32),
   PidTagCreationTime((short) 0x3007, PtypTime),
   PidTagLastModificationTime((short) 0x3008, PtypTime),
   PidTagAttachEncoding((short) 0x3702, PtypBinary),
@@ -49,7 +57,10 @@ public enum PropertyTag {
   PidTagAttachSize((short) 0x0E20, PtypInteger32),
   PidTagAttachMethod((short) 0x3705, PtypInteger32),
   PidTagRenderingPosition((short) 0x370B, PtypInteger32),
-  PidTagDisplayName((short) 0x3001, PtypString);
+  PidTagDisplayName((short) 0x3001, PtypString),
+  PidTagSubfolders((short) 0x360A, PtypBoolean),
+  PidTagContentCount((short) 0x3602, PtypInteger32),
+  PidTagContentUnreadCount((short) 0x3603, PtypInteger32);
 
   private final short propertyIdentifier;
   private final PropertyDataType propertyDataType;
