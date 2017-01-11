@@ -1,11 +1,14 @@
 package org.pipoware.pst.exp;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import static org.pipoware.pst.exp.PropertyDataType.PtypBinary;
 import static org.pipoware.pst.exp.PropertyDataType.PtypBoolean;
 import static org.pipoware.pst.exp.PropertyDataType.PtypInteger32;
 import static org.pipoware.pst.exp.PropertyDataType.PtypObject;
 import static org.pipoware.pst.exp.PropertyDataType.PtypString;
+import static org.pipoware.pst.exp.PropertyDataType.PtypString8;
 import static org.pipoware.pst.exp.PropertyDataType.PtypTime;
 
 /**
@@ -57,31 +60,37 @@ public enum PropertyTag {
   PidTagAttachSize((short) 0x0E20, PtypInteger32),
   PidTagAttachMethod((short) 0x3705, PtypInteger32),
   PidTagRenderingPosition((short) 0x370B, PtypInteger32),
-  PidTagDisplayName((short) 0x3001, PtypString),
+  PidTagDisplayName((short) 0x3001, PtypString, PtypString8),
   PidTagSubfolders((short) 0x360A, PtypBoolean),
   PidTagContentCount((short) 0x3602, PtypInteger32),
   PidTagContentUnreadCount((short) 0x3603, PtypInteger32);
 
   private final short propertyIdentifier;
-  private final PropertyDataType propertyDataType;
+  private final List<PropertyDataType> propertyDataTypes = new ArrayList<>();
 
   private PropertyTag(short propertyIdentifier, PropertyDataType propertyDataType) {
     this.propertyIdentifier = propertyIdentifier;
-    this.propertyDataType = propertyDataType;
+    this.propertyDataTypes.add(propertyDataType);
+  }
+
+  private PropertyTag(short propertyIdentifier, PropertyDataType propertyDataType, PropertyDataType alternativePropertyDataType) {
+    this.propertyIdentifier = propertyIdentifier;
+    this.propertyDataTypes.add(propertyDataType);
+    this.propertyDataTypes.add(alternativePropertyDataType);
   }
 
   public short getPropertyIdentifier() {
     return propertyIdentifier;
   }
 
-  public PropertyDataType getPropertyDataType() {
-    return propertyDataType;
+  public List<PropertyDataType> getPropertyDataTypes() {
+    return propertyDataTypes;
   }
 
   public static PropertyTag getPropertyTagFromIdentifier(short propertyIdentifier, PropertyDataType propertyDataType) {
     for (PropertyTag tag : EnumSet.allOf(PropertyTag.class)) {
       if (tag.getPropertyIdentifier() == propertyIdentifier
-        && tag.getPropertyDataType() == propertyDataType) {
+        && (tag.propertyDataTypes.contains(propertyDataType))) {
         return tag;
       }
     }
