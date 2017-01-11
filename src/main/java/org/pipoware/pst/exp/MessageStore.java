@@ -18,7 +18,7 @@ public class MessageStore {
   public MessageStore(NDB ndb, PC messageStorePC) {
     this.ndb = ndb;
     this.messageStorePC = messageStorePC;
-    displayName = this.messageStorePC.getPCItemByPropertyIdentifier(PidTagDisplayName).getString();
+    displayName = this.messageStorePC.findPCItemByPropertyTag(PropertyTag.PidTagDisplayName).getString();
   }
 
   public String getDisplayName() {
@@ -26,10 +26,10 @@ public class MessageStore {
   }
 
   public Folder getRootFolder() throws IOException {
-    PCItem pic = messageStorePC.getPCItemByPropertyIdentifier(PidTagIpmSubTreeEntryId);
+    PCItem pic = messageStorePC.findPCItemByPropertyTag(PropertyTag.PidTagIpmSubTreeEntryId);
     EntryID rootEntryId = new EntryID(pic.dataValue);
     PC rootFolderPC = ndb.getPCFromNID(rootEntryId.nid);
-    boolean hasFolder = rootFolderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
+    boolean hasFolder = rootFolderPC.findPCItemByPropertyTag(PropertyTag.PidTagSubfolders).getBoolean();
     int rootFolderHCnid = (rootEntryId.nid & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
     TC hc = ndb.getTCFromNID(rootFolderHCnid);
     return new Folder(ndb, rootFolderPC, hc, null);

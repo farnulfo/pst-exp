@@ -42,7 +42,7 @@ public class Message {
   }
 
   private void initSubject() {
-    PCItem subjectItem = messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PR_SUBJECT);
+    PCItem subjectItem = messageObjectPC.findPCItemByPropertyTag(PropertyTag.PidTagSubject);
     if (subjectItem == null) {
       subject = "";
     } else {
@@ -56,15 +56,15 @@ public class Message {
   }
   
   public Date getCreationTime() {
-    return messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagCreationTime).getTime();
+    return messageObjectPC.findPCItemByPropertyTag(PropertyTag.PidTagCreationTime).getTime();
   }
   
   public Date getLastModificationTime() {
-    return messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagLastModificationTime).getTime();
+    return messageObjectPC.findPCItemByPropertyTag(PropertyTag.PidTagLastModificationTime).getTime();
   }
   
   public Date getMessageDeliveryTime() {
-    return messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagMessageDeliveryTime).getTime();
+    return messageObjectPC.findPCItemByPropertyTag(PropertyTag.PidTagMessageDeliveryTime).getTime();
   }
 
   private void getRecipients(NBTENTRY nbtentry) throws IOException {
@@ -82,7 +82,7 @@ public class Message {
   }
   
   public boolean hasAttachment() {
-    PCItem pcItem = messageObjectPC.getPCItemByPropertyIdentifier(PropertyIdentifier.PidTagMessageFlags);
+    PCItem pcItem = messageObjectPC.findPCItemByPropertyTag(PropertyTag.PidTagMessageFlags);
     final int mfHasAttach = 0x00000010;
     return (pcItem.getInt() & mfHasAttach) != 0;
   }
@@ -122,7 +122,7 @@ public class Message {
     }
     
   }
-  
+
   public void toStringMessageObjectPC() {
     for (PCItem item : messageObjectPC.items) {
       System.out.println(item.toString());

@@ -21,7 +21,7 @@ public class MessageStoreTest {
     NDB ndb = new NDB(pstFile, pstFile.getHeader());
     PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
     System.out.println("PC:" + ToStringHelper.formatMultiline(pc.toString()));
-    PCItem pic = pc.getPCItemByPropertyIdentifier(PidTagIpmSubTreeEntryId);
+    PCItem pic = pc.findPCItemByPropertyTag(PropertyTag.PidTagIpmSubTreeEntryId);
     EntryID rootEntryId = new EntryID(pic.dataValue);
     System.out.println("rootEntryId : " + ToStringHelper.formatMultiline(rootEntryId.toString()));
     System.out.println("rootEntryId.nid : " + new NID(rootEntryId.nid));
@@ -54,7 +54,7 @@ public class MessageStoreTest {
     NDB ndb = new NDB(pstFile, pstFile.getHeader());
     PC pc = ndb.getPCFromNID(SpecialInternalNID.NID_MESSAGE_STORE);
     System.out.println("PC:" + ToStringHelper.formatMultiline(pc.toString()));
-    PCItem pic = pc.getPCItemByPropertyIdentifier(PidTagIpmSubTreeEntryId);
+    PCItem pic = pc.findPCItemByPropertyTag(PropertyTag.PidTagIpmSubTreeEntryId);
     EntryID rootEntryId = new EntryID(pic.dataValue);
     System.out.println("rootEntryId : " + ToStringHelper.formatMultiline(rootEntryId.toString()));
     System.out.println("rootEntryId.nid : " + new NID(rootEntryId.nid));

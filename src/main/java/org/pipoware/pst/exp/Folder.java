@@ -34,10 +34,10 @@ public class Folder implements Iterable<Message> {
     this.folderPC = pc;
     this.hierarchyTable = hierarchyTable;
     this.contentTable = aContentTable;
-    displayName = folderPC.getPCItemByPropertyIdentifier(PidTagDisplayName).getString();
-    contentCount = folderPC.getPCItemByPropertyIdentifier(PidTagContentCount).getInt();
-    contentUnreadCount = folderPC.getPCItemByPropertyIdentifier(PidTagContentUnreadCount).getInt();
-    hasSubFolders = folderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
+    displayName = folderPC.findPCItemByPropertyTag(PropertyTag.PidTagDisplayName).getString();
+    contentCount = folderPC.findPCItemByPropertyTag(PropertyTag.PidTagContentCount).getInt();
+    contentUnreadCount = folderPC.findPCItemByPropertyTag(PropertyTag.PidTagContentUnreadCount).getInt();
+    hasSubFolders = folderPC.findPCItemByPropertyTag(PropertyTag.PidTagSubfolders).getBoolean();
   }
 
   public String getDisplayName() {
@@ -61,7 +61,7 @@ public class Folder implements Iterable<Message> {
       for (TCROWID row : hierarchyTable.getRows()) {
         int dwRowId = row.dwRowID;
         PC subFolderPC = ndb.getPCFromNID(dwRowId);
-        boolean hasFolder = subFolderPC.getPCItemByPropertyIdentifier(PidTagSubfolders).getBoolean();
+        boolean hasFolder = subFolderPC.findPCItemByPropertyTag(PropertyTag.PidTagSubfolders).getBoolean();
         TC hc = null;
         if (hasFolder) {
           int tcNID = (dwRowId & 0xFFFFFFE0) | NID.NID_TYPE_HIERARCHY_TABLE;
@@ -69,7 +69,7 @@ public class Folder implements Iterable<Message> {
         }
         
         TC contentTableTC = null;
-        int nbSubFolderMessages = subFolderPC.getPCItemByPropertyIdentifier(PidTagContentCount).getInt();
+        int nbSubFolderMessages = subFolderPC.findPCItemByPropertyTag(PropertyTag.PidTagContentCount).getInt();
         if (nbSubFolderMessages > 0) {
           int contentTableNID = (dwRowId & 0xFFFFFFE0) | NID.NID_TYPE_CONTENTS_TABLE;
           contentTableTC = ndb.getTCFromNID(contentTableNID);

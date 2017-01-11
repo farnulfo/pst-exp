@@ -78,7 +78,7 @@ public class PC {
       .toString();
   }
 
-  private PCItem findPCItemByPropertyTag(PropertyTag propertyTag) {
+  public PCItem findPCItemByPropertyTag(PropertyTag propertyTag) {
     for (PCItem item : items) {
       if (PropertyTag.getPropertyTagFromIdentifier(item.propertyIdentifier, item.getPropertyDataType()) == propertyTag) {
         return item;
@@ -86,14 +86,4 @@ public class PC {
     }
     return null;
   }
-  
-  public PCItem getPCItemByPropertyIdentifier(short propertyIdentifier) {
-    for (PCItem item : items) {
-      if (item.propertyIdentifier == propertyIdentifier) {
-        return item;
-      }
-    }
-    return null;
-  }
-
 }
