@@ -1,5 +1,9 @@
 package org.pipoware.pst.exp;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 /**
  *
  * @author Franck Arnulfo
@@ -30,8 +34,21 @@ public enum NIDType {
   public final byte value;
   public final String comment;
 
+  private static final Map<Byte, NIDType> map = new HashMap<>();
+
+  static {
+    for (NIDType nidType : NIDType.values()) {
+      map.put(nidType.value, nidType);
+    }
+  }
+
   NIDType(byte value, String comment) {
     this.value = value;
     this.comment = comment;
   }
+  
+  public static Optional<NIDType> valueOf(byte value) {
+    return Optional.ofNullable(map.get(value));
+  }
+
 }

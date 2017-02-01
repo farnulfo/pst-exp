@@ -65,7 +65,7 @@ public class NID {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("nidType", "0x" + Long.toHexString(nidType))
+      .add("nidType", "0x" + Long.toHexString(nidType) + " " + NIDType.valueOf((byte) nidType).map(NIDType::toString).orElse(""))
       .add("nidData", "0x" + Long.toHexString(data))
       .toString();
   }
