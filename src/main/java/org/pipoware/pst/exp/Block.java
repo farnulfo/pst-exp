@@ -33,7 +33,8 @@ public class Block {
   public enum BlockType {
 
     DATA_BLOCK, XBLOCK, XXBLOCK, SLBLOCK, SIBLOCK
-  };
+  }
+  
   public BlockType blockType;
 
   public byte data[];
