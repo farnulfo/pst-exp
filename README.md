@@ -3,7 +3,7 @@ Outlook PST File format experimentation
 
 [![Build Status](https://travis-ci.org/farnulfo/pst-exp.svg?branch=master)](https://travis-ci.org/farnulfo/pst-exp)
 
-[![Quality Gate](https://sonarcloud.io/api/project_badges/quality_gate?project=org.pipoware%3Apst-exp)](https://sonarqube.com/dashboard/index?id=org.pipoware%3Apst-exp)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/quality_gate?project=org.pipoware%3Apst-exp)](https://sonarcloud.io/dashboard?id=org.pipoware%3Apst-exp)
 
 Articles about MS-PST file format:
 
