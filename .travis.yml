@@ -3,6 +3,8 @@
 # Use container
 sudo: false
 
+dist: trusty
+
 language: java
 
 script:
