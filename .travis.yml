@@ -7,16 +7,15 @@ dist: trusty
 
 language: java
 
-script:
-  - chmod u+x ./runSonarQubeAnalysis.sh
-  - ./runSonarQubeAnalysis.sh
+addons:
+  sonarcloud:
+    organization: "farnulfo-github"
+    token:
+      secure: "DRygVqB43KxA7u7XdrMvNUF3S+vme6vcW1v6/mqIW/s+T/ATXwNR4E68//tFfgputxuD68hl/TvNG3fRz+7BgNtRu8+lWCrNSaN/Y3+1FkUHFHTqSIUrw6gKrzKsqx19IQllop6ELnNs+KqPwasmiDjHAAVieyErCk/WJPium9GNAtYLIE+3zhIuFNN0AK1/0KBjEKxvJR8RGymZEFCoqlISEBKJQoArYHytDOuMWi9nBWI5vviq5sS5kltDB5cxv/kIbK56JbH5d7p22AQ8DqORoNsXpdZMVvNYnRUcTi91Zgo9kIrZBwbpjOPGTseGGGtNvcULnQUaAwiIcnPXDNCsfcDSvzlJVctEEToPFl1k/zJkAKPmIfG8WpRofdurVPoZbjJ/OilqVSudMqoGAs9miiDr3I6VCsn4wnco8kj9JjqLI7JYdamb5O7qIbfb1M+6sr5/LbVaPTtPFWAkoZdWEoJ2oJn8Djf6hO0Z5gHqln0S49ic0o2VNIalinSH4uTvTQgFrfYdkkDta8dd/wVGx+0u7N53TnIVLBKQeBiRlH07I6Fxz5SsHE5amoLRMh094JzbjBybDV9dOxZHePxfe1QkCyGggZpaatRhJ0ZsRDK8NKvbG4MHzj1jaFtnugxQ/do/vEs81pmYeokECSBiezSaF1WsU9zSWMIJI9o="
 
-# Caching 
-cache:
-  directories:
-  - .autoconf
-  - $HOME/.m2
-  - '$HOME/.sonar/cache'
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 
 jdk:
   - oraclejdk8
