@@ -8,5 +8,4 @@ workflows:
       - if: $hasFilePattern("**/pages/**")
         then:
           - $addLabel("security")
-          - $assignTeamReviewer(["Security"]) # This 'Security' team must exist in your GitHub Repository
           - $commentOnce("The Security team has been involved because the authentication layer is touched")
