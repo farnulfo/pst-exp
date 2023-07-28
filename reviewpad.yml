@@ -1,0 +1,4 @@
+workflows:
+  - name: My First Reviewpad Workflow
+    run:
+      - $addLabel("foo")
