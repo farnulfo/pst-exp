@@ -29,6 +29,7 @@ public class NBTENTRY {
     this.nidParent = nidParent;
   }
 
+  // TODO mettre de la doc !
   public NBTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
 
