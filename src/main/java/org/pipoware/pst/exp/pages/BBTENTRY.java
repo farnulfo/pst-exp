@@ -38,6 +38,7 @@ public class BBTENTRY {
     this.cref = cref;
   }
 
+  // TODO !
   public BBTENTRY(byte[] entrybyte, Header.PST_TYPE type) {
     ByteBuffer bb = ByteBuffer.wrap(entrybyte).order(ByteOrder.LITTLE_ENDIAN);
 
