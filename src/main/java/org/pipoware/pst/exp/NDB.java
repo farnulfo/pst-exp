@@ -21,11 +21,21 @@ public class NDB {
   
   private static SEARCH_IMPL searchImplementation = SEARCH_IMPL.BINARY_SEARCH;
   
-  public static void setSearchImplemation(SEARCH_IMPL search_impl) {
+  /**
+   * Configure which search implementation to use when looking up entries.
+   *
+   * @param search_impl the implementation to use
+   */
+  public static void setSearchImplementation(SEARCH_IMPL search_impl) {
     NDB.searchImplementation = search_impl;
   }
 
-  public static SEARCH_IMPL getSearchImplemation() {
+  /**
+   * Returns the currently configured search implementation.
+   *
+   * @return the active {@link SEARCH_IMPL}
+   */
+  public static SEARCH_IMPL getSearchImplementation() {
     return NDB.searchImplementation;
   }
 
