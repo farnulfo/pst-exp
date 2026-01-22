@@ -63,6 +63,7 @@ public class BID {
                 return b.append(']').toString();
             b.append(", ");
         }
+        StringBuilder d = new StringBuilder();
     }
     
 }
